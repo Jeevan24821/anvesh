@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Databases and private records
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups and private uploads
+backups/
+*.bak
+*.backup
+uploads/
+evidence/
+
+# Local configuration
+.DS_Store
+Thumbs.db
+
+# Bundled Node.js runtime and npm dependencies
+tools/node-v*/
+**/node_modules/
