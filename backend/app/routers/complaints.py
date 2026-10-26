@@ -15,7 +15,8 @@ from app.auth import get_current_user, require_role
 from app.schemas import (
     ComplaintCreate, ComplaintStatusUpdate, ComplaintActionTakenRequest, ComplaintTransfer, ComplaintEscalate,
     ComplaintAssign, ComplaintVerifyRequest, ComplaintInfoRequest, ComplaintInfoResponse,
-    ComplaintRejectRequest, ComplaintFeedbackRequest, PriorityAssessmentRequest, PriorityAssessmentResponse
+    ComplaintRejectRequest, ComplaintFeedbackRequest, PriorityAssessmentRequest, PriorityAssessmentResponse,
+    validate_complaint_description
 )
 from app.crud import (
     get_complaints, get_complaint_by_id, create_complaint, update_complaint_status,
@@ -132,22 +133,18 @@ async def upload_evidence(
     - Reviewer: can attach evidence to complaints in their assigned bureau.
     - Complainant: can attach evidence to their own complaint.
     """
-    allowed_extensions = {".pdf", ".doc", ".docx"}
+    allowed_extensions = {".pdf"}
     ext = os.path.splitext(file.filename)[1].lower()
     if ext not in allowed_extensions:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported file format '{ext}'. Allowed formats: PDF, DOC, DOCX only."
+            detail=f"Unsupported file format '{ext}'. Upload PDF only (.pdf files)."
         )
 
     # Magic byte validation signatures:
     # PDF: %PDF-
-    # DOC: \xd0\xcf\x11\xe0 (Compound File Binary)
-    # DOCX: PK\x03\x04 (ZIP container)
     magic_signatures = {
         ".pdf": b"%PDF-",
-        ".doc": b"\xd0\xcf\x11\xe0",
-        ".docx": b"PK\x03\x04"
     }
 
     complaint = None
@@ -186,7 +183,7 @@ async def upload_evidence(
                         os.remove(destination)
                     raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
-                        detail=f"Invalid file content for format '{ext}'. The file header does not match a valid {ext.upper()} document."
+                        detail="Invalid file content for format '.pdf'. The file header does not match a valid PDF document. Upload PDF only."
                     )
                 header_checked = True
 
@@ -200,6 +197,14 @@ async def upload_evidence(
                     detail="File exceeds maximum allowable size (10 MB)."
                 )
             buffer.write(content)
+
+    if file_size == 0 or not header_checked:
+        if os.path.exists(destination):
+            os.remove(destination)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Uploaded file is empty. Please upload a valid, non-empty PDF document."
+        )
 
     # Format human-readable size
     if file_size < 1024:
@@ -461,12 +466,13 @@ def register_complaint(
             detail="Administrators cannot register complaints. Complaint registration is strictly reserved for Complainants."
         )
 
-    # Validate minimum 150-character narrative description as per Master Mandate
+    # Validate grievance narrative description meaningfulness (reject gibberish, spam, meaningless text)
     desc_clean = (comp_in.description or "").strip()
-    if len(desc_clean) < 150:
+    is_valid, err_msg = validate_complaint_description(desc_clean)
+    if not is_valid:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Complaint description must be at least 150 characters for comprehensive investigation (currently {len(desc_clean)} characters)."
+            detail=err_msg
         )
 
     # Ensure complainant cannot impersonate another identity

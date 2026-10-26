@@ -199,18 +199,27 @@ export function Overlaps({ onViewCase }) {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">
-              Inter-Bureau Overlap & Duplicate Intelligence Centre
-            </h1>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 font-bold">
-              6 Administrative Actions
-            </span>
+        <div className="flex items-center gap-3">
+          <div className="p-1.5 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs flex items-center justify-center flex-shrink-0">
+            <img 
+              src="/aicte_logo.png" 
+              alt="AICTE Official Seal" 
+              className="h-10 w-auto object-contain" 
+            />
           </div>
-          <p className="text-xs text-[#8B8988] mt-1">
-            Deterministic, explainable cross-bureau matching. Authorize joint investigations, jurisdictional transfers, duplicate consolidations, and false positive dismissals.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">
+                Inter-Bureau Overlap & Duplicate Intelligence Centre
+              </h1>
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 font-bold">
+                6 Administrative Actions
+              </span>
+            </div>
+            <p className="text-xs text-[#8B8988] mt-1">
+              Deterministic, explainable cross-bureau matching. Authorize joint investigations, jurisdictional transfers, duplicate consolidations, and false positive dismissals.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">

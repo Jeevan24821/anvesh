@@ -142,26 +142,40 @@ def test_evidence_magic_byte_validation(tokens):
     assert "Unsupported file format" in res.json()["detail"]
 
 
-def test_description_minimum_150_chars(tokens):
+def test_meaningful_description_validation(tokens):
     """
-    Verify complaint registration enforces >= 150 characters on description.
+    Verify complaint registration rejects meaningless/gibberish text,
+    while accepting genuine concise and detailed grievances.
     """
     student_headers = {"Authorization": f"Bearer {tokens['student']}"}
 
-    # Short description (< 150 chars) rejected
-    short_payload = {
+    # Meaningless keyboard mash rejected
+    gibberish_payload = {
         "institution_id": 1,
         "complainant_name": "Priya Nair",
         "category": "Fee Overcharging / Capitation",
         "subject": "Tuition overcharge test",
-        "description": "Short description under 150 characters.",
+        "description": "asdfghjkl qwertyuiop zxcvbnm",
         "complainant_affiliation": "Student"
     }
-    res = client.post("/api/complaints", json=short_payload, headers=student_headers)
+    res = client.post("/api/complaints", json=gibberish_payload, headers=student_headers)
     assert res.status_code == 400
-    assert "at least 150 characters" in res.json()["detail"]
+    assert "meaningful description" in res.json()["detail"].lower()
 
-    # Valid description (>= 150 chars) succeeds
+    # Valid short description (concise complaint) succeeds
+    short_valid_payload = {
+        "institution_id": 1,
+        "complainant_name": "Priya Nair",
+        "category": "Fee Overcharging / Capitation",
+        "subject": "Tuition refund dispute",
+        "description": "Fee refund denied by accounts office.",
+        "complainant_affiliation": "Student"
+    }
+    res = client.post("/api/complaints", json=short_valid_payload, headers=student_headers)
+    assert res.status_code == 201
+    assert res.json()["id"] is not None
+
+    # Valid comprehensive narrative succeeds
     valid_desc = (
         "The institution demanded an unauthorized caution deposit and laboratory maintenance charge "
         "amounting to Rs. 45,000 without issuance of a formal stamped fee receipt or council approval. "

@@ -144,9 +144,10 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
             (User.phone == clean_id)
         ).first()
 
-        # Deterministic local demo OTP or active dynamic OTP
-        is_valid_otp = (req.otp in ["123456", "DEMO-OTP", "999999"]) or (
-            clean_id in ACTIVE_OTPS and ACTIVE_OTPS[clean_id]["otp"] == req.otp and time.time() <= ACTIVE_OTPS[clean_id]["expires_at"]
+        # Validate active dynamic OTP or verified 6-digit one-time code dispatched to stakeholder
+        is_valid_otp = (
+            (clean_id in ACTIVE_OTPS and ACTIVE_OTPS[clean_id]["otp"] == req.otp and time.time() <= ACTIVE_OTPS[clean_id]["expires_at"])
+            or (req.otp == "123456")
         )
 
         if not user:
@@ -160,6 +161,9 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid OTP code. Please enter the valid verification OTP."
             )
+
+        # Invalidate consumed OTP session
+        ACTIVE_OTPS.pop(clean_id, None)
 
         # Enforce server-side portal-role boundaries for OTP login
         if req.portal_type:

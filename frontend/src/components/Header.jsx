@@ -10,38 +10,68 @@ export function Header({ onNavigate, activePage }) {
   return (
     <header className="bg-[#0D0D14]/90 backdrop-blur-md border-b border-[#232234] sticky top-0 z-30 px-6 py-3 shadow-md">
       <div className="flex items-center justify-between gap-4">
-        {/* Left: Branding & Portal Badge */}
+        {/* Left: Branding, Official Government Logos & Portal Badge */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1 rounded-xl bg-[#13131E] border border-[#3A3854] shadow-[0_0_15px_rgba(147,18,255,0.25)] flex items-center justify-center">
+          {/* Institutional Logos Group */}
+          <div className="flex items-center gap-2">
+            {/* AICTE Statutory Council Seal */}
+            <div 
+              className="p-1 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs flex items-center justify-center hover:bg-white transition"
+              title="All India Council for Technical Education (AICTE)"
+            >
+              <img 
+                src="/aicte_logo.png" 
+                alt="AICTE Official Seal" 
+                className="h-8 w-auto max-w-[42px] object-contain" 
+              />
+            </div>
+
+            {/* ANVESH Platform Brand Emblem */}
+            <div 
+              className="p-1 rounded-xl bg-[#13131E] border border-[#3A3854] shadow-[0_0_15px_rgba(147,18,255,0.25)] flex items-center justify-center"
+              title="ANVESH Grievance Intelligence Platform"
+            >
               <img 
                 src="/anvesh_logo.png" 
                 alt="ANVESH Logo" 
                 className="w-8 h-8 object-contain rounded-lg" 
               />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-wider text-[#F7F7F8] flex items-center gap-1.5">
-                  ANVESH
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#9312FF] shadow-[0_0_8px_#9312FF]"></span>
-                </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
-                  currentRole?.role === 'Complainant'
-                    ? 'bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30'
-                    : currentRole?.role === 'Reviewer'
-                    ? 'bg-[#9312FF]/15 text-[#A020FF] border border-[#9312FF]/30'
-                    : currentRole?.role === 'Administrator'
-                    ? 'bg-gradient-to-r from-[#9312FF]/20 to-[#7A1CF8]/20 text-[#D8B4FE] border border-[#9312FF]/40 font-extrabold shadow-[0_0_10px_rgba(147,18,255,0.2)]'
-                    : 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30'
-                }`}>
-                  {currentRole?.role} Portal
-                </span>
-              </div>
-              <p className="text-[11px] text-[#8B8988] hidden sm:block font-medium">
-                AICTE Inter-Bureau Grievance Intelligence & Resolution Platform
-              </p>
+
+            {/* Digital India Seal (Hidden on narrow mobile, visible sm+) */}
+            <div 
+              className="hidden sm:flex p-1 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs items-center justify-center hover:bg-white transition"
+              title="Digital India - Power to Empower"
+            >
+              <img 
+                src="/digital_india_logo.png" 
+                alt="Digital India" 
+                className="h-8 w-auto max-w-[56px] object-contain" 
+              />
             </div>
+          </div>
+
+          <div className="border-l border-[#232234] pl-2.5">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-base tracking-wider text-[#F7F7F8] flex items-center gap-1.5">
+                ANVESH
+                <span className="w-1.5 h-1.5 rounded-full bg-[#9312FF] shadow-[0_0_8px_#9312FF]"></span>
+              </span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
+                currentRole?.role === 'Complainant'
+                  ? 'bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30'
+                  : currentRole?.role === 'Reviewer'
+                  ? 'bg-[#9312FF]/15 text-[#A020FF] border border-[#9312FF]/30'
+                  : currentRole?.role === 'Administrator'
+                  ? 'bg-gradient-to-r from-[#9312FF]/20 to-[#7A1CF8]/20 text-[#D8B4FE] border border-[#9312FF]/40 font-extrabold shadow-[0_0_10px_rgba(147,18,255,0.2)]'
+                  : 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30'
+              }`}>
+                {currentRole?.role} Portal
+              </span>
+            </div>
+            <p className="text-[11px] text-[#8B8988] hidden sm:block font-medium">
+              AICTE Inter-Bureau Grievance Intelligence & Resolution Platform
+            </p>
           </div>
         </div>
 

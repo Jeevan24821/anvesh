@@ -81,11 +81,20 @@ export function Reports() {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">AICTE Executive Analytics & Regulatory Reports</h1>
-          <p className="text-xs text-[#8B8988] mt-1">
-            Bureau disposal velocity, case ageing distribution, regional trends, and exportable datasets.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="p-1.5 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs flex items-center justify-center flex-shrink-0">
+            <img 
+              src="/aicte_logo.png" 
+              alt="AICTE Official Seal" 
+              className="h-10 w-auto object-contain" 
+            />
+          </div>
+          <div>
+            <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">AICTE Executive Analytics & Regulatory Reports</h1>
+            <p className="text-xs text-[#8B8988] mt-0.5">
+              Bureau disposal velocity, case ageing distribution, regional trends, and exportable datasets.
+            </p>
+          </div>
         </div>
 
         {/* Live Export CSV Button */}

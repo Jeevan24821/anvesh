@@ -141,6 +141,17 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
     e.target.value = '';
     setEvidenceError(null);
+
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      setEvidenceError('Upload PDF only. Only official .pdf documents are accepted for grievance evidence.');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setEvidenceError('File exceeds maximum allowable size (10 MB).');
+      return;
+    }
+
     setUploadingEvidence(true);
     try {
       await api.uploadEvidence(file, complaint.id);
@@ -584,12 +595,12 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   </h4>
                   <label className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] text-white rounded-lg text-xs font-bold shadow-xs cursor-pointer transition">
                     <UploadCloud className="w-3.5 h-3.5" />
-                    <span>Upload Proof</span>
+                    <span>Upload PDF Proof</span>
                     <input
                       type="file"
                       onChange={handleEvidenceUpload}
                       disabled={uploadingEvidence}
-                      accept=".pdf,.doc,.docx"
+                      accept=".pdf"
                       className="hidden"
                     />
                   </label>
@@ -1165,12 +1176,12 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                     {!currentRole?.readOnly && (isAdmin || (isReviewer && (currentRole?.bureau === 'All' || currentRole?.bureau === complaint.source_bureau))) && (
                       <label className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex-shrink-0">
                         <UploadCloud className="w-3.5 h-3.5" />
-                        <span>{uploadingEvidence ? 'Uploading...' : 'Upload Proof Document'}</span>
+                        <span>{uploadingEvidence ? 'Uploading...' : 'Upload PDF Document'}</span>
                         <input
                           type="file"
                           onChange={handleEvidenceUpload}
                           disabled={uploadingEvidence}
-                          accept=".pdf,.doc,.docx"
+                          accept=".pdf"
                           className="hidden"
                         />
                       </label>

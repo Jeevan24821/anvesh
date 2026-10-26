@@ -514,43 +514,6 @@ export function LoginPage() {
           </p>
         </div>
 
-        {/* 1-CLICK QUICK DEMO ACCESS BAR (Instant Evaluator & Tester Entry) */}
-        <div className="max-w-4xl mx-auto w-full mb-6 p-3.5 rounded-xl bg-[#0D0D14] border border-[#232234] shadow-xs">
-          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#232234]">
-            <span className="text-xs font-bold text-[#F7F7F8] uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#D8B4FE]" />
-              <span>1-Click Quick Demo Access</span>
-            </span>
-            <span className="text-[11px] text-[#8B8988]">Click any role for instant entry without typing:</span>
-          </div>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {[
-              { label: 'Admin (HQ)', user: 'admin', pass: 'Admin@123', portal: 'admin', icon: ShieldCheck },
-              { label: 'Reviewer (PGRC)', user: 'reviewer_pgrc', pass: 'Reviewer@123', portal: 'admin', icon: Building2 },
-              { label: 'Student', user: 'student', pass: 'Student@123', portal: 'student', icon: GraduationCap },
-              { label: 'Faculty', user: 'inst_user', pass: 'Institution@123', portal: 'student', icon: School },
-              { label: 'Parent', user: 'parent', pass: 'Parent@123', portal: 'parent', icon: Users },
-              { label: 'Auditor (Guest)', user: 'viewer', pass: 'Viewer@123', portal: 'admin', icon: Eye },
-            ].map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                onClick={async () => {
-                  try {
-                    await login(item.user, item.pass, item.portal);
-                  } catch (e) {
-                    alert(e.message || 'Demo login failed');
-                  }
-                }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#232234] bg-[#13131E] hover:bg-[#1C1B2B] hover:border-[#9312FF]/50 text-xs font-semibold text-[#F7F7F8] transition"
-              >
-                <item.icon className="w-3.5 h-3.5 text-[#D8B4FE]" />
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* PRIMARY NAVIGATION SWITCH: LOGIN vs SIGN UP */}
         <div className="flex justify-center mb-8">
           <div className="bg-[#0D0D14] p-1.5 rounded-xl border border-[#232234] flex items-center gap-1.5 max-w-md w-full">

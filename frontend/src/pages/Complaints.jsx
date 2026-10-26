@@ -44,6 +44,74 @@ import {
   X
 } from 'lucide-react';
 
+export function validateComplaintDescription(desc) {
+  if (!desc || typeof desc !== 'string') {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+  const text = desc.trim();
+  if (text.length < 15) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance (minimum 15 characters), including what happened.' };
+  }
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length < 2) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance with at least 2 words explaining what happened.' };
+  }
+
+  // Check for repeating the exact same word multiple times (e.g. 'test test test test')
+  const cleanedWords = words.map(w => w.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')).filter(Boolean);
+  if (cleanedWords.length >= 3 && new Set(cleanedWords).size <= 1) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+
+  // Check if text contains Indian languages (Devanagari, Bengali, Tamil, Telugu, Kannada, Malayalam, etc.)
+  if (/[\u0900-\u0D7F]/.test(text)) {
+    const indicChars = text.match(/[\u0900-\u0D7F]/g) || [];
+    if (new Set(indicChars).size < 4) {
+      return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+    }
+    return { valid: true };
+  }
+
+  // Alphanumeric check for Latin / English text
+  const alnumChars = (text.toLowerCase().match(/[a-z0-9]/g) || []);
+  if (alnumChars.length < 10) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+  if (new Set(alnumChars).size <= 3) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+
+  // Repeated single char run (e.g. 'aaaaa', 'xxxxxxx')
+  if (/([a-zA-Z])\1{4,}/.test(text)) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+
+  // Keyboard mash rows check
+  const compact = text.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  const mashPatterns = [/(asdf|ghjkl|qwerty|yuiop|zxcv|xcvbnm|12345|abcdef)/i];
+  if (mashPatterns.some(pat => pat.test(compact)) && compact.length < 40) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+
+  // Vowel to consonant ratio check for Latin text
+  const letters = (text.toLowerCase().match(/[a-z]/g) || []);
+  if (letters.length >= 10) {
+    const vowels = letters.filter(c => 'aeiouy'.includes(c)).length;
+    const vowelRatio = vowels / letters.length;
+    if (vowelRatio < 0.12 || vowelRatio > 0.85) {
+      return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+    }
+  }
+
+  // Long consonant cluster
+  if (/[bcdfghjklmnpqrstvwxz]{6,}/i.test(text)) {
+    return { valid: false, error: 'Please provide a meaningful description of your grievance, including what happened.' };
+  }
+
+  return { valid: true };
+}
+
 export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }) {
   const { currentRole, refreshNotifications } = useAuth();
   const isComplainant = currentRole?.role === 'Complainant';
@@ -104,6 +172,19 @@ export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      alert('Upload PDF only. Only .pdf files are accepted for official grievance evidence.');
+      e.target.value = null;
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File exceeds maximum allowable size (10 MB).');
+      e.target.value = null;
+      return;
+    }
+
     setUploadingEvidence(true);
     try {
       const res = await api.uploadEvidence(file);
@@ -255,10 +336,13 @@ export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }
       setCreateError('Please complete subject and description fields.');
       return;
     }
-    if (createForm.description.trim().length < 150) {
-      setCreateError(`Complaint description must be at least 150 characters for comprehensive investigation (currently ${createForm.description.trim().length} characters).`);
+
+    const descValidation = validateComplaintDescription(createForm.description);
+    if (!descValidation.valid) {
+      setCreateError(descValidation.error);
       return;
     }
+
     if (!createForm.is_anonymous && !createForm.complainant_name) {
       setCreateError('Please provide complainant name or select confidential anonymous filing.');
       return;
@@ -1207,14 +1291,14 @@ export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }
             <div className="flex items-center justify-between mb-1">
               <label className="text-[#F7F7F8] font-semibold">Detailed Description *</label>
               <span className={`text-[11px] font-mono font-bold ${
-                createForm.description.trim().length >= 150 ? 'text-[#45B558]' : 'text-[#F59E0B]'
+                createForm.description.trim().length >= 15 ? 'text-[#45B558]' : 'text-[#F59E0B]'
               }`}>
-                {createForm.description.trim().length} / 150 characters minimum
+                {createForm.description.trim().length} characters (min 15)
               </span>
             </div>
             <textarea
               rows={4}
-              placeholder="Provide narrative facts, dates, monetary demands, faculty/officer names, or specific regulations violated (minimum 150 characters)..."
+              placeholder="Provide a meaningful description of your grievance including what happened, dates, monetary demands, or specific facts..."
               value={createForm.description}
               onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
               className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]/30 focus:border-[#9312FF] shadow-xs text-xs"
@@ -1268,16 +1352,16 @@ export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }
             <div className="flex items-center justify-between">
               <label className="text-[#F7F7F8] font-semibold flex items-center gap-1.5 text-xs">
                 <UploadCloud className="w-4 h-4 text-[#A020FF]" />
-                <span>Supporting Documentary Evidence (PDF, DOC, DOCX max 10MB)</span>
+                <span>Supporting Documentary Evidence (Upload PDF only, max 10MB)</span>
               </label>
               <label className="cursor-pointer px-3 py-1 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-xs">
-                <span>{uploadingEvidence ? 'Uploading...' : '+ Attach Document'}</span>
+                <span>{uploadingEvidence ? 'Uploading...' : '+ Attach PDF'}</span>
                 <input
                   type="file"
                   onChange={handleFileUpload}
                   disabled={uploadingEvidence}
                   className="hidden"
-                  accept=".pdf,.doc,.docx"
+                  accept=".pdf"
                 />
               </label>
             </div>

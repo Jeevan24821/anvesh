@@ -1,6 +1,89 @@
+import re
 from datetime import date, datetime
-from typing import List, Optional, Any, Dict
+from typing import List, Optional, Any, Dict, Tuple
 from pydantic import BaseModel, Field, ConfigDict
+
+
+def validate_complaint_description(desc: str) -> Tuple[bool, str]:
+    """
+    Robust algorithmic validator for grievance narrative descriptions.
+    Enforces genuine grievance content without external paid AI APIs.
+    Rejects:
+    - Empty, whitespace-only, or < 15 character inputs
+    - Obvious keyboard mash / test sequences (e.g. 'asdfghjkl', 'qwertyuiop', 'abc')
+    - Repeated single characters or repeated words spam ('aaaaaaaa', 'test test test')
+    - Random alphabetic sequences with abnormal consonant clusters or no vowels in Latin text
+    Accepts:
+    - Concise valid grievances (e.g. 'Fee refund denied', 'Hostel harassment')
+    - Detailed multi-sentence narratives
+    - Non-English / Indian languages (Hindi, Tamil, Telugu, etc.)
+    - Text containing numbers, punctuation, or mixed case
+    """
+    if not desc or not isinstance(desc, str):
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    text = desc.strip()
+    if len(text) < 15:
+        return False, "Please provide a meaningful description of your grievance (minimum 15 characters), including what happened."
+
+    words = [w for w in re.split(r'\s+', text) if len(w) > 0]
+    if len(words) < 2:
+        return False, "Please provide a meaningful description of your grievance with at least 2 words explaining what happened."
+
+    # Check for repeating the exact same word multiple times (e.g. 'test test test test')
+    cleaned_words = [re.sub(r'[^a-zA-Z0-9]', '', w.lower()) for w in words]
+    non_empty = [w for w in cleaned_words if len(w) > 0]
+    if len(non_empty) >= 3 and len(set(non_empty)) <= 1:
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    # Check if text contains Indian languages (Devanagari, Bengali, Tamil, Telugu, Kannada, Malayalam, etc.)
+    indic_match = re.search(r'[\u0900-\u0D7F]', text)
+    if indic_match:
+        unique_indic = set(re.findall(r'[\u0900-\u0D7F]', text))
+        if len(unique_indic) < 4:
+            return False, "Please provide a meaningful description of your grievance, including what happened."
+        return True, ""
+
+    # Alphanumeric check for Latin / English text
+    alnum_chars = [c.lower() for c in text if c.isalnum()]
+    if len(alnum_chars) < 10:
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    unique_chars = set(alnum_chars)
+    if len(unique_chars) <= 3:
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    # Excessive repeated single char run (e.g. 'aaaaa', 'xxxxxxx')
+    if re.search(r'([a-zA-Z])\1{4,}', text):
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    # Keyboard mash rows check
+    compact = re.sub(r'[^a-zA-Z0-9]', '', text).lower()
+    mash_patterns = [
+        r'(?i)(asdf|ghjkl|qwerty|yuiop|zxcv|xcvbnm|12345|abcdef)',
+    ]
+    mash_count = 0
+    for pat in mash_patterns:
+        if re.search(pat, compact):
+            mash_count += 1
+    if mash_count > 0 and len(compact) < 40:
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    # Vowel to consonant ratio check for Latin text
+    letters = [c.lower() for c in text if 'a' <= c.lower() <= 'z']
+    if len(letters) >= 10:
+        vowels = sum(1 for c in letters if c in 'aeiouy')
+        vowel_ratio = vowels / len(letters)
+        # Natural English is 25-45% vowels. Gibberish like 'sdfghjklmn' has 0% or < 12%
+        if vowel_ratio < 0.12 or vowel_ratio > 0.85:
+            return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    # Long consonant cluster check (e.g. 'sdfghjk')
+    if re.search(r'(?i)[bcdfghjklmnpqrstvwxz]{6,}', text):
+        return False, "Please provide a meaningful description of your grievance, including what happened."
+
+    return True, ""
+
 
 # --- Institution Schemas ---
 class InstitutionBase(BaseModel):
