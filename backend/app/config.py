@@ -73,3 +73,17 @@ COMPLAINT_CATEGORIES = [
     "Admissions & Affiliation Irregularities",
     "Governance Malpractice & Retaliation"
 ]
+
+# AICTE Approval Process Handbook (APH) Statutory Clause Reference Mapping
+APH_CLAUSE_MAP = {
+    "Fee Overcharging / Capitation": "Clause 6.35",
+    "Withholding Original Certificates": "Clause 6.38",
+    "Faculty Non-Payment & Understaffing": "Clause 7.12",
+    "Infrastructure & Laboratory Deficit": "Clause 4.5",
+    "Unapproved Courses & Excess Intake": "Clause 2.14",
+    "Ragging & Student Harassment": "Clause 6.1",
+    "Misappropriation of Grant Funds": "Clause 8.4",
+    "Admissions & Affiliation Irregularities": "Clause 3.7",
+    "Governance Malpractice & Retaliation": "Clause 6.20"
+}
+
