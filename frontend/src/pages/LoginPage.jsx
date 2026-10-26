@@ -47,9 +47,9 @@ export function LoginPage() {
   const [officialError, setOfficialError] = useState(null);
 
   // ----------------------------------------------------
-  // CARD 2: Student / Institution State
+  // CARD 2: Student / Faculty State
   // ----------------------------------------------------
-  const [studentMode, setStudentMode] = useState('otp'); // 'otp' | 'password'
+  const [studentMode, setStudentMode] = useState('password'); // Default to password login as requested
   const [studentId, setStudentId] = useState('');
   const [studentOtp, setStudentOtp] = useState('');
   const [studentPassword, setStudentPassword] = useState('');
@@ -63,7 +63,7 @@ export function LoginPage() {
   // ----------------------------------------------------
   // CARD 3: Parent / Guardian State
   // ----------------------------------------------------
-  const [parentMode, setParentMode] = useState('otp'); // 'otp' | 'password'
+  const [parentMode, setParentMode] = useState('password'); // Default to password login as requested
   const [parentId, setParentId] = useState('');
   const [parentOtp, setParentOtp] = useState('');
   const [parentPassword, setParentPassword] = useState('');
@@ -462,32 +462,32 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50/40 to-slate-100 flex flex-col justify-between text-slate-800">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between text-[#0F172A]">
       
       {/* Top Government Portal Header Bar */}
-      <header className="bg-[#0845A8] text-white px-6 py-3 border-b-4 border-[#FF9933] shadow-md">
+      <header className="bg-white text-[#0F172A] px-6 py-3 border-b border-slate-200 shadow-2xs">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <img 
               src="/anvesh_logo.png" 
               alt="ANVESH" 
-              className="w-10 h-10 object-contain rounded-lg p-0.5 bg-white shadow-xs" 
+              className="w-10 h-10 object-contain rounded-lg p-0.5 bg-slate-50 border border-slate-200 shadow-2xs" 
             />
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg tracking-wide text-white">ANVESH</span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-400 text-slate-900 font-bold uppercase">
+                <span className="font-extrabold text-lg tracking-wide text-[#0F172A]">ANVESH</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 uppercase tracking-wider">
                   National Portal
                 </span>
               </div>
-              <p className="text-[11px] text-blue-100/90 font-medium">
+              <p className="text-[11px] text-[#64748B] font-medium">
                 AICTE Inter-Bureau Grievance Intelligence & Resolution Platform • Ministry of Education
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-xs text-blue-100">
-            <div className="flex items-center gap-1.5 font-semibold bg-white/10 px-3 py-1 rounded-full border border-white/15">
-              <ShieldCheck className="w-4 h-4 text-emerald-300" />
+          <div className="flex items-center gap-4 text-xs text-[#64748B]">
+            <div className="flex items-center gap-1.5 font-medium bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
+              <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
               <span>Multi-Stakeholder Secure Authentication Gateway</span>
             </div>
           </div>
@@ -499,23 +499,60 @@ export function LoginPage() {
         
         {/* Portal Introduction & Branding Banner */}
         <div className="text-center mb-6 max-w-2xl mx-auto">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-blue-200 mb-3 shadow-sm p-1.5">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white border border-slate-200 mb-3 shadow-xs p-1.5">
             <img src="/anvesh_logo.png" alt="ANVESH" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
             ANVESH Authentication Portal
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-[#0845A8] mt-1">
+          <p className="text-xs sm:text-sm font-semibold text-[#0D9488] mt-1">
             Analytics-Driven Network for Verifying, Evaluating, and Synchronizing Higher-Education Grievances
           </p>
-          <p className="text-xs text-slate-500 mt-1 italic">
+          <p className="text-xs text-[#64748B] mt-1 italic">
             Discover Connections. Drive Resolution. Strengthen Accountability.
           </p>
         </div>
 
+        {/* 1-CLICK QUICK DEMO ACCESS BAR (Instant Evaluator & Tester Entry) */}
+        <div className="max-w-4xl mx-auto w-full mb-6 p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-100">
+            <span className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#0D9488]" />
+              1-Click Quick Demo Access
+            </span>
+            <span className="text-[11px] text-[#64748B]">Click any role for instant entry without typing:</span>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {[
+              { label: 'Admin (HQ)', user: 'admin', pass: 'Admin@123', portal: 'admin', icon: ShieldCheck },
+              { label: 'Reviewer (PGRC)', user: 'reviewer_pgrc', pass: 'Reviewer@123', portal: 'admin', icon: Building2 },
+              { label: 'Student', user: 'student', pass: 'Student@123', portal: 'student', icon: GraduationCap },
+              { label: 'Faculty', user: 'inst_user', pass: 'Institution@123', portal: 'student', icon: School },
+              { label: 'Parent', user: 'parent', pass: 'Parent@123', portal: 'parent', icon: Users },
+              { label: 'Auditor (Guest)', user: 'viewer', pass: 'Viewer@123', portal: 'admin', icon: Eye },
+            ].map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={async () => {
+                  try {
+                    await login(item.user, item.pass, item.portal);
+                  } catch (e) {
+                    alert(e.message || 'Demo login failed');
+                  }
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-xs font-semibold text-[#0F172A] transition"
+              >
+                <item.icon className="w-3.5 h-3.5 text-[#0D9488]" />
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* PRIMARY NAVIGATION SWITCH: LOGIN vs SIGN UP */}
         <div className="flex justify-center mb-8">
-          <div className="bg-slate-200/80 p-1.5 rounded-2xl border border-slate-300 shadow-inner flex items-center gap-1.5 max-w-md w-full">
+          <div className="bg-slate-100 p-1.5 rounded-xl border border-slate-200 flex items-center gap-1.5 max-w-md w-full">
             <button
               type="button"
               onClick={() => {
@@ -523,10 +560,10 @@ export function LoginPage() {
                 setSignupError(null);
                 setSignupSuccess(null);
               }}
-              className={`flex-1 py-2.5 px-5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-4 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 ${
                 activeTab === 'login'
-                  ? 'bg-[#0845A8] text-white shadow-md'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <LogIn className="w-4 h-4" />
@@ -541,10 +578,10 @@ export function LoginPage() {
                 setStudentError(null);
                 setParentError(null);
               }}
-              className={`flex-1 py-2.5 px-5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-4 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 ${
                 activeTab === 'signup'
-                  ? 'bg-[#0845A8] text-white shadow-md'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <UserPlus className="w-4 h-4" />
@@ -562,22 +599,22 @@ export function LoginPage() {
             {/* ==================================================== */}
             {/* CARD 1: BUREAU OFFICER / ADMIN                       */}
             {/* ==================================================== */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-100 bg-gradient-to-b from-blue-50/70 to-white">
+                <div className="p-5 border-b border-slate-200 bg-white">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#0845A8] border border-blue-200 flex items-center justify-center shadow-xs">
-                      <Building2 className="w-5 h-5 text-[#0845A8]" />
+                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
+                      <Building2 className="w-4 h-4 text-[#0D9488]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-[#0845A8] border border-blue-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
                       Official Access
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
                     Bureau Officer / Admin
                   </h2>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Central HQ Administrators, Bureau Reviewers (PGRC, RB, AB), and Scrutiny Officers.
                   </p>
                 </div>
@@ -605,7 +642,7 @@ export function LoginPage() {
                           setOfficialError(null);
                         }}
                         placeholder="e.g. admin or reviewer_pgrc"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium transition"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                         autoComplete="username"
                       />
                     </div>
@@ -625,7 +662,7 @@ export function LoginPage() {
                           setOfficialError(null);
                         }}
                         placeholder="Enter password"
-                        className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium transition"
+                        className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                         autoComplete="current-password"
                       />
                       <button
@@ -645,7 +682,7 @@ export function LoginPage() {
                     <button
                       type="button"
                       onClick={openForgotPassword}
-                      className="text-[#0845A8] hover:text-[#063784] font-bold text-xs hover:underline transition"
+                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
                     >
                       Forgot Password?
                     </button>
@@ -654,7 +691,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={officialLoading}
-                    className="w-full py-2.5 px-4 bg-[#0845A8] hover:bg-[#063784] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>{officialLoading ? 'Authenticating Official Session...' : 'Sign In as Officer / Admin'}</span>
                     <ChevronRight className="w-4 h-4" />
@@ -663,52 +700,36 @@ export function LoginPage() {
               </div>
 
               <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
                 <span>Privileged role; account issued strictly by AICTE Administration.</span>
               </div>
             </div>
 
 
             {/* ==================================================== */}
-            {/* CARD 2: STUDENT / INSTITUTION                        */}
+            {/* CARD 2: STUDENT / FACULTY                            */}
             {/* ==================================================== */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-100 bg-gradient-to-b from-indigo-50/70 to-white">
+                <div className="p-5 border-b border-slate-200 bg-white">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 border border-indigo-200 flex items-center justify-center shadow-xs">
-                      <GraduationCap className="w-5 h-5 text-indigo-700" />
+                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
+                      <GraduationCap className="w-4 h-4 text-[#0D9488]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wider">
-                      Student & College
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
+                      Student & Faculty
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
-                    Student / Institution
+                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
+                    Student / Faculty
                   </h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Enrolled students, alumni, and authorized technical institutions.
+                  <p className="text-xs text-[#64748B] mt-1">
+                    Enrolled students, alumni, and verified faculty / institutional members.
                   </p>
 
-                  {/* Mode Selector Toggle: OTP vs Password */}
+                  {/* Mode Selector Toggle: Password vs OTP */}
                   <div className="mt-3.5 flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setStudentMode('otp');
-                        setStudentError(null);
-                        setStudentSuccessMsg(null);
-                      }}
-                      className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
-                        studentMode === 'otp'
-                          ? 'bg-white text-indigo-700 shadow-xs'
-                          : 'text-slate-500 hover:text-slate-800'
-                      }`}
-                    >
-                      <KeyRound className="w-3 h-3" />
-                      <span>OTP Verification</span>
-                    </button>
                     <button
                       type="button"
                       onClick={() => {
@@ -718,12 +739,28 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         studentMode === 'password'
-                          ? 'bg-white text-indigo-700 shadow-xs'
-                          : 'text-slate-500 hover:text-slate-800'
+                          ? 'bg-[#0D9488] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
                       <Lock className="w-3 h-3" />
                       <span>Password Login</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStudentMode('otp');
+                        setStudentError(null);
+                        setStudentSuccessMsg(null);
+                      }}
+                      className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
+                        studentMode === 'otp'
+                          ? 'bg-[#0D9488] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <KeyRound className="w-3 h-3" />
+                      <span>OTP Verification</span>
                     </button>
                   </div>
                 </div>
@@ -746,7 +783,7 @@ export function LoginPage() {
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                      Student USN / Roll No or Institution ID *
+                      Student USN / Roll No or Faculty ID *
                     </label>
                     <div className="relative">
                       <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -757,8 +794,8 @@ export function LoginPage() {
                           setStudentId(e.target.value);
                           setStudentError(null);
                         }}
-                        placeholder="e.g. 1DS22CS089 or 1-3349102801"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 font-medium transition"
+                        placeholder="e.g. 1DS22CS089 or FAC-8891"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                       />
                     </div>
                   </div>
@@ -773,7 +810,7 @@ export function LoginPage() {
                           type="button"
                           disabled={studentOtpLoading || !studentId.trim() || studentOtpCooldown > 0}
                           onClick={handleStudentRequestOtp}
-                          className="text-[11px] font-bold text-indigo-700 hover:text-indigo-900 disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
+                          className="text-[11px] font-bold text-[#0D9488] hover:text-[#0b7c72] disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
                         >
                           <Send className="w-3 h-3" />
                           <span>
@@ -795,7 +832,7 @@ export function LoginPage() {
                             setStudentError(null);
                           }}
                           placeholder="Enter 6-digit OTP code"
-                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] transition"
                           maxLength={6}
                         />
                       </div>
@@ -815,7 +852,7 @@ export function LoginPage() {
                             setStudentError(null);
                           }}
                           placeholder="Enter password"
-                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 font-medium transition"
+                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                           autoComplete="current-password"
                         />
                         <button
@@ -838,14 +875,14 @@ export function LoginPage() {
                         setSignupRole('Student');
                         setActiveTab('signup');
                       }}
-                      className="text-[11px] text-slate-500 hover:text-indigo-700 font-semibold transition"
+                      className="text-[11px] text-slate-500 hover:text-[#0D9488] font-semibold transition"
                     >
-                      New user? <span className="font-bold text-indigo-700 underline">Sign Up</span>
+                      New user? <span className="font-bold text-[#0D9488] underline">Sign Up</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => openAccountRecovery('Student')}
-                      className="text-indigo-700 hover:text-indigo-900 font-bold text-xs hover:underline transition"
+                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
                     >
                       Need Help / Recovery?
                     </button>
@@ -854,7 +891,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={studentLoading}
-                    className="w-full py-2.5 px-4 bg-[#0845A8] hover:bg-[#063784] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>
                       {studentLoading
@@ -869,8 +906,8 @@ export function LoginPage() {
               </div>
 
               <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 flex-shrink-0" />
-                <span>Confidential student filing protected under AICTE norms.</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                <span>Confidential stakeholder filing protected under AICTE norms.</span>
               </div>
             </div>
 
@@ -878,43 +915,27 @@ export function LoginPage() {
             {/* ==================================================== */}
             {/* CARD 3: PARENT / GUARDIAN                            */}
             {/* ==================================================== */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-100 bg-gradient-to-b from-teal-50/70 to-white">
+                <div className="p-5 border-b border-slate-200 bg-white">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 border border-teal-200 flex items-center justify-center shadow-xs">
-                      <Users className="w-5 h-5 text-teal-700" />
+                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
+                      <Users className="w-4 h-4 text-[#0D9488]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 border border-teal-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
                       Parent / Guardian
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
                     Parent / Guardian
                   </h2>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-[#64748B] mt-1">
                     Parents and legal guardians tracking ward grievance petitions.
                   </p>
 
-                  {/* Mode Selector Toggle: OTP vs Password */}
+                  {/* Mode Selector Toggle: Password vs OTP */}
                   <div className="mt-3.5 flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setParentMode('otp');
-                        setParentError(null);
-                        setParentSuccessMsg(null);
-                      }}
-                      className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
-                        parentMode === 'otp'
-                          ? 'bg-white text-teal-700 shadow-xs'
-                          : 'text-slate-500 hover:text-slate-800'
-                      }`}
-                    >
-                      <KeyRound className="w-3 h-3" />
-                      <span>OTP Verification</span>
-                    </button>
                     <button
                       type="button"
                       onClick={() => {
@@ -924,12 +945,28 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         parentMode === 'password'
-                          ? 'bg-white text-teal-700 shadow-xs'
-                          : 'text-slate-500 hover:text-slate-800'
+                          ? 'bg-[#0D9488] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
                       <Lock className="w-3 h-3" />
                       <span>Password Login</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setParentMode('otp');
+                        setParentError(null);
+                        setParentSuccessMsg(null);
+                      }}
+                      className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
+                        parentMode === 'otp'
+                          ? 'bg-[#0D9488] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <KeyRound className="w-3 h-3" />
+                      <span>OTP Verification</span>
                     </button>
                   </div>
                 </div>
@@ -964,7 +1001,7 @@ export function LoginPage() {
                           setParentError(null);
                         }}
                         placeholder="e.g. PAR-984501 or Mobile"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 font-medium transition"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                       />
                     </div>
                   </div>
@@ -979,7 +1016,7 @@ export function LoginPage() {
                           type="button"
                           disabled={parentOtpLoading || !parentId.trim() || parentOtpCooldown > 0}
                           onClick={handleParentRequestOtp}
-                          className="text-[11px] font-bold text-teal-700 hover:text-teal-900 disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
+                          className="text-[11px] font-bold text-[#0D9488] hover:text-[#0b7c72] disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
                         >
                           <Send className="w-3 h-3" />
                           <span>
@@ -1001,7 +1038,7 @@ export function LoginPage() {
                             setParentError(null);
                           }}
                           placeholder="Enter 6-digit OTP code"
-                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] transition"
                           maxLength={6}
                         />
                       </div>
@@ -1021,7 +1058,7 @@ export function LoginPage() {
                             setParentError(null);
                           }}
                           placeholder="Enter password"
-                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 font-medium transition"
+                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
                           autoComplete="current-password"
                         />
                         <button
@@ -1044,14 +1081,14 @@ export function LoginPage() {
                         setSignupRole('Parent / Guardian');
                         setActiveTab('signup');
                       }}
-                      className="text-[11px] text-slate-500 hover:text-teal-700 font-semibold transition"
+                      className="text-[11px] text-slate-500 hover:text-[#0D9488] font-semibold transition"
                     >
-                      New parent? <span className="font-bold text-teal-700 underline">Sign Up</span>
+                      New parent? <span className="font-bold text-[#0D9488] underline">Sign Up</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => openAccountRecovery('Parent')}
-                      className="text-teal-700 hover:text-teal-900 font-bold text-xs hover:underline transition"
+                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
                     >
                       Account Recovery
                     </button>
@@ -1060,7 +1097,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={parentLoading}
-                    className="w-full py-2.5 px-4 bg-[#0845A8] hover:bg-[#063784] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>
                       {parentLoading
@@ -1086,33 +1123,33 @@ export function LoginPage() {
         {/* VIEW 2: FUNCTIONAL SIGN UP / CREATE ACCOUNT PORTAL                        */}
         {/* ========================================================================= */}
         {activeTab === 'signup' && (
-          <div className="max-w-2xl mx-auto w-full bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
+          <div className="max-w-2xl mx-auto w-full bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             
             {/* Header */}
-            <div className="p-6 bg-gradient-to-r from-blue-900 via-[#0845A8] to-indigo-900 text-white">
+            <div className="p-6 bg-[#12345A] text-white">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                    <UserPlus className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                    <UserPlus className="w-4 h-4 text-[#0D9488]" />
                   </div>
-                  <h2 className="text-lg font-black tracking-wide">
+                  <h2 className="text-lg font-black tracking-wide text-white">
                     Create New Stakeholder Account
                   </h2>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900 uppercase">
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-200 border border-teal-500/30 uppercase tracking-wider">
                   Self-Service Registration
                 </span>
               </div>
-              <p className="text-xs text-blue-100/90">
-                Register as an enrolled Student, Technical Institution Representative, or Legal Parent/Guardian to submit and track grievances.
+              <p className="text-xs text-slate-300">
+                Register as an enrolled Student, Faculty Member, or Legal Parent/Guardian to submit and track grievances.
               </p>
             </div>
 
             {/* Official Access Policy Notice */}
-            <div className="px-6 py-3.5 bg-blue-50/70 border-b border-blue-100 flex items-start gap-2.5 text-xs text-blue-900">
-              <Info className="w-4 h-4 text-[#0845A8] flex-shrink-0 mt-0.5" />
+            <div className="px-6 py-3.5 bg-slate-50 border-b border-slate-200 flex items-start gap-2.5 text-xs text-slate-600">
+              <Info className="w-4 h-4 text-[#0D9488] flex-shrink-0 mt-0.5" />
               <div className="text-[11px] leading-relaxed">
-                <strong>AICTE Governance Policy:</strong> Bureau Officers and Central Administrators cannot be registered publicly. Official administrative credentials are issued strictly by AICTE Central Administration.
+                <strong className="text-[#0F172A]">AICTE Governance Policy:</strong> Bureau Officers and Central Administrators cannot be registered publicly. Official administrative credentials are issued strictly by AICTE Central Administration.
               </div>
             </div>
 
@@ -1147,13 +1184,13 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Student')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Student'
-                        ? 'border-indigo-600 bg-indigo-50/70 text-indigo-950 ring-2 ring-indigo-500/20'
+                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
                         : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <GraduationCap className={`w-4 h-4 ${signupRole === 'Student' ? 'text-indigo-600' : 'text-slate-400'}`} />
-                      {signupRole === 'Student' && <span className="w-2 h-2 rounded-full bg-indigo-600" />}
+                      <GraduationCap className={`w-4 h-4 ${signupRole === 'Student' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
+                      {signupRole === 'Student' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
                     </div>
                     <div>
                       <div className="font-bold text-xs">Student</div>
@@ -1166,17 +1203,17 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Institution User')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Institution User'
-                        ? 'border-blue-600 bg-blue-50/70 text-blue-950 ring-2 ring-blue-500/20'
+                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
                         : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <School className={`w-4 h-4 ${signupRole === 'Institution User' ? 'text-blue-600' : 'text-slate-400'}`} />
-                      {signupRole === 'Institution User' && <span className="w-2 h-2 rounded-full bg-blue-600" />}
+                      <School className={`w-4 h-4 ${signupRole === 'Institution User' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
+                      {signupRole === 'Institution User' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
                     </div>
                     <div>
-                      <div className="font-bold text-xs">Institution</div>
-                      <div className="text-[10px] text-slate-500">College Nodal Officer</div>
+                      <div className="font-bold text-xs">Faculty</div>
+                      <div className="text-[10px] text-slate-500">Faculty / College Representative</div>
                     </div>
                   </button>
 
@@ -1185,13 +1222,13 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Parent / Guardian')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Parent / Guardian'
-                        ? 'border-teal-600 bg-teal-50/70 text-teal-950 ring-2 ring-teal-500/20'
+                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
                         : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <Users className={`w-4 h-4 ${signupRole === 'Parent / Guardian' ? 'text-teal-600' : 'text-slate-400'}`} />
-                      {signupRole === 'Parent / Guardian' && <span className="w-2 h-2 rounded-full bg-teal-600" />}
+                      <Users className={`w-4 h-4 ${signupRole === 'Parent / Guardian' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
+                      {signupRole === 'Parent / Guardian' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
                     </div>
                     <div>
                       <div className="font-bold text-xs">Parent / Guardian</div>
@@ -1207,7 +1244,7 @@ export function LoginPage() {
                 {/* Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    {signupRole === 'Institution User' ? 'Nodal Officer / Principal Name *' : 'Full Name *'}
+                    {signupRole === 'Institution User' ? 'Faculty / Staff Full Name *' : 'Full Name *'}
                   </label>
                   <div className="relative">
                     <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -1215,8 +1252,8 @@ export function LoginPage() {
                       type="text"
                       value={signupName}
                       onChange={(e) => setSignupName(e.target.value)}
-                      placeholder="e.g. Priya Nair"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                      placeholder="e.g. Dr. Priya Nair"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       required
                     />
                   </div>
@@ -1228,7 +1265,7 @@ export function LoginPage() {
                     {signupRole === 'Student' 
                       ? 'Student USN / Roll No *' 
                       : signupRole === 'Institution User' 
-                      ? 'AICTE Permanent Institute ID *' 
+                      ? 'Faculty ID / Employee Code *' 
                       : 'Student Ward USN / ID *'}
                   </label>
                   <div className="relative">
@@ -1241,10 +1278,10 @@ export function LoginPage() {
                         signupRole === 'Student' 
                           ? 'e.g. 1RV23CS045' 
                           : signupRole === 'Institution User' 
-                          ? 'e.g. 1-3349102801' 
+                          ? 'e.g. FAC-8891' 
                           : 'e.g. 1RV23CS045'
                       }
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium uppercase"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium uppercase"
                       required
                     />
                   </div>
@@ -1263,7 +1300,7 @@ export function LoginPage() {
                         value={signupInstitution}
                         onChange={(e) => setSignupInstitution(e.target.value)}
                         placeholder="e.g. R.V. College of Engineering, Bengaluru"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       />
                     </div>
                   </div>
@@ -1280,8 +1317,8 @@ export function LoginPage() {
                       type="email"
                       value={signupEmail}
                       onChange={(e) => setSignupEmail(e.target.value)}
-                      placeholder="e.g. student@college.edu.in"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                      placeholder="e.g. user@college.edu.in"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       required
                     />
                   </div>
@@ -1299,7 +1336,7 @@ export function LoginPage() {
                       value={signupPhone}
                       onChange={(e) => setSignupPhone(e.target.value)}
                       placeholder="+91-9845012345"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       required={signupRole === 'Parent / Guardian'}
                     />
                   </div>
@@ -1317,7 +1354,7 @@ export function LoginPage() {
                       value={signupPassword}
                       onChange={(e) => setSignupPassword(e.target.value)}
                       placeholder="Enter strong password"
-                      className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                      className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       required
                       minLength={6}
                     />
@@ -1343,7 +1380,7 @@ export function LoginPage() {
                       value={signupConfirmPassword}
                       onChange={(e) => setSignupConfirmPassword(e.target.value)}
                       placeholder="Re-enter password"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                       required
                     />
                   </div>
@@ -1355,7 +1392,7 @@ export function LoginPage() {
                 <button
                   type="submit"
                   disabled={signupLoading}
-                  className="w-full sm:flex-1 py-3 px-6 bg-[#0845A8] hover:bg-[#063784] text-white font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                  className="w-full sm:flex-1 py-3 px-6 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>{signupLoading ? 'Creating Verified Account...' : 'Complete Registration & Create Account'}</span>
@@ -1378,9 +1415,9 @@ export function LoginPage() {
           <button
             type="button"
             onClick={() => setIsEvalAccountsOpen(true)}
-            className="inline-flex items-center gap-1.5 font-semibold text-slate-600 hover:text-[#0845A8] hover:underline transition"
+            className="inline-flex items-center gap-1.5 font-semibold text-slate-600 hover:text-[#0D9488] hover:underline transition"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-[#0845A8]" />
+            <HelpCircle className="w-3.5 h-3.5 text-[#0D9488]" />
             <span>SIH Evaluation Reference: Predefined Local Test Accounts</span>
           </button>
         </div>
@@ -1427,7 +1464,7 @@ export function LoginPage() {
                     value={forgotIdentifier}
                     onChange={(e) => setForgotIdentifier(e.target.value)}
                     placeholder="e.g. admin or official email"
-                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                     required
                     autoFocus
                   />
@@ -1445,7 +1482,7 @@ export function LoginPage() {
                 <button
                   type="submit"
                   disabled={forgotLoading}
-                  className="px-5 py-2 rounded-xl bg-[#0845A8] hover:bg-[#063784] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
                 >
                   <span>{forgotLoading ? 'Issuing Instructions...' : 'Request Reset Token'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1469,7 +1506,7 @@ export function LoginPage() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                    className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                     required
                     minLength={6}
                     autoFocus
@@ -1495,7 +1532,7 @@ export function LoginPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter new password"
-                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0845A8]/20 focus:border-[#0845A8] font-medium"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                     required
                   />
                 </div>
@@ -1512,7 +1549,7 @@ export function LoginPage() {
                 <button
                   type="submit"
                   disabled={forgotLoading}
-                  className="px-5 py-2 rounded-xl bg-[#0845A8] hover:bg-[#063784] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
                 >
                   <span>{forgotLoading ? 'Updating Hash...' : 'Update Password & Return to Login'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1553,7 +1590,7 @@ export function LoginPage() {
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              {recoveryRole === 'Student' ? 'Student USN or Institution ID *' : 'Parent Identifier *'}
+              {recoveryRole === 'Student' ? 'Student USN or Faculty ID *' : 'Parent Identifier *'}
             </label>
             <div className="relative">
               <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -1562,7 +1599,7 @@ export function LoginPage() {
                 value={recoveryIdentifier}
                 onChange={(e) => setRecoveryIdentifier(e.target.value)}
                 placeholder="e.g. 1DS22CS089 or PAR-984501"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                 required
               />
             </div>
@@ -1579,7 +1616,7 @@ export function LoginPage() {
                 value={recoveryContact}
                 onChange={(e) => setRecoveryContact(e.target.value)}
                 placeholder="Where should helpdesk reach you?"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
                 required
               />
             </div>
@@ -1594,7 +1631,7 @@ export function LoginPage() {
               onChange={(e) => setRecoveryReason(e.target.value)}
               placeholder="e.g. Changed phone number or unable to receive OTP"
               rows={3}
-              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
             />
           </div>
 
@@ -1609,7 +1646,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={recoveryLoading}
-              className="px-5 py-2 rounded-xl bg-[#0845A8] hover:bg-[#063784] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+              className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
             >
               <span>{recoveryLoading ? 'Registering Ticket...' : 'Submit Recovery Ticket'}</span>
               <ChevronRight className="w-4 h-4" />

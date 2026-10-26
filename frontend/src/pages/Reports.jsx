@@ -79,7 +79,7 @@ export function Reports() {
 
   const ageingData = [
     { name: '< 15 Days', count: summary?.ageing?.under_15_days || 0, fill: '#10B981' },
-    { name: '15 - 30 Days', count: summary?.ageing?.['15_to_30_days'] || 0, fill: '#0845A8' },
+    { name: '15 - 30 Days', count: summary?.ageing?.['15_to_30_days'] || 0, fill: '#0D9488' },
     { name: '31 - 60 Days', count: summary?.ageing?.['31_to_60_days'] || 0, fill: '#F59E0B' },
     { name: '> 60 Days', count: summary?.ageing?.over_60_days || 0, fill: '#EF4444' },
   ];
@@ -89,8 +89,8 @@ export function Reports() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">AICTE Executive Analytics & Regulatory Reports</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">AICTE Executive Analytics & Regulatory Reports</h1>
+          <p className="text-xs text-[#64748B] mt-1">
             Bureau disposal velocity, case ageing distribution, regional trends, and exportable datasets.
           </p>
         </div>
@@ -99,7 +99,7 @@ export function Reports() {
         <button
           onClick={handleExportCsv}
           disabled={downloading}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0845A8] hover:bg-[#063B8B] text-white font-bold text-xs rounded-xl shadow-sm transition disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold text-xs rounded-xl shadow-xs transition disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
           {downloading ? 'Preparing CSV...' : 'Export Filtered CSV'}
@@ -107,16 +107,16 @@ export function Reports() {
       </div>
 
       {/* CSV Filter Preset Toolbar */}
-      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-wrap items-center gap-3 text-xs">
-        <div className="flex items-center gap-1.5 font-bold text-slate-700 mr-2">
-          <FileSpreadsheet className="w-4 h-4 text-[#0845A8]" />
+      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-xs flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex items-center gap-1.5 font-bold text-[#0F172A] mr-2">
+          <FileSpreadsheet className="w-4 h-4 text-[#0D9488]" />
           Export Scope:
         </div>
 
         <select
           value={exportBureau}
           onChange={(e) => setExportBureau(e.target.value)}
-          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0845A8] focus:ring-2 focus:ring-[#0845A8]/20"
+          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
         >
           {BUREAUS.map((b) => (
             <option key={b} value={b}>Bureau: {b}</option>
@@ -126,7 +126,7 @@ export function Reports() {
         <select
           value={exportStatus}
           onChange={(e) => setExportStatus(e.target.value)}
-          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0845A8] focus:ring-2 focus:ring-[#0845A8]/20"
+          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
         >
           {STATUS_OPTIONS.map((s) => (
             <option key={s} value={s}>Status: {s}</option>
@@ -136,7 +136,7 @@ export function Reports() {
         <select
           value={exportPriority}
           onChange={(e) => setExportPriority(e.target.value)}
-          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0845A8] focus:ring-2 focus:ring-[#0845A8]/20"
+          className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
         >
           {PRIORITY_OPTIONS.map((p) => (
             <option key={p} value={p}>Priority: {p}</option>
@@ -148,18 +148,18 @@ export function Reports() {
             type="checkbox"
             checked={exportOverdueOnly}
             onChange={(e) => setExportOverdueOnly(e.target.checked)}
-            className="w-4 h-4 rounded text-[#0845A8] border-slate-300 focus:ring-[#0845A8]"
+            className="w-4 h-4 rounded text-[#0D9488] border-slate-300 focus:ring-[#0D9488]"
           />
           <span className="font-medium">Overdue Cases Only</span>
         </label>
       </div>
 
       {/* Bureau Disposal Rates Table */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-        <h3 className="text-sm font-bold text-slate-900 tracking-wide mb-1">
+      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+        <h3 className="text-sm font-bold text-[#0F172A] tracking-wide mb-1">
           Bureau Disposal Rates & Regulatory Throughput
         </h3>
-        <p className="text-xs text-slate-500 mb-4">
+        <p className="text-xs text-[#64748B] mb-4">
           Statutory resolution percentage of complaints closed with formal orders
         </p>
 
@@ -176,17 +176,17 @@ export function Reports() {
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
               {summary?.bureau_disposals?.map((b) => (
-                <tr key={b.bureau} className="hover:bg-blue-50/40 transition">
-                  <td className="py-3 px-3 font-semibold text-slate-900">{b.bureau}</td>
+                <tr key={b.bureau} className="hover:bg-slate-50 transition">
+                  <td className="py-3 px-3 font-semibold text-[#0F172A]">{b.bureau}</td>
                   <td className="py-3 px-3 font-mono">{b.total}</td>
                   <td className="py-3 px-3 font-mono text-emerald-600 font-semibold">{b.disposed}</td>
-                  <td className="py-3 px-3 font-mono font-bold text-slate-900">
+                  <td className="py-3 px-3 font-mono font-bold text-[#0F172A]">
                     {b.disposal_rate_pct}%
                   </td>
                   <td className="py-3 px-3 w-48">
                     <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                       <div
-                        className="bg-[#0845A8] h-full rounded-full transition-all duration-500"
+                        className="bg-[#0D9488] h-full rounded-full transition-all duration-500"
                         style={{ width: `${b.disposal_rate_pct}%` }}
                       />
                     </div>
@@ -201,11 +201,11 @@ export function Reports() {
       {/* Grid: Ageing Analysis & Regional Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Case Ageing Analysis */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h3 className="text-sm font-bold text-slate-900 tracking-wide mb-1">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+          <h3 className="text-sm font-bold text-[#0F172A] tracking-wide mb-1">
             Active Case Ageing Profile
           </h3>
-          <p className="text-xs text-slate-500 mb-4">
+          <p className="text-xs text-[#64748B] mb-4">
             Duration elapsed since formal complaint registration
           </p>
           <div className="h-64 w-full min-h-[256px]">

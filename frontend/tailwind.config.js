@@ -7,30 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        royal: {
-          900: '#063B8B',
-          800: '#0845A8',
-          700: '#0E55C8',
-          600: '#1769E0',
-          500: '#2575FC',
-          100: '#E8F1FD',
-          50: '#F0F6FE',
+        anvesh: {
+          bg: '#F8FAFC',
+          card: '#FFFFFF',
+          border: '#E2E8F0',
+          navy: '#0F172A',
+          secondary: '#64748B',
+          teal: '#0D9488',
+          tealHover: '#0F766E',
+          tealLight: '#F0FDFA',
+          tealBorder: '#CCFBF1',
+          accentNavy: '#12345A',
         },
         navy: {
-          950: '#060B18',
-          900: '#0B132B',
-          850: '#0F1B38',
-          800: '#152244',
-          750: '#1C2C55',
-          700: '#233766',
-          600: '#324D85',
+          950: '#0A0F1D',
+          900: '#0F172A',
+          800: '#12345A',
+          700: '#1E293B',
+          600: '#334155',
         },
-        brand: {
-          teal: '#00B4D8',
-          cyan: '#38BDF8',
-          emerald: '#10B981',
-          amber: '#F59E0B',
-          rose: '#F43F5E',
+        teal: {
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          300: '#5EEAD4',
+          400: '#2DD4BF',
+          500: '#14B8A6',
+          600: '#0D9488',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A',
         }
       },
       fontFamily: {

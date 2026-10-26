@@ -134,12 +134,12 @@ export function Notifications({ onViewCase, onViewOverlap }) {
       return <ArrowRightLeft className="w-5 h-5 text-amber-600" />;
     }
     if (type === 'NEW_COMPLAINT') {
-      return <FilePlus className="w-5 h-5 text-[#0845A8]" />;
+      return <FilePlus className="w-5 h-5 text-[#0D9488]" />;
     }
     if (type === 'STATUS_UPDATE') {
-      return <Activity className="w-5 h-5 text-blue-600" />;
+      return <Activity className="w-5 h-5 text-[#0D9488]" />;
     }
-    return <AlertCircle className="w-5 h-5 text-[#0845A8]" />;
+    return <AlertCircle className="w-5 h-5 text-[#0D9488]" />;
   };
 
   return (
@@ -148,14 +148,14 @@ export function Notifications({ onViewCase, onViewOverlap }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Notification & Intelligence Feed</h1>
+            <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">Notification & Intelligence Feed</h1>
             {currentRole?.canEditAll && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200 uppercase">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200 uppercase">
                 Global Central Feed (All Departments)
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#64748B] mt-1">
             Real-time multi-department updates for complaint submissions, status transitions, officer assignments, and statutory alerts.
           </p>
         </div>
@@ -174,14 +174,14 @@ export function Notifications({ onViewCase, onViewOverlap }) {
             onClick={handleMarkAllRead}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 text-xs font-semibold shadow-2xs transition"
           >
-            <CheckCheck className="w-4 h-4 text-[#0845A8]" />
+            <CheckCheck className="w-4 h-4 text-[#0D9488]" />
             <span>Mark All Read</span>
           </button>
         </div>
       </div>
 
       {/* Filter toolbar: Category Tabs & Department Dropdown */}
-      <div className="p-4 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-3">
+      <div className="p-4 bg-white border border-slate-200 rounded-xl shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           {/* Category Tabs */}
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
@@ -189,7 +189,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
               onClick={() => setCategoryFilter('all')}
               className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
                 categoryFilter === 'all'
-                  ? 'bg-[#0845A8] text-white shadow-xs'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -200,7 +200,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
               onClick={() => setCategoryFilter('complaints')}
               className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
                 categoryFilter === 'complaints'
-                  ? 'bg-[#0845A8] text-white shadow-xs'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
@@ -245,7 +245,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
               <select
                 value={selectedBureau}
                 onChange={(e) => setSelectedBureau(e.target.value)}
-                className="p-1.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 text-xs font-semibold focus:outline-none focus:border-[#0845A8]"
+                className="p-1.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 text-xs font-semibold focus:outline-none focus:border-[#0D9488]"
               >
                 <option value="All">All Departments (Global)</option>
                 {BUREAUS.filter(b => b !== 'All').map(b => (
@@ -265,7 +265,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
               placeholder="Search notifications by case ID, keyword, bureau..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-xs focus:outline-none focus:border-[#0845A8]"
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-xs focus:outline-none focus:border-[#0D9488]"
             />
           </div>
 
@@ -312,17 +312,17 @@ export function Notifications({ onViewCase, onViewOverlap }) {
               key={n.id}
               className={`p-4 rounded-xl border transition flex items-start gap-3.5 ${
                 !n.is_read
-                  ? 'bg-blue-50/40 border-blue-200 ring-1 ring-blue-300 shadow-sm'
-                  : 'bg-white border-slate-200 opacity-90 shadow-xs'
+                  ? 'bg-teal-50/30 border-teal-200 ring-1 ring-teal-300 shadow-xs'
+                  : 'bg-white border-slate-200 opacity-90 shadow-2xs'
               }`}
             >
-              <div className="p-2 rounded-lg bg-white border border-slate-200 flex-shrink-0 mt-0.5 shadow-xs">
+              <div className="p-2 rounded-lg bg-white border border-slate-200 flex-shrink-0 mt-0.5 shadow-2xs">
                 {getIcon(n.type, n.severity)}
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className={`text-xs font-bold leading-tight ${!n.is_read ? 'text-slate-900' : 'text-slate-700'}`}>
+                  <h4 className={`text-xs font-bold leading-tight ${!n.is_read ? 'text-[#0F172A]' : 'text-slate-700'}`}>
                     {n.title}
                   </h4>
                   <span className="text-[10px] text-slate-400 whitespace-nowrap">
@@ -330,7 +330,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
                   {n.message}
                 </p>
 
@@ -344,7 +344,7 @@ export function Notifications({ onViewCase, onViewOverlap }) {
                     {n.complaint_id && (
                       <button
                         onClick={() => onViewCase(n.complaint_id)}
-                        className="text-xs text-[#0845A8] font-bold hover:underline flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded border border-blue-100"
+                        className="text-xs text-[#0D9488] font-bold hover:underline flex items-center gap-1 bg-teal-50 px-2 py-0.5 rounded border border-teal-100"
                       >
                         Inspect Case <ArrowRight className="w-3 h-3" />
                       </button>

@@ -120,28 +120,28 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
   if (isComplainant) {
     return (
       <div className="p-6 max-w-7xl mx-auto space-y-6">
-        {/* Top Banner */}
-        <div className="bg-gradient-to-r from-blue-900 to-[#0845A8] text-white p-6 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* Top Header Card */}
+        <div className="bg-white border border-slate-200 text-[#0F172A] p-5 rounded-xl shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 font-bold uppercase tracking-wider">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold uppercase tracking-wider">
                 Complainant Tracking Portal
               </span>
-              <span className="text-xs text-blue-200">
+              <span className="text-xs text-[#64748B]">
                 Logged in as <strong>{currentRole?.name || 'Complainant'}</strong> ({currentRole?.affiliation || 'Student'})
               </span>
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight">
+            <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-[#0F172A]">
               AICTE Grievance Monitoring & Resolution Status
             </h1>
-            <p className="text-xs text-blue-100">
+            <p className="text-xs text-[#64748B]">
               Institution: {currentRole?.institution || 'Technical Educational Institution'} • Ref ID: {currentRole?.complainantId || '1DS22CS089'}
             </p>
           </div>
 
           <button
             onClick={() => onNavigate('complaints')}
-            className="px-4 py-2.5 bg-white hover:bg-blue-50 text-[#0845A8] font-bold text-xs rounded-xl shadow transition flex items-center gap-2 self-start md:self-auto"
+            className="px-4 py-2 bg-[#0D9488] hover:bg-[#0F766E] text-white font-semibold text-xs rounded-lg shadow-xs transition flex items-center gap-2 self-start md:self-auto"
           >
             <Plus className="w-4 h-4" />
             <span>Submit New Grievance</span>
@@ -321,30 +321,30 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Top Banner & Bureau Filter */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-xl shadow-xs">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">AICTE Executive Grievance Overview</h1>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0845A8] border border-blue-200 font-semibold">
+            <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">AICTE Executive Grievance Overview</h1>
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-teal-50 text-[#0D9488] border border-teal-200 font-bold uppercase tracking-wider">
               ANVESH Intelligence Mesh
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#64748B] mt-1 font-medium">
             Real-time monitoring across PGRC, Regulation Bureau (RB), Approval Bureau (AB), Anti-Ragging Cell, and Skill Cell.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-700">
-            <Filter className="w-3.5 h-3.5 text-[#0845A8]" />
-            <span className="text-slate-500 font-medium">Bureau:</span>
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-[#0F172A]">
+            <Filter className="w-3.5 h-3.5 text-[#0D9488]" />
+            <span className="text-[#64748B] font-medium">Bureau:</span>
             <select
               value={selectedBureau}
               onChange={(e) => setSelectedBureau(e.target.value)}
-              className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
+              className="bg-transparent text-[#0F172A] font-semibold focus:outline-none cursor-pointer"
             >
               {BUREAUS.map((b) => (
-                <option key={b} value={b} className="bg-white text-slate-800">
+                <option key={b} value={b} className="bg-white text-[#0F172A]">
                   {b}
                 </option>
               ))}
@@ -353,7 +353,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
 
           <button
             onClick={fetchStats}
-            className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition"
+            className="p-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 transition"
             title="Refresh statistics"
           >
             <RefreshCw className="w-4 h-4" />
@@ -463,29 +463,29 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
       </div>
 
       {/* CHARTS SECTION 1: COMPLAINT TREND LINE CHART WITH TOGGLE */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#0845A8]" />
-              <h3 className="text-sm font-bold text-slate-900 tracking-wide">
+              <TrendingUp className="w-4 h-4 text-[#0D9488]" />
+              <h3 className="text-sm font-bold text-[#0F172A] tracking-wide">
                 Complaint Intake & Resolution Longitudinal Trends
               </h3>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-[#64748B] mt-0.5 font-medium">
               6-month historical trajectory of grievance intake, disposal volume, and pending pipelines
             </p>
           </div>
 
           {/* Metric filter buttons */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
             {['All', 'Filed', 'Resolved', 'Pending', 'Overdue'].map((m) => (
               <button
                 key={m}
                 onClick={() => setTrendMetric(m)}
-                className={`px-3 py-1 rounded-lg font-semibold transition ${
+                className={`px-3 py-1 rounded-md font-semibold transition ${
                   trendMetric === m
-                    ? 'bg-white text-[#0845A8] shadow-xs'
+                    ? 'bg-white text-teal-700 shadow-2xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -508,10 +508,10 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                 contentStyle={{
                   backgroundColor: '#FFFFFF',
                   borderColor: '#E2E8F0',
-                  color: '#1E293B',
-                  borderRadius: '10px',
+                  color: '#0F172A',
+                  borderRadius: '8px',
                   fontSize: '12px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
                 }}
               />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
@@ -521,7 +521,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                   type="monotone"
                   dataKey="filed"
                   name="Filed Grievances"
-                  stroke="#1769E0"
+                  stroke="#0D9488"
                   strokeWidth={2.5}
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
@@ -599,7 +599,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                   }} 
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: '#475569' }} />
-                <Bar dataKey="active" name="Active Cases" fill="#1769E0" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="active" name="Active Cases" fill="#0D9488" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="overdue" name="Overdue SLA" fill="#DC2626" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="disposed" name="Disposed" fill="#16A34A" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -608,10 +608,10 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
         </div>
 
         {/* Case Status Distribution Donut Chart with Total in Center (1 Col) */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between relative">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col justify-between relative">
           <div>
-            <h3 className="text-sm font-bold text-slate-800 tracking-wide">Status Breakdown</h3>
-            <p className="text-xs text-slate-500">Current lifecycle states of complaints</p>
+            <h3 className="text-sm font-bold text-[#0F172A] tracking-wide">Status Breakdown</h3>
+            <p className="text-xs text-[#64748B]">Current lifecycle states of complaints</p>
           </div>
 
           <div className="h-56 w-full my-auto relative min-h-[224px]">
@@ -681,15 +681,15 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
       {/* Bottom Section: Recent Activity & Approaching Deadlines */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Cases Table (2 Cols) */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-800 tracking-wide">Recent Case Intake</h3>
-              <p className="text-xs text-slate-500">Latest technical institution complaints filed</p>
+              <h3 className="text-sm font-bold text-[#0F172A] tracking-wide">Recent Case Intake</h3>
+              <p className="text-xs text-[#64748B]">Latest technical institution complaints filed</p>
             </div>
             <button
               onClick={() => onNavigate('complaints')}
-              className="text-xs text-[#0845A8] hover:underline flex items-center gap-1 font-bold"
+              className="text-xs text-teal-700 hover:text-teal-800 flex items-center gap-1 font-semibold"
             >
               View All <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -709,14 +709,14 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {recentCases.map((c) => (
-                  <tr key={c.id} className="hover:bg-blue-50/40 transition">
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#0845A8] whitespace-nowrap">
+                  <tr key={c.id} className="hover:bg-slate-50 transition">
+                    <td className="py-2.5 px-3 font-mono font-bold text-[#12345A] whitespace-nowrap">
                       {c.case_id}
                     </td>
                     <td className="py-2.5 px-3 max-w-[200px] truncate" title={c.institution_name}>
                       <button
                         onClick={() => onViewInstitution(c.institution_id)}
-                        className="text-slate-800 hover:text-[#0845A8] font-medium truncate text-left block"
+                        className="text-[#0F172A] hover:text-teal-700 font-medium truncate text-left block"
                       >
                         {c.institution_name}
                       </button>
@@ -733,7 +733,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                     <td className="py-2.5 px-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => onViewCase(c.id)}
-                        className="text-xs px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-blue-50 text-[#0845A8] font-bold border border-slate-200 hover:border-blue-300 transition"
+                        className="text-xs px-2.5 py-1 rounded-md bg-white hover:bg-teal-50 text-teal-700 font-semibold border border-slate-200 hover:border-teal-300 transition"
                       >
                         Inspect
                       </button>
@@ -753,18 +753,18 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
         </div>
 
         {/* Approaching Deadlines Widget (1 Col) */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-amber-600" />
-                <h3 className="text-sm font-bold text-slate-800 tracking-wide">Target Deadlines in 7 Days</h3>
+                <h3 className="text-sm font-bold text-[#0F172A] tracking-wide">Target Deadlines in 7 Days</h3>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
                 Action Required
               </span>
             </div>
-            <p className="text-xs text-slate-500 mb-4">
+            <p className="text-xs text-[#64748B] mb-4">
               Pending cases approaching statutory SLA resolution limits
             </p>
 
@@ -773,20 +773,20 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                 <div
                   key={c.id}
                   onClick={() => onViewCase(c.id)}
-                  className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200 hover:border-amber-300 cursor-pointer transition"
+                  className="p-3 rounded-lg bg-slate-50 hover:bg-slate-100/80 border border-slate-200 hover:border-amber-300 cursor-pointer transition"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#0845A8]">
+                    <span className="font-mono text-xs font-bold text-[#12345A]">
                       {c.case_id}
                     </span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
                       Due in {c.days_remaining}d
                     </span>
                   </div>
-                  <p className="text-xs text-slate-800 font-semibold truncate mt-1" title={c.subject}>
+                  <p className="text-xs text-[#0F172A] font-semibold truncate mt-1" title={c.subject}>
                     {c.subject}
                   </p>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 mt-1">
+                  <div className="flex items-center justify-between text-[11px] text-[#64748B] mt-1">
                     <span className="truncate max-w-[150px]">{c.institution_name}</span>
                     <span>{formatDate(c.due_date)}</span>
                   </div>

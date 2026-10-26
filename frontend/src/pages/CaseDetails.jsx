@@ -8,7 +8,7 @@ import { Modal } from '../components/Modal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import AcknowledgementModal from '../components/AcknowledgementModal';
 import { formatDate, formatDateTime, formatRegistrationDateTime } from '../utils/formatters';
-import { BUREAUS, STATUS_OPTIONS, OFFICERS_LIST, PRIORITY_OPTIONS } from '../utils/constants';
+import { BUREAUS, STATUS_OPTIONS, OFFICERS_LIST, PRIORITY_OPTIONS, getAphClause } from '../utils/constants';
 import { 
   ArrowLeft, 
   Building2, 
@@ -539,17 +539,26 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
             <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
               <div className="space-y-3 pb-4 border-b border-slate-200">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0845A8] border border-blue-200 font-bold">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 font-semibold">
                     {complaint.category}
                   </span>
                   <PriorityBadge priority={complaint.priority} />
+                  {/* Verified APH Clause Tagging */}
+                  <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold flex items-center gap-1 ${
+                    getAphClause(complaint.category) !== 'No relevant clause identified.'
+                      ? 'bg-teal-50 text-teal-800 border-teal-200'
+                      : 'bg-slate-50 text-slate-500 border-slate-200'
+                  }`}>
+                    <span className="text-[10px] text-teal-600 font-normal">APH:</span>
+                    {getAphClause(complaint.category)}
+                  </span>
                 </div>
 
-                <h2 className="text-lg font-black text-slate-900 leading-snug">
+                <h2 className="text-lg font-extrabold text-[#0F172A] leading-snug">
                   {complaint.subject}
                 </h2>
 
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center gap-2">
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-[#64748B] flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                   <span>
                     <strong>Identity Protected:</strong> Filed as {complaint.is_anonymous ? 'Protected Confidential Identity' : complaint.complainant_name} ({complaint.complainant_affiliation || 'Student'})
@@ -559,10 +568,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
               {/* Narrative */}
               <div className="space-y-2">
-                <h4 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">
                   Grievance Description & Facts
                 </h4>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 leading-relaxed whitespace-pre-wrap">
+                <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 text-xs text-[#0F172A] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
                   {complaint.description}
                 </div>
               </div>
@@ -845,10 +854,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
             <button
               onClick={() => setActiveTab('dossier')}
-              className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition flex items-center gap-2 ${
                 activeTab === 'dossier'
-                  ? 'bg-[#0845A8] text-white shadow-sm'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
               }`}
             >
               <FileText className="w-4 h-4" />
@@ -857,16 +866,16 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
             <button
               onClick={() => setActiveTab('action_taken')}
-              className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition flex items-center gap-2 ${
                 activeTab === 'action_taken'
-                  ? 'bg-[#0845A8] text-white shadow-sm'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
               }`}
             >
               <FileCheck className="w-4 h-4" />
               <span>Action Taken Workspace</span>
               {isReviewerAccepted && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 font-extrabold">
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 font-bold">
                   Active
                 </span>
               )}
@@ -874,10 +883,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
             <button
               onClick={() => setActiveTab('audit')}
-              className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition flex items-center gap-2 ${
                 activeTab === 'audit'
-                  ? 'bg-[#0845A8] text-white shadow-sm'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-[#0D9488] text-white shadow-xs'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
               }`}
             >
               <History className="w-4 h-4" />
@@ -889,21 +898,21 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {activeTab === 'dossier' && (
             <div className="space-y-6">
               {/* REVIEWER SCRUTINY PANEL */}
-              <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-5 shadow-md space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/15">
+              <div className="bg-white border border-slate-200 text-[#0F172A] rounded-xl p-5 shadow-xs space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-white/10 border border-white/20">
-                      <FileCheck className="w-5 h-5 text-blue-200" />
+                    <div className="p-2 rounded-lg bg-teal-50 border border-teal-200">
+                      <FileCheck className="w-5 h-5 text-teal-600" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold tracking-tight">Reviewer Intake & Scrutiny Workspace</h3>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/30 text-blue-200 border border-blue-400/30 uppercase">
-                          Scrutiny Mode
+                        <h3 className="text-sm font-bold text-[#0F172A] tracking-tight">Reviewer Intake & Scrutiny Workspace</h3>
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 uppercase tracking-wider">
+                          Scrutiny Workspace
                         </span>
                       </div>
-                      <p className="text-xs text-blue-200">
-                        Manual Document Scrutiny Mode — Verify evidence authenticity and confirm priority SLA.
+                      <p className="text-xs text-[#64748B]">
+                        Document Scrutiny Mode — Verify evidence authenticity and confirm statutory priority.
                       </p>
                     </div>
                   </div>
@@ -919,7 +928,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           });
                           setActiveModal('verify');
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow transition flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <CheckCircle className="w-4 h-4" />
                         <span>Verify & Accept</span>
@@ -930,7 +939,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ request_notes: '' });
                           setActiveModal('request_info');
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow transition flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <HelpCircle className="w-4 h-4" />
                         <span>Request Info</span>
@@ -941,7 +950,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ rejection_reason: '' });
                           setActiveModal('reject');
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow transition flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <XCircle className="w-4 h-4" />
                         <span>Reject Grievance</span>
@@ -951,36 +960,36 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-1">
-                  <div className="bg-white/10 rounded-xl p-3 border border-white/15">
-                    <span className="text-[10px] uppercase font-bold text-blue-200 block">Suggested AI Priority</span>
+                  <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <span className="text-[10px] uppercase font-bold text-[#64748B] block">Suggested Priority</span>
                     <div className="mt-1 flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">
+                      <span className="font-bold text-[#0F172A] text-sm">
                         {complaint.suggested_priority || complaint.priority}
                       </span>
                     </div>
-                    <p className="text-[11px] text-blue-100 mt-1 line-clamp-2">
+                    <p className="text-[11px] text-[#64748B] mt-1 line-clamp-2">
                       {complaint.suggested_priority_reason || 'AI heuristic SLA model'}
                     </p>
                   </div>
 
-                  <div className="bg-white/10 rounded-xl p-3 border border-white/15">
-                    <span className="text-[10px] uppercase font-bold text-blue-200 block">Jurisdiction & Routing</span>
-                    <div className="mt-1 font-semibold text-white">
+                  <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <span className="text-[10px] uppercase font-bold text-[#64748B] block">Jurisdiction & Routing</span>
+                    <div className="mt-1 font-semibold text-[#0F172A]">
                       {complaint.source_bureau}
                     </div>
-                    <p className="text-[11px] text-blue-100 mt-1 line-clamp-2">
+                    <p className="text-[11px] text-[#64748B] mt-1 line-clamp-2">
                       {complaint.routing_reason || 'Categorical statutory jurisdiction mapping'}
                     </p>
                   </div>
 
-                  <div className="bg-white/10 rounded-xl p-3 border border-white/15">
-                    <span className="text-[10px] uppercase font-bold text-blue-200 block">Current Verification Status</span>
+                  <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <span className="text-[10px] uppercase font-bold text-[#64748B] block">Current Verification Status</span>
                     <div className="mt-1 flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">
+                      <span className="font-bold text-[#0F172A] text-sm">
                         {complaint.verification_status || 'Submitted'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-blue-200 mt-1">
+                    <p className="text-[11px] text-[#64748B] mt-1">
                       {complaint.info_request_notes ? `Active Query: ${complaint.info_request_notes}` : 'Documents pending initial inquiry'}
                     </p>
                   </div>
@@ -1095,15 +1104,15 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-[10px] uppercase font-semibold text-slate-500 block">Grievance Category</span>
-                    <span className="font-bold text-slate-800 mt-0.5 block">{complaint.category}</span>
-                    <span className="text-[10px] text-slate-500">
-                      Affiliation: {complaint.complainant_affiliation || complaint.complainant_type || 'Student'}
+                    <span className="font-bold text-[#0F172A] mt-0.5 block">{complaint.category}</span>
+                    <span className="text-[10px] text-teal-700 font-semibold block mt-0.5">
+                      APH: {getAphClause(complaint.category)}
                     </span>
                   </div>
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-[10px] uppercase font-semibold text-slate-500 block">Assigned Official / Desk</span>
-                    <span className="font-bold text-slate-800 mt-0.5 block truncate">
+                    <span className="font-bold text-[#0F172A] mt-0.5 block truncate">
                       {complaint.assigned_officer || 'Central Intake Desk'}
                     </span>
                     <span className="text-[10px] text-slate-500">{complaint.source_bureau}</span>
@@ -1111,7 +1120,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <span className="text-[10px] uppercase font-semibold text-slate-500 block">Statutory Resolution SLA</span>
-                    <span className={`font-bold mt-0.5 block ${complaint.is_overdue ? 'text-rose-600' : 'text-slate-800'}`}>
+                    <span className={`font-bold mt-0.5 block ${complaint.is_overdue ? 'text-rose-600' : 'text-[#0F172A]'}`}>
                       {formatDate(complaint.due_date)}
                     </span>
                     <span className="text-[10px] text-slate-500">
@@ -1122,10 +1131,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
                 {/* Narrative */}
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">
                     Grievance Description & Facts
                   </h4>
-                  <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-xs text-[#0F172A] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
                     {complaint.description}
                   </p>
 

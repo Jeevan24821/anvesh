@@ -93,18 +93,18 @@ export function Institutions({ onViewCase }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Technical Institution Directory</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">Technical Institution Directory</h1>
+          <p className="text-xs text-[#64748B] mt-1">
             Consolidated profiles and multi-bureau grievance track records for AICTE approved colleges.
           </p>
         </div>
-        <div className="text-xs text-slate-500 font-mono">
-          Showing <span className="text-[#0845A8] font-bold">{institutions.length}</span> of {total} Institutions
+        <div className="text-xs text-[#64748B] font-mono">
+          Showing <span className="text-[#0D9488] font-bold">{institutions.length}</span> of {total} Institutions
         </div>
       </div>
 
       {/* Filter Row */}
-      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col md:flex-row items-center gap-3">
+      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-xs flex flex-col md:flex-row items-center gap-3">
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -112,7 +112,7 @@ export function Institutions({ onViewCase }) {
             placeholder="Search by Institution Name, AICTE Permanent ID (1-3349...), or District..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0845A8] focus:ring-2 focus:ring-[#0845A8]/20 transition"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition"
           />
         </div>
 
@@ -120,7 +120,7 @@ export function Institutions({ onViewCase }) {
           <select
             value={region}
             onChange={(e) => setRegion(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-[#0845A8] focus:ring-2 focus:ring-[#0845A8]/20"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
           >
             {REGIONS.map((r) => (
               <option key={r} value={r}>Region: {r}</option>
@@ -142,12 +142,12 @@ export function Institutions({ onViewCase }) {
             <div
               key={inst.id}
               onClick={() => handleOpenDetail(inst.id)}
-              className="bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-5 cursor-pointer transition flex flex-col justify-between"
+              className="bg-white border border-slate-200 hover:border-teal-300 hover:shadow-xs rounded-xl p-5 cursor-pointer transition flex flex-col justify-between"
             >
               <div>
                 {/* Header */}
                 <div className="flex items-start justify-between gap-2">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-[#0845A8] border border-blue-200">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-teal-50 text-[#0D9488] border border-teal-200">
                     {inst.aicte_id}
                   </span>
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
@@ -159,7 +159,7 @@ export function Institutions({ onViewCase }) {
                   </span>
                 </div>
 
-                <h3 className="text-sm font-bold text-slate-800 mt-2.5 leading-snug line-clamp-2" title={inst.name}>
+                <h3 className="text-sm font-bold text-[#0F172A] mt-2.5 leading-snug line-clamp-2" title={inst.name}>
                   {inst.name}
                 </h3>
 
@@ -178,7 +178,7 @@ export function Institutions({ onViewCase }) {
                 <div className="flex items-center gap-3">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase block">Complaints</span>
-                    <span className="font-bold text-slate-800">{inst.complaint_count}</span>
+                    <span className="font-bold text-[#0F172A]">{inst.complaint_count}</span>
                   </div>
 
                   {inst.overdue_complaints > 0 && (
@@ -199,7 +199,7 @@ export function Institutions({ onViewCase }) {
                   )}
                 </div>
 
-                <span className="text-xs text-[#0845A8] font-semibold flex items-center gap-1">
+                <span className="text-xs text-[#0D9488] font-semibold flex items-center gap-1">
                   History <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -225,14 +225,14 @@ export function Institutions({ onViewCase }) {
             {/* Header info */}
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-[#0845A8]">
+                <span className="font-mono text-xs font-bold text-[#0D9488]">
                   Permanent AICTE ID: {detailData.aicte_id}
                 </span>
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
                   {detailData.approval_status}
                 </span>
               </div>
-              <h2 className="text-base font-bold text-slate-900">{detailData.name}</h2>
+              <h2 className="text-base font-bold text-[#0F172A]">{detailData.name}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600 text-xs pt-2">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-slate-400" />
@@ -255,19 +255,19 @@ export function Institutions({ onViewCase }) {
 
             {/* Quick Summary Counts */}
             <div className="grid grid-cols-4 gap-3 text-center">
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
                 <div className="text-[10px] text-slate-500 uppercase">Total Filed</div>
-                <div className="text-lg font-bold text-slate-900 mt-0.5">{detailData.total_complaints}</div>
+                <div className="text-lg font-bold text-[#0F172A] mt-0.5">{detailData.total_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
-                <div className="text-[10px] text-sky-600 uppercase">Active Cases</div>
-                <div className="text-lg font-bold text-sky-700 mt-0.5">{detailData.active_complaints}</div>
+              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-[10px] text-teal-600 uppercase">Active Cases</div>
+                <div className="text-lg font-bold text-[#0D9488] mt-0.5">{detailData.active_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
                 <div className="text-[10px] text-rose-600 uppercase">Overdue Breaches</div>
                 <div className="text-lg font-bold text-rose-700 mt-0.5">{detailData.overdue_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm">
+              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
                 <div className="text-[10px] text-purple-600 uppercase">Overlap Alerts</div>
                 <div className="text-lg font-bold text-purple-700 mt-0.5">{detailData.overlap_alerts_count}</div>
               </div>
@@ -276,15 +276,15 @@ export function Institutions({ onViewCase }) {
             {/* Consolidated Complaints Table */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-bold text-slate-900 tracking-wide">
+                <h4 className="text-sm font-bold text-[#0F172A] tracking-wide">
                   Cross-Bureau Complaint History ({detailData.complaints.length})
                 </h4>
-                <span className="text-[11px] text-slate-500">
+                <span className="text-[11px] text-[#64748B]">
                   Tracked across PGRC, Regulation, Approval, ARC, and SDC
                 </span>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden max-h-80 overflow-y-auto shadow-sm">
+              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden max-h-80 overflow-y-auto shadow-2xs">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200 sticky top-0">
                     <tr>
@@ -298,8 +298,8 @@ export function Institutions({ onViewCase }) {
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
                     {(detailData.complaints || []).map((c) => (
-                      <tr key={c.id} className="hover:bg-blue-50/40 transition">
-                        <td className="py-2.5 px-3 font-mono font-bold text-[#0845A8] whitespace-nowrap">
+                      <tr key={c.id} className="hover:bg-slate-50 transition">
+                        <td className="py-2.5 px-3 font-mono font-bold text-[#0D9488] whitespace-nowrap">
                           {c.case_id}
                         </td>
                         <td className="py-2.5 px-3 whitespace-nowrap">
@@ -320,7 +320,7 @@ export function Institutions({ onViewCase }) {
                               setSelectedInstId(null);
                               onViewCase(c.id);
                             }}
-                            className="text-xs px-2.5 py-1 rounded bg-blue-50 text-[#0845A8] hover:bg-blue-100 border border-blue-200 font-semibold transition"
+                            className="text-xs px-2.5 py-1 rounded bg-teal-50 text-[#0D9488] hover:bg-teal-100 border border-teal-200 font-semibold transition"
                           >
                             Inspect
                           </button>

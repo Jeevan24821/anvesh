@@ -176,7 +176,7 @@ export function Overlaps({ onViewCase }) {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2">
           {['Pending Review', 'Confirmed Linked', 'Separate Proceeding', 'Confirmed Duplicate', 'Dismissed False Positive', 'All'].map((s) => (
             <button
@@ -184,7 +184,7 @@ export function Overlaps({ onViewCase }) {
               onClick={() => setStatusFilter(s)}
               className={`px-3 py-1.5 rounded-lg font-medium transition ${
                 statusFilter === s
-                  ? 'bg-[#0845A8] text-white font-semibold shadow-sm'
+                  ? 'bg-[#0D9488] text-white font-semibold shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -195,11 +195,11 @@ export function Overlaps({ onViewCase }) {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500 font-medium">Confidence:</span>
+            <span className="text-[#64748B] font-medium">Confidence:</span>
             <select
               value={confidenceFilter}
               onChange={(e) => setConfidenceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none"
+              className="bg-slate-50 border border-slate-200 text-[#0F172A] rounded-lg px-2.5 py-1.5 focus:outline-none"
             >
               <option value="All">All Confidence</option>
               <option value="High">High Confidence</option>
@@ -209,11 +209,11 @@ export function Overlaps({ onViewCase }) {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500 font-medium">Type:</span>
+            <span className="text-[#64748B] font-medium">Type:</span>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none"
+              className="bg-slate-50 border border-slate-200 text-[#0F172A] rounded-lg px-2.5 py-1.5 focus:outline-none"
             >
               <option value="All">All Types</option>
               <option value="Cross-Bureau Institution Overlap">Cross-Bureau Overlap</option>
@@ -238,25 +238,34 @@ export function Overlaps({ onViewCase }) {
           {alerts.map((alert) => (
             <div
               key={alert.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 hover:border-blue-300 transition"
+              className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4 hover:border-slate-300 transition"
             >
               {/* Card Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="font-mono text-xs font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">
                     Alert #{alert.id}
                   </span>
-                  <span className="font-bold text-slate-800 text-sm">
+                  <span className="font-bold text-[#0F172A] text-sm">
                     {alert.institution_1_name}
                   </span>
                   <span className="text-[10px] text-slate-500 font-mono">
                     (AICTE ID: {alert.institution_1_aicte_id})
                   </span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${getConfidenceStyle(alert.confidence_label)}`}>
-                    {alert.confidence_label} Match ({alert.confidence_score}%)
+                  {/* Prominent Similarity Score */}
+                  <span className="px-3 py-0.5 rounded-full text-xs font-bold border bg-teal-50 text-teal-800 border-teal-200 flex items-center gap-1">
+                    <span className="text-[10px] text-teal-600 font-normal">Similarity Score:</span>
+                    {alert.confidence_score}%
                   </span>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                    {alert.status}
+                  {/* Clear Relationship Distinction */}
+                  <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                    alert.status === 'Pending Review'
+                      ? 'bg-amber-50 text-amber-800 border-amber-200'
+                      : alert.status === 'Dismissed False Positive'
+                      ? 'bg-slate-100 text-slate-600 border-slate-200'
+                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  }`}>
+                    {alert.status === 'Pending Review' ? 'Suggested Overlap (Awaiting Review)' : alert.status}
                   </span>
                 </div>
 
@@ -265,7 +274,7 @@ export function Overlaps({ onViewCase }) {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleOpenReview(alert, 'JOINT_INVESTIGATION')}
-                      className="px-3 py-1.5 rounded-lg bg-[#0845A8] hover:bg-[#063B8B] text-white text-xs font-bold shadow transition flex items-center gap-1.5"
+                      className="px-3.5 py-1.5 rounded-lg bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold shadow-xs transition flex items-center gap-1.5"
                     >
                       <GitMerge className="w-3.5 h-3.5" />
                       <span>Take Action</span>
@@ -279,12 +288,12 @@ export function Overlaps({ onViewCase }) {
                 {/* Case 1 */}
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-blue-900 text-xs">
+                    <span className="font-mono font-bold text-[#12345A] text-xs">
                       {alert.case_1_id}
                     </span>
                     <button
                       onClick={() => onViewCase(alert.complaint_id_1)}
-                      className="text-[11px] font-bold text-blue-700 hover:underline flex items-center gap-1"
+                      className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
                     >
                       View Case <ArrowRight className="w-3 h-3" />
                     </button>
@@ -293,10 +302,10 @@ export function Overlaps({ onViewCase }) {
                     <BureauBadge bureau={alert.case_1_bureau} />
                     <StatusBadge status={alert.case_1_status} />
                   </div>
-                  <div className="text-xs font-semibold text-slate-800">
+                  <div className="text-xs font-semibold text-[#0F172A]">
                     {alert.case_1_subject}
                   </div>
-                  <p className="text-[11px] text-slate-600 line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                  <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs break-words">
                     {alert.case_1_description}
                   </p>
                 </div>
@@ -304,12 +313,12 @@ export function Overlaps({ onViewCase }) {
                 {/* Case 2 */}
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-blue-900 text-xs">
+                    <span className="font-mono font-bold text-[#12345A] text-xs">
                       {alert.case_2_id}
                     </span>
                     <button
                       onClick={() => onViewCase(alert.complaint_id_2)}
-                      className="text-[11px] font-bold text-blue-700 hover:underline flex items-center gap-1"
+                      className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
                     >
                       View Case <ArrowRight className="w-3 h-3" />
                     </button>
@@ -318,22 +327,22 @@ export function Overlaps({ onViewCase }) {
                     <BureauBadge bureau={alert.case_2_bureau} />
                     <StatusBadge status={alert.case_2_status} />
                   </div>
-                  <div className="text-xs font-semibold text-slate-800">
+                  <div className="text-xs font-semibold text-[#0F172A]">
                     {alert.case_2_subject}
                   </div>
-                  <p className="text-[11px] text-slate-600 line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                  <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs break-words">
                     {alert.case_2_description}
                   </p>
                 </div>
               </div>
 
               {/* Explainability Card: Transparent Signal Breakdown */}
-              <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 text-xs space-y-1.5">
-                <div className="flex items-center gap-1.5 text-blue-900 font-bold uppercase tracking-wider text-[10px]">
-                  <Info className="w-3.5 h-3.5 text-[#0845A8]" />
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                <div className="flex items-center gap-1.5 text-[#0F172A] font-bold uppercase tracking-wider text-[10px]">
+                  <Info className="w-3.5 h-3.5 text-[#0D9488]" />
                   Engine Match Signals & Explainability Breakdown:
                 </div>
-                <ul className="list-disc list-inside space-y-0.5 text-slate-700 text-[11px]">
+                <ul className="list-disc list-inside space-y-0.5 text-[#64748B] text-[11px]">
                   {alert.match_reasons.map((reason, idx) => (
                     <li key={idx} className="leading-relaxed">
                       {reason}

@@ -10,6 +10,7 @@ import { Institutions } from './pages/Institutions';
 import { Overlaps } from './pages/Overlaps';
 import { Reports } from './pages/Reports';
 import { Notifications } from './pages/Notifications';
+import { Settings } from './pages/Settings';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AlertCircle, Shield } from 'lucide-react';
 
@@ -146,6 +147,10 @@ function AppContent() {
                 onViewCase={handleViewCase}
                 onViewOverlap={() => setActivePage('overlaps')}
               />
+            )}
+
+            {activePage === 'settings' && (
+              <Settings />
             )}
           </ErrorBoundary>
         </main>
