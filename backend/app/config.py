@@ -5,12 +5,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = BASE_DIR / "sentrix.db"
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
+
 CORS_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://anvesh-phi.vercel.app",
 ]
+
 
 BUREAUS = [
     "PGRC (Public Grievance Redressal)",
