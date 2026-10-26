@@ -28,7 +28,7 @@ export default function AcknowledgementModal({ isOpen, onClose, complaint }) {
     : 'Within 30 Calendar Days';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       {/* Container with print-specific visibility */}
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden my-8 print:m-0 print:border-none print:shadow-none print:w-full">
         {/* Printable Section */}
@@ -222,7 +222,7 @@ export default function AcknowledgementModal({ isOpen, onClose, complaint }) {
 
           <button
             onClick={handlePrint}
-            className="px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white font-medium text-sm rounded-xl transition shadow flex items-center space-x-2"
+            className="px-5 py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_20px_rgba(147,18,255,0.5)] text-white font-medium text-sm rounded-xl transition shadow-[0_0_15px_rgba(147,18,255,0.35)] flex items-center space-x-2"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />

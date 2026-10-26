@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { Modal } from '../components/Modal';
 import { 
-  Shield, 
   Building2, 
   GraduationCap, 
   Users, 
@@ -16,19 +15,15 @@ import {
   CheckCircle2, 
   ChevronRight, 
   HelpCircle, 
-  ArrowRight, 
-  RefreshCw, 
   Send,
   ShieldCheck,
   Phone,
   Mail,
-  FileText,
   UserPlus,
   LogIn,
   School,
   Info,
-  Sparkles,
-  BookOpen
+  Sparkles
 } from 'lucide-react';
 
 export function LoginPage() {
@@ -49,7 +44,7 @@ export function LoginPage() {
   // ----------------------------------------------------
   // CARD 2: Student / Faculty State
   // ----------------------------------------------------
-  const [studentMode, setStudentMode] = useState('password'); // Default to password login as requested
+  const [studentMode, setStudentMode] = useState('password');
   const [studentId, setStudentId] = useState('');
   const [studentOtp, setStudentOtp] = useState('');
   const [studentPassword, setStudentPassword] = useState('');
@@ -63,7 +58,7 @@ export function LoginPage() {
   // ----------------------------------------------------
   // CARD 3: Parent / Guardian State
   // ----------------------------------------------------
-  const [parentMode, setParentMode] = useState('password'); // Default to password login as requested
+  const [parentMode, setParentMode] = useState('password');
   const [parentId, setParentId] = useState('');
   const [parentOtp, setParentOtp] = useState('');
   const [parentPassword, setParentPassword] = useState('');
@@ -77,7 +72,7 @@ export function LoginPage() {
   // ----------------------------------------------------
   // SIGN UP / CREATE ACCOUNT STATE
   // ----------------------------------------------------
-  const [signupRole, setSignupRole] = useState('Student'); // 'Student' | 'Institution User' | 'Parent / Guardian'
+  const [signupRole, setSignupRole] = useState('Student');
   const [signupName, setSignupName] = useState('');
   const [signupIdentifier, setSignupIdentifier] = useState('');
   const [signupInstitution, setSignupInstitution] = useState('');
@@ -112,7 +107,6 @@ export function LoginPage() {
   const [recoveryLoading, setRecoveryLoading] = useState(false);
   const [recoveryError, setRecoveryError] = useState(null);
   const [recoverySuccess, setRecoverySuccess] = useState(null);
-
 
   // ----------------------------------------------------
   // OTP Cooldown Timers
@@ -151,30 +145,32 @@ export function LoginPage() {
     try {
       await login(officialUsername.trim(), officialPassword, 'admin');
     } catch (err) {
-      setOfficialError(err.message || 'Authentication failed. Please verify your official credentials.');
+      setOfficialError(err.message || 'Authentication failed. Please check your credentials.');
     } finally {
       setOfficialLoading(false);
     }
   };
 
   // ----------------------------------------------------
-  // Handlers: Student / Institution
+  // Handlers: Student / Faculty
   // ----------------------------------------------------
   const handleStudentRequestOtp = async () => {
     if (!studentId.trim()) {
-      setStudentError('Please enter your Student USN, Roll Number, or Institution ID first.');
-      setStudentSuccessMsg(null);
+      setStudentError('Please enter your Student USN or Faculty ID first.');
       return;
     }
     setStudentOtpLoading(true);
     setStudentError(null);
     setStudentSuccessMsg(null);
     try {
-      const res = await api.requestOtp({ identifier: studentId.trim(), role_type: 'Student' });
-      setStudentSuccessMsg(res.message || 'OTP dispatched to registered contact.');
-      setStudentOtpCooldown(15);
+      const res = await api.requestOtp(studentId.trim());
+      setStudentSuccessMsg(res.message || 'OTP successfully dispatched to registered email/phone.');
+      if (res.demo_otp) {
+        setStudentOtp(res.demo_otp);
+      }
+      setStudentOtpCooldown(30);
     } catch (err) {
-      setStudentError(err.message || 'Unable to dispatch OTP. Please verify your identifier.');
+      setStudentError(err.message || 'Failed to dispatch OTP. Please check your identifier.');
     } finally {
       setStudentOtpLoading(false);
     }
@@ -183,10 +179,9 @@ export function LoginPage() {
   const handleStudentSubmit = async (e) => {
     e.preventDefault();
     if (!studentId.trim()) {
-      setStudentError('Please enter your Student USN, Roll Number, or Institution ID.');
+      setStudentError('Please enter your Student USN or Faculty ID.');
       return;
     }
-
     setStudentLoading(true);
     setStudentError(null);
     try {
@@ -217,19 +212,21 @@ export function LoginPage() {
   // ----------------------------------------------------
   const handleParentRequestOtp = async () => {
     if (!parentId.trim()) {
-      setParentError('Please enter your Parent Identifier or Registered Mobile Number first.');
-      setParentSuccessMsg(null);
+      setParentError('Please enter your Parent ID or Registered Mobile number.');
       return;
     }
     setParentOtpLoading(true);
     setParentError(null);
     setParentSuccessMsg(null);
     try {
-      const res = await api.requestOtp({ identifier: parentId.trim(), role_type: 'Parent' });
+      const res = await api.requestOtp(parentId.trim());
       setParentSuccessMsg(res.message || 'OTP dispatched to registered mobile number.');
-      setParentOtpCooldown(15);
+      if (res.demo_otp) {
+        setParentOtp(res.demo_otp);
+      }
+      setParentOtpCooldown(30);
     } catch (err) {
-      setParentError(err.message || 'Unable to dispatch OTP. Please verify your registered contact.');
+      setParentError(err.message || 'Failed to dispatch OTP.');
     } finally {
       setParentOtpLoading(false);
     }
@@ -238,10 +235,9 @@ export function LoginPage() {
   const handleParentSubmit = async (e) => {
     e.preventDefault();
     if (!parentId.trim()) {
-      setParentError('Please enter your Parent Identifier or Registered Mobile Number.');
+      setParentError('Please enter your Parent ID or Registered Mobile number.');
       return;
     }
-
     setParentLoading(true);
     setParentError(null);
     try {
@@ -317,7 +313,6 @@ export function LoginPage() {
       const res = await api.register(payload);
       setSignupSuccess(res.message || 'Account successfully created! You may now sign in.');
 
-      // Prefill appropriate login card identifier
       if (signupRole === 'Student' || signupRole === 'Institution User') {
         setStudentId(signupIdentifier.trim());
         setStudentMode('password');
@@ -328,7 +323,6 @@ export function LoginPage() {
         setParentPassword(signupPassword);
       }
 
-      // Reset signup form
       setSignupName('');
       setSignupEmail('');
       setSignupPhone('');
@@ -336,7 +330,6 @@ export function LoginPage() {
       setSignupPassword('');
       setSignupConfirmPassword('');
 
-      // Auto-switch to login tab after 2.5s
       setTimeout(() => {
         setActiveTab('login');
       }, 2500);
@@ -403,16 +396,17 @@ export function LoginPage() {
     setForgotLoading(true);
     setForgotError(null);
     try {
-      const res = await api.resetPassword({ token: resetToken.trim(), new_password: newPassword });
+      const res = await api.resetPassword({
+        token: resetToken.trim(),
+        new_password: newPassword
+      });
       setForgotSuccess(res.message);
-      if (forgotIdentifier) {
-        setOfficialUsername(forgotIdentifier.trim());
-      }
+      setOfficialPassword(newPassword);
       setTimeout(() => {
         setIsForgotOpen(false);
       }, 2000);
     } catch (err) {
-      setForgotError(err.message || 'Password reset failed. Token may have expired.');
+      setForgotError(err.message || 'Failed to update password.');
     } finally {
       setForgotLoading(false);
     }
@@ -462,32 +456,39 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between text-[#0F172A]">
+    <div className="min-h-screen bg-[#000000] flex flex-col justify-between text-[#F7F7F8] relative overflow-hidden">
       
+      {/* Ambient Violet Radial Glow Background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[radial-gradient(ellipse_90%_50%_at_50%_-15%,rgba(147,18,255,0.22),transparent_75%)] pointer-events-none" />
+
       {/* Top Government Portal Header Bar */}
-      <header className="bg-white text-[#0F172A] px-6 py-3 border-b border-slate-200 shadow-2xs">
+      <header className="bg-[#0D0D14]/90 backdrop-blur-md text-[#F7F7F8] px-6 py-3 border-b border-[#232234] shadow-xs sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <img 
-              src="/anvesh_logo.png" 
-              alt="ANVESH" 
-              className="w-10 h-10 object-contain rounded-lg p-0.5 bg-slate-50 border border-slate-200 shadow-2xs" 
-            />
+            <div className="w-10 h-10 rounded-lg p-0.5 bg-[#9312FF]/20 border border-[#9312FF]/40 shadow-[0_0_10px_rgba(147,18,255,0.25)] flex items-center justify-center">
+              <img 
+                src="/anvesh_logo.png" 
+                alt="ANVESH" 
+                className="w-full h-full object-contain" 
+              />
+            </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg tracking-wide text-[#0F172A]">ANVESH</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 uppercase tracking-wider">
+                <span className="font-extrabold text-lg tracking-wide bg-gradient-to-r from-white via-[#D8B4FE] to-[#9312FF] bg-clip-text text-transparent">
+                  ANVESH
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 uppercase tracking-wider">
                   National Portal
                 </span>
               </div>
-              <p className="text-[11px] text-[#64748B] font-medium">
+              <p className="text-[11px] text-[#8B8988] font-medium">
                 AICTE Inter-Bureau Grievance Intelligence & Resolution Platform • Ministry of Education
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-xs text-[#64748B]">
-            <div className="flex items-center gap-1.5 font-medium bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
-              <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
+          <div className="flex items-center gap-4 text-xs text-[#8B8988]">
+            <div className="flex items-center gap-1.5 font-medium bg-[#13131E] px-3 py-1 rounded-full border border-[#232234]">
+              <ShieldCheck className="w-4 h-4 text-[#D8B4FE]" />
               <span>Multi-Stakeholder Secure Authentication Gateway</span>
             </div>
           </div>
@@ -495,32 +496,32 @@ export function LoginPage() {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 flex flex-col justify-center">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 flex flex-col justify-center relative z-10">
         
         {/* Portal Introduction & Branding Banner */}
         <div className="text-center mb-6 max-w-2xl mx-auto">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white border border-slate-200 mb-3 shadow-xs p-1.5">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-[#9312FF]/20 border border-[#9312FF]/40 mb-3 shadow-[0_0_20px_rgba(147,18,255,0.3)] p-1.5">
             <img src="/anvesh_logo.png" alt="ANVESH" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#F7F7F8] tracking-tight">
             ANVESH Authentication Portal
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-[#0D9488] mt-1">
+          <p className="text-xs sm:text-sm font-semibold text-[#D8B4FE] mt-1">
             Analytics-Driven Network for Verifying, Evaluating, and Synchronizing Higher-Education Grievances
           </p>
-          <p className="text-xs text-[#64748B] mt-1 italic">
+          <p className="text-xs text-[#8B8988] mt-1 italic">
             Discover Connections. Drive Resolution. Strengthen Accountability.
           </p>
         </div>
 
         {/* 1-CLICK QUICK DEMO ACCESS BAR (Instant Evaluator & Tester Entry) */}
-        <div className="max-w-4xl mx-auto w-full mb-6 p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-100">
-            <span className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#0D9488]" />
-              1-Click Quick Demo Access
+        <div className="max-w-4xl mx-auto w-full mb-6 p-3.5 rounded-xl bg-[#0D0D14] border border-[#232234] shadow-xs">
+          <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#232234]">
+            <span className="text-xs font-bold text-[#F7F7F8] uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#D8B4FE]" />
+              <span>1-Click Quick Demo Access</span>
             </span>
-            <span className="text-[11px] text-[#64748B]">Click any role for instant entry without typing:</span>
+            <span className="text-[11px] text-[#8B8988]">Click any role for instant entry without typing:</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             {[
@@ -541,9 +542,9 @@ export function LoginPage() {
                     alert(e.message || 'Demo login failed');
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-xs font-semibold text-[#0F172A] transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#232234] bg-[#13131E] hover:bg-[#1C1B2B] hover:border-[#9312FF]/50 text-xs font-semibold text-[#F7F7F8] transition"
               >
-                <item.icon className="w-3.5 h-3.5 text-[#0D9488]" />
+                <item.icon className="w-3.5 h-3.5 text-[#D8B4FE]" />
                 <span>{item.label}</span>
               </button>
             ))}
@@ -552,7 +553,7 @@ export function LoginPage() {
 
         {/* PRIMARY NAVIGATION SWITCH: LOGIN vs SIGN UP */}
         <div className="flex justify-center mb-8">
-          <div className="bg-slate-100 p-1.5 rounded-xl border border-slate-200 flex items-center gap-1.5 max-w-md w-full">
+          <div className="bg-[#0D0D14] p-1.5 rounded-xl border border-[#232234] flex items-center gap-1.5 max-w-md w-full">
             <button
               type="button"
               onClick={() => {
@@ -562,8 +563,8 @@ export function LoginPage() {
               }}
               className={`flex-1 py-2 px-4 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 ${
                 activeTab === 'login'
-                  ? 'bg-[#0D9488] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.3)]'
+                  : 'text-[#8B8988] hover:text-[#F7F7F8]'
               }`}
             >
               <LogIn className="w-4 h-4" />
@@ -580,8 +581,8 @@ export function LoginPage() {
               }}
               className={`flex-1 py-2 px-4 rounded-lg font-bold text-xs transition flex items-center justify-center gap-2 ${
                 activeTab === 'signup'
-                  ? 'bg-[#0D9488] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.3)]'
+                  : 'text-[#8B8988] hover:text-[#F7F7F8]'
               }`}
             >
               <UserPlus className="w-4 h-4" />
@@ -596,25 +597,23 @@ export function LoginPage() {
         {activeTab === 'login' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             
-            {/* ==================================================== */}
-            {/* CARD 1: BUREAU OFFICER / ADMIN                       */}
-            {/* ==================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
+            {/* CARD 1: BUREAU OFFICER / ADMIN */}
+            <div className="bg-[#0D0D14] rounded-xl border border-[#232234] shadow-xs hover:border-[#3A3854] transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-200 bg-white">
+                <div className="p-5 border-b border-[#232234] bg-[#0D0D14]">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
-                      <Building2 className="w-4 h-4 text-[#0D9488]" />
+                    <div className="w-9 h-9 rounded-lg bg-[#9312FF]/20 text-[#D8B4FE] border border-[#9312FF]/40 flex items-center justify-center shadow-xs">
+                      <Building2 className="w-4 h-4 text-[#D8B4FE]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#13131E] text-[#D8B4FE] border border-[#232234] uppercase tracking-wider">
                       Official Access
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
+                  <h2 className="text-base font-extrabold text-[#F7F7F8] tracking-tight">
                     Bureau Officer / Admin
                   </h2>
-                  <p className="text-xs text-[#64748B] mt-1">
+                  <p className="text-xs text-[#8B8988] mt-1">
                     Central HQ Administrators, Bureau Reviewers (PGRC, RB, AB), and Scrutiny Officers.
                   </p>
                 </div>
@@ -622,18 +621,18 @@ export function LoginPage() {
                 {/* Form Body */}
                 <form onSubmit={handleOfficialSubmit} className="p-5 space-y-4 text-xs">
                   {officialError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2 shadow-2xs">
-                      <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="p-3 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2 shadow-xs">
+                      <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
                       <span className="font-medium">{officialError}</span>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                       Official Username *
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={officialUsername}
@@ -642,18 +641,18 @@ export function LoginPage() {
                           setOfficialError(null);
                         }}
                         placeholder="e.g. admin or reviewer_pgrc"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                         autoComplete="username"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                       Password *
                     </label>
                     <div className="relative">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type={showOfficialPassword ? 'text' : 'password'}
                         value={officialPassword}
@@ -662,13 +661,13 @@ export function LoginPage() {
                           setOfficialError(null);
                         }}
                         placeholder="Enter password"
-                        className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                        className="w-full pl-9 pr-10 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                         autoComplete="current-password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowOfficialPassword(!showOfficialPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 transition"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B8988] hover:text-[#F7F7F8] p-0.5 transition"
                         title={showOfficialPassword ? 'Hide password' : 'Show password'}
                       >
                         {showOfficialPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -678,11 +677,11 @@ export function LoginPage() {
 
                   {/* Sub-row: Forgot Password link */}
                   <div className="flex items-center justify-between pt-1 text-xs">
-                    <span className="text-[11px] text-slate-400">Server Audited Session</span>
+                    <span className="text-[11px] text-[#8B8988]">Server Audited Session</span>
                     <button
                       type="button"
                       onClick={openForgotPassword}
-                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
+                      className="text-[#D8B4FE] hover:text-white font-bold text-xs hover:underline transition"
                     >
                       Forgot Password?
                     </button>
@@ -691,7 +690,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={officialLoading}
-                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.3)] transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>{officialLoading ? 'Authenticating Official Session...' : 'Sign In as Officer / Admin'}</span>
                     <ChevronRight className="w-4 h-4" />
@@ -699,37 +698,34 @@ export function LoginPage() {
                 </form>
               </div>
 
-              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+              <div className="px-5 py-3 bg-[#13131E] border-t border-[#232234] text-[11px] text-[#8B8988] flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#45B558] flex-shrink-0" />
                 <span>Privileged role; account issued strictly by AICTE Administration.</span>
               </div>
             </div>
 
-
-            {/* ==================================================== */}
-            {/* CARD 2: STUDENT / FACULTY                            */}
-            {/* ==================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
+            {/* CARD 2: STUDENT / FACULTY */}
+            <div className="bg-[#0D0D14] rounded-xl border border-[#232234] shadow-xs hover:border-[#3A3854] transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-200 bg-white">
+                <div className="p-5 border-b border-[#232234] bg-[#0D0D14]">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
-                      <GraduationCap className="w-4 h-4 text-[#0D9488]" />
+                    <div className="w-9 h-9 rounded-lg bg-[#9312FF]/20 text-[#D8B4FE] border border-[#9312FF]/40 flex items-center justify-center shadow-xs">
+                      <GraduationCap className="w-4 h-4 text-[#D8B4FE]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#13131E] text-[#D8B4FE] border border-[#232234] uppercase tracking-wider">
                       Student & Faculty
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
+                  <h2 className="text-base font-extrabold text-[#F7F7F8] tracking-tight">
                     Student / Faculty
                   </h2>
-                  <p className="text-xs text-[#64748B] mt-1">
+                  <p className="text-xs text-[#8B8988] mt-1">
                     Enrolled students, alumni, and verified faculty / institutional members.
                   </p>
 
                   {/* Mode Selector Toggle: Password vs OTP */}
-                  <div className="mt-3.5 flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <div className="mt-3.5 flex bg-[#13131E] p-1 rounded-xl border border-[#232234]">
                     <button
                       type="button"
                       onClick={() => {
@@ -739,8 +735,8 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         studentMode === 'password'
-                          ? 'bg-[#0D9488] text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_8px_rgba(147,18,255,0.3)]'
+                          : 'text-[#8B8988] hover:text-[#F7F7F8]'
                       }`}
                     >
                       <Lock className="w-3 h-3" />
@@ -755,8 +751,8 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         studentMode === 'otp'
-                          ? 'bg-[#0D9488] text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_8px_rgba(147,18,255,0.3)]'
+                          : 'text-[#8B8988] hover:text-[#F7F7F8]'
                       }`}
                     >
                       <KeyRound className="w-3 h-3" />
@@ -768,25 +764,25 @@ export function LoginPage() {
                 {/* Form Body */}
                 <form onSubmit={handleStudentSubmit} className="p-5 space-y-4 text-xs">
                   {studentError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2 shadow-2xs">
-                      <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="p-3 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2 shadow-xs">
+                      <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
                       <span className="font-medium">{studentError}</span>
                     </div>
                   )}
 
                   {studentSuccessMsg && (
-                    <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-2 shadow-2xs">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div className="p-3 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] flex items-start gap-2 shadow-xs">
+                      <CheckCircle2 className="w-4 h-4 text-[#45B558] flex-shrink-0 mt-0.5" />
                       <span className="font-medium">{studentSuccessMsg}</span>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                       Student USN / Roll No or Faculty ID *
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={studentId}
@@ -795,7 +791,7 @@ export function LoginPage() {
                           setStudentError(null);
                         }}
                         placeholder="e.g. 1DS22CS089 or FAC-8891"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                       />
                     </div>
                   </div>
@@ -803,14 +799,14 @@ export function LoginPage() {
                   {studentMode === 'otp' ? (
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        <label className="text-xs font-bold text-[#8B8988] uppercase tracking-wider">
                           Verification OTP *
                         </label>
                         <button
                           type="button"
                           disabled={studentOtpLoading || !studentId.trim() || studentOtpCooldown > 0}
                           onClick={handleStudentRequestOtp}
-                          className="text-[11px] font-bold text-[#0D9488] hover:text-[#0b7c72] disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
+                          className="text-[11px] font-bold text-[#D8B4FE] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
                         >
                           <Send className="w-3 h-3" />
                           <span>
@@ -823,7 +819,7 @@ export function LoginPage() {
                         </button>
                       </div>
                       <div className="relative">
-                        <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <KeyRound className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type="text"
                           value={studentOtp}
@@ -832,18 +828,18 @@ export function LoginPage() {
                             setStudentError(null);
                           }}
                           placeholder="Enter 6-digit OTP code"
-                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] transition"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] font-mono font-bold tracking-widest focus:outline-none focus:border-[#9312FF] transition"
                           maxLength={6}
                         />
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                      <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                         Password *
                       </label>
                       <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type={showStudentPassword ? 'text' : 'password'}
                           value={studentPassword}
@@ -852,13 +848,13 @@ export function LoginPage() {
                             setStudentError(null);
                           }}
                           placeholder="Enter password"
-                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                          className="w-full pl-9 pr-10 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                           autoComplete="current-password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowStudentPassword(!showStudentPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 transition"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B8988] hover:text-[#F7F7F8] p-0.5 transition"
                           title={showStudentPassword ? 'Hide password' : 'Show password'}
                         >
                           {showStudentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -875,14 +871,14 @@ export function LoginPage() {
                         setSignupRole('Student');
                         setActiveTab('signup');
                       }}
-                      className="text-[11px] text-slate-500 hover:text-[#0D9488] font-semibold transition"
+                      className="text-[11px] text-[#8B8988] hover:text-[#D8B4FE] font-semibold transition"
                     >
-                      New user? <span className="font-bold text-[#0D9488] underline">Sign Up</span>
+                      New user? <span className="font-bold text-[#D8B4FE] underline">Sign Up</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => openAccountRecovery('Student')}
-                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
+                      className="text-[#D8B4FE] hover:text-white font-bold text-xs hover:underline transition"
                     >
                       Need Help / Recovery?
                     </button>
@@ -891,7 +887,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={studentLoading}
-                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.3)] transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>
                       {studentLoading
@@ -905,37 +901,34 @@ export function LoginPage() {
                 </form>
               </div>
 
-              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+              <div className="px-5 py-3 bg-[#13131E] border-t border-[#232234] text-[11px] text-[#8B8988] flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#45B558] flex-shrink-0" />
                 <span>Confidential stakeholder filing protected under AICTE norms.</span>
               </div>
             </div>
 
-
-            {/* ==================================================== */}
-            {/* CARD 3: PARENT / GUARDIAN                            */}
-            {/* ==================================================== */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-slate-300 transition flex flex-col justify-between overflow-hidden">
+            {/* CARD 3: PARENT / GUARDIAN */}
+            <div className="bg-[#0D0D14] rounded-xl border border-[#232234] shadow-xs hover:border-[#3A3854] transition flex flex-col justify-between overflow-hidden">
               <div>
                 {/* Card Header */}
-                <div className="p-5 border-b border-slate-200 bg-white">
+                <div className="p-5 border-b border-[#232234] bg-[#0D0D14]">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-teal-50 text-[#0D9488] border border-teal-200 flex items-center justify-center shadow-2xs">
-                      <Users className="w-4 h-4 text-[#0D9488]" />
+                    <div className="w-9 h-9 rounded-lg bg-[#9312FF]/20 text-[#D8B4FE] border border-[#9312FF]/40 flex items-center justify-center shadow-xs">
+                      <Users className="w-4 h-4 text-[#D8B4FE]" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#0F172A] border border-slate-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#13131E] text-[#D8B4FE] border border-[#232234] uppercase tracking-wider">
                       Parent / Guardian
                     </span>
                   </div>
-                  <h2 className="text-base font-extrabold text-[#0F172A] tracking-tight">
+                  <h2 className="text-base font-extrabold text-[#F7F7F8] tracking-tight">
                     Parent / Guardian
                   </h2>
-                  <p className="text-xs text-[#64748B] mt-1">
+                  <p className="text-xs text-[#8B8988] mt-1">
                     Parents and legal guardians tracking ward grievance petitions.
                   </p>
 
                   {/* Mode Selector Toggle: Password vs OTP */}
-                  <div className="mt-3.5 flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <div className="mt-3.5 flex bg-[#13131E] p-1 rounded-xl border border-[#232234]">
                     <button
                       type="button"
                       onClick={() => {
@@ -945,8 +938,8 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         parentMode === 'password'
-                          ? 'bg-[#0D9488] text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_8px_rgba(147,18,255,0.3)]'
+                          : 'text-[#8B8988] hover:text-[#F7F7F8]'
                       }`}
                     >
                       <Lock className="w-3 h-3" />
@@ -961,8 +954,8 @@ export function LoginPage() {
                       }}
                       className={`flex-1 py-1 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         parentMode === 'otp'
-                          ? 'bg-[#0D9488] text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_8px_rgba(147,18,255,0.3)]'
+                          : 'text-[#8B8988] hover:text-[#F7F7F8]'
                       }`}
                     >
                       <KeyRound className="w-3 h-3" />
@@ -974,25 +967,25 @@ export function LoginPage() {
                 {/* Form Body */}
                 <form onSubmit={handleParentSubmit} className="p-5 space-y-4 text-xs">
                   {parentError && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2 shadow-2xs">
-                      <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div className="p-3 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2 shadow-xs">
+                      <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
                       <span className="font-medium">{parentError}</span>
                     </div>
                   )}
 
                   {parentSuccessMsg && (
-                    <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-2 shadow-2xs">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <div className="p-3 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] flex items-start gap-2 shadow-xs">
+                      <CheckCircle2 className="w-4 h-4 text-[#45B558] flex-shrink-0 mt-0.5" />
                       <span className="font-medium">{parentSuccessMsg}</span>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                       Parent ID or Registered Mobile *
                     </label>
                     <div className="relative">
-                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={parentId}
@@ -1001,7 +994,7 @@ export function LoginPage() {
                           setParentError(null);
                         }}
                         placeholder="e.g. PAR-984501 or Mobile"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                       />
                     </div>
                   </div>
@@ -1009,14 +1002,14 @@ export function LoginPage() {
                   {parentMode === 'otp' ? (
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        <label className="text-xs font-bold text-[#8B8988] uppercase tracking-wider">
                           Verification OTP *
                         </label>
                         <button
                           type="button"
                           disabled={parentOtpLoading || !parentId.trim() || parentOtpCooldown > 0}
                           onClick={handleParentRequestOtp}
-                          className="text-[11px] font-bold text-[#0D9488] hover:text-[#0b7c72] disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
+                          className="text-[11px] font-bold text-[#D8B4FE] hover:text-white disabled:opacity-40 disabled:cursor-not-allowed hover:underline flex items-center gap-1 transition"
                         >
                           <Send className="w-3 h-3" />
                           <span>
@@ -1029,7 +1022,7 @@ export function LoginPage() {
                         </button>
                       </div>
                       <div className="relative">
-                        <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <KeyRound className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type="text"
                           value={parentOtp}
@@ -1038,18 +1031,18 @@ export function LoginPage() {
                             setParentError(null);
                           }}
                           placeholder="Enter 6-digit OTP code"
-                          className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 font-mono font-bold tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] transition"
+                          className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] font-mono font-bold tracking-widest focus:outline-none focus:border-[#9312FF] transition"
                           maxLength={6}
                         />
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                      <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                         Password *
                       </label>
                       <div className="relative">
-                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type={showParentPassword ? 'text' : 'password'}
                           value={parentPassword}
@@ -1058,13 +1051,13 @@ export function LoginPage() {
                             setParentError(null);
                           }}
                           placeholder="Enter password"
-                          className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium transition"
+                          className="w-full pl-9 pr-10 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium transition"
                           autoComplete="current-password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowParentPassword(!showParentPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 transition"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B8988] hover:text-[#F7F7F8] p-0.5 transition"
                           title={showParentPassword ? 'Hide password' : 'Show password'}
                         >
                           {showParentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1081,14 +1074,14 @@ export function LoginPage() {
                         setSignupRole('Parent / Guardian');
                         setActiveTab('signup');
                       }}
-                      className="text-[11px] text-slate-500 hover:text-[#0D9488] font-semibold transition"
+                      className="text-[11px] text-[#8B8988] hover:text-[#D8B4FE] font-semibold transition"
                     >
-                      New parent? <span className="font-bold text-[#0D9488] underline">Sign Up</span>
+                      New parent? <span className="font-bold text-[#D8B4FE] underline">Sign Up</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => openAccountRecovery('Parent')}
-                      className="text-[#0D9488] hover:text-[#0b7c72] font-bold text-xs hover:underline transition"
+                      className="text-[#D8B4FE] hover:text-white font-bold text-xs hover:underline transition"
                     >
                       Account Recovery
                     </button>
@@ -1097,7 +1090,7 @@ export function LoginPage() {
                   <button
                     type="submit"
                     disabled={parentLoading}
-                    className="w-full py-2.5 px-4 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.3)] transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                   >
                     <span>
                       {parentLoading
@@ -1111,8 +1104,8 @@ export function LoginPage() {
                 </form>
               </div>
 
-              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+              <div className="px-5 py-3 bg-[#13131E] border-t border-[#232234] text-[11px] text-[#8B8988] flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#45B558] flex-shrink-0" />
                 <span>Secure legal guardian tracking and notification service.</span>
               </div>
             </div>
@@ -1123,33 +1116,33 @@ export function LoginPage() {
         {/* VIEW 2: FUNCTIONAL SIGN UP / CREATE ACCOUNT PORTAL                        */}
         {/* ========================================================================= */}
         {activeTab === 'signup' && (
-          <div className="max-w-2xl mx-auto w-full bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="max-w-2xl mx-auto w-full bg-[#0D0D14] rounded-xl border border-[#232234] shadow-xs overflow-hidden">
             
             {/* Header */}
-            <div className="p-6 bg-[#12345A] text-white">
+            <div className="p-6 bg-[#13131E] border-b border-[#232234] text-[#F7F7F8]">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-                    <UserPlus className="w-4 h-4 text-[#0D9488]" />
+                  <div className="w-8 h-8 rounded-lg bg-[#9312FF]/20 border border-[#9312FF]/40 flex items-center justify-center">
+                    <UserPlus className="w-4 h-4 text-[#D8B4FE]" />
                   </div>
-                  <h2 className="text-lg font-black tracking-wide text-white">
+                  <h2 className="text-lg font-black tracking-wide text-[#F7F7F8]">
                     Create New Stakeholder Account
                   </h2>
                 </div>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-200 border border-teal-500/30 uppercase tracking-wider">
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 uppercase tracking-wider">
                   Self-Service Registration
                 </span>
               </div>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-[#8B8988]">
                 Register as an enrolled Student, Faculty Member, or Legal Parent/Guardian to submit and track grievances.
               </p>
             </div>
 
             {/* Official Access Policy Notice */}
-            <div className="px-6 py-3.5 bg-slate-50 border-b border-slate-200 flex items-start gap-2.5 text-xs text-slate-600">
-              <Info className="w-4 h-4 text-[#0D9488] flex-shrink-0 mt-0.5" />
+            <div className="px-6 py-3.5 bg-[#0D0D14] border-b border-[#232234] flex items-start gap-2.5 text-xs text-[#8B8988]">
+              <Info className="w-4 h-4 text-[#D8B4FE] flex-shrink-0 mt-0.5" />
               <div className="text-[11px] leading-relaxed">
-                <strong className="text-[#0F172A]">AICTE Governance Policy:</strong> Bureau Officers and Central Administrators cannot be registered publicly. Official administrative credentials are issued strictly by AICTE Central Administration.
+                <strong className="text-[#F7F7F8]">AICTE Governance Policy:</strong> Bureau Officers and Central Administrators cannot be registered publicly. Official administrative credentials are issued strictly by AICTE Central Administration.
               </div>
             </div>
 
@@ -1157,25 +1150,25 @@ export function LoginPage() {
             <form onSubmit={handleSignUpSubmit} className="p-6 space-y-5 text-xs">
               
               {signupError && (
-                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="p-3.5 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
                   <span className="font-semibold">{signupError}</span>
                 </div>
               )}
 
               {signupSuccess && (
-                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <div className="p-3.5 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#45B558] flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold">{signupSuccess}</p>
-                    <p className="text-[11px] text-emerald-700 mt-1">Redirecting to Login view in a moment...</p>
+                    <p className="text-[11px] text-[#45B558]/80 mt-1">Redirecting to Login view in a moment...</p>
                   </div>
                 </div>
               )}
 
               {/* Stakeholder Role Picker */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-2">
                   Select Stakeholder Role *
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -1184,17 +1177,17 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Student')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Student'
-                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
-                        : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                        ? 'border-[#9312FF] bg-[#9312FF]/20 text-[#F7F7F8] ring-2 ring-[#9312FF]/30 shadow-[0_0_10px_rgba(147,18,255,0.2)]'
+                        : 'border-[#232234] hover:border-[#3A3854] bg-[#13131E] text-[#8B8988]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <GraduationCap className={`w-4 h-4 ${signupRole === 'Student' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
-                      {signupRole === 'Student' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
+                      <GraduationCap className={`w-4 h-4 ${signupRole === 'Student' ? 'text-[#D8B4FE]' : 'text-[#8B8988]'}`} />
+                      {signupRole === 'Student' && <span className="w-2 h-2 rounded-full bg-[#9312FF]" />}
                     </div>
                     <div>
-                      <div className="font-bold text-xs">Student</div>
-                      <div className="text-[10px] text-slate-500">Enrolled student / alumni</div>
+                      <div className="font-bold text-xs text-[#F7F7F8]">Student</div>
+                      <div className="text-[10px] text-[#8B8988]">Enrolled student / alumni</div>
                     </div>
                   </button>
 
@@ -1203,17 +1196,17 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Institution User')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Institution User'
-                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
-                        : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                        ? 'border-[#9312FF] bg-[#9312FF]/20 text-[#F7F7F8] ring-2 ring-[#9312FF]/30 shadow-[0_0_10px_rgba(147,18,255,0.2)]'
+                        : 'border-[#232234] hover:border-[#3A3854] bg-[#13131E] text-[#8B8988]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <School className={`w-4 h-4 ${signupRole === 'Institution User' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
-                      {signupRole === 'Institution User' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
+                      <School className={`w-4 h-4 ${signupRole === 'Institution User' ? 'text-[#D8B4FE]' : 'text-[#8B8988]'}`} />
+                      {signupRole === 'Institution User' && <span className="w-2 h-2 rounded-full bg-[#9312FF]" />}
                     </div>
                     <div>
-                      <div className="font-bold text-xs">Faculty</div>
-                      <div className="text-[10px] text-slate-500">Faculty / College Representative</div>
+                      <div className="font-bold text-xs text-[#F7F7F8]">Faculty</div>
+                      <div className="text-[10px] text-[#8B8988]">Faculty / College Staff</div>
                     </div>
                   </button>
 
@@ -1222,17 +1215,17 @@ export function LoginPage() {
                     onClick={() => setSignupRole('Parent / Guardian')}
                     className={`p-3 rounded-xl border text-left transition flex flex-col justify-between ${
                       signupRole === 'Parent / Guardian'
-                        ? 'border-[#0D9488] bg-teal-50/50 text-[#0F172A] ring-2 ring-[#0D9488]/20'
-                        : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
+                        ? 'border-[#9312FF] bg-[#9312FF]/20 text-[#F7F7F8] ring-2 ring-[#9312FF]/30 shadow-[0_0_10px_rgba(147,18,255,0.2)]'
+                        : 'border-[#232234] hover:border-[#3A3854] bg-[#13131E] text-[#8B8988]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <Users className={`w-4 h-4 ${signupRole === 'Parent / Guardian' ? 'text-[#0D9488]' : 'text-slate-400'}`} />
-                      {signupRole === 'Parent / Guardian' && <span className="w-2 h-2 rounded-full bg-[#0D9488]" />}
+                      <Users className={`w-4 h-4 ${signupRole === 'Parent / Guardian' ? 'text-[#D8B4FE]' : 'text-[#8B8988]'}`} />
+                      {signupRole === 'Parent / Guardian' && <span className="w-2 h-2 rounded-full bg-[#9312FF]" />}
                     </div>
                     <div>
-                      <div className="font-bold text-xs">Parent / Guardian</div>
-                      <div className="text-[10px] text-slate-500">Legal ward advocate</div>
+                      <div className="font-bold text-xs text-[#F7F7F8]">Parent / Guardian</div>
+                      <div className="text-[10px] text-[#8B8988]">Legal ward advocate</div>
                     </div>
                   </button>
                 </div>
@@ -1243,17 +1236,17 @@ export function LoginPage() {
                 
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     {signupRole === 'Institution User' ? 'Faculty / Staff Full Name *' : 'Full Name *'}
                   </label>
                   <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       value={signupName}
                       onChange={(e) => setSignupName(e.target.value)}
                       placeholder="e.g. Dr. Priya Nair"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       required
                     />
                   </div>
@@ -1261,7 +1254,7 @@ export function LoginPage() {
 
                 {/* Identifier */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     {signupRole === 'Student' 
                       ? 'Student USN / Roll No *' 
                       : signupRole === 'Institution User' 
@@ -1269,7 +1262,7 @@ export function LoginPage() {
                       : 'Student Ward USN / ID *'}
                   </label>
                   <div className="relative">
-                    <KeyRound className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <KeyRound className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       value={signupIdentifier}
@@ -1281,7 +1274,7 @@ export function LoginPage() {
                           ? 'e.g. FAC-8891' 
                           : 'e.g. 1RV23CS045'
                       }
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium uppercase"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium uppercase"
                       required
                     />
                   </div>
@@ -1290,17 +1283,17 @@ export function LoginPage() {
                 {/* Institution Name (for Student and Institution) */}
                 {signupRole !== 'Parent / Guardian' && (
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                       Institution Name *
                     </label>
                     <div className="relative">
-                      <School className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <School className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={signupInstitution}
                         onChange={(e) => setSignupInstitution(e.target.value)}
                         placeholder="e.g. R.V. College of Engineering, Bengaluru"
-                        className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                        className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       />
                     </div>
                   </div>
@@ -1308,17 +1301,17 @@ export function LoginPage() {
 
                 {/* Registered Email */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     Registered Email Address *
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Mail className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="email"
                       value={signupEmail}
                       onChange={(e) => setSignupEmail(e.target.value)}
                       placeholder="e.g. user@college.edu.in"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       required
                     />
                   </div>
@@ -1326,17 +1319,17 @@ export function LoginPage() {
 
                 {/* Mobile Phone */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     Mobile Number {signupRole === 'Parent / Guardian' ? '*' : '(Optional)'}
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Phone className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="tel"
                       value={signupPhone}
                       onChange={(e) => setSignupPhone(e.target.value)}
                       placeholder="+91-9845012345"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       required={signupRole === 'Parent / Guardian'}
                     />
                   </div>
@@ -1344,24 +1337,24 @@ export function LoginPage() {
 
                 {/* Password */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     Create Password (min. 6 characters) *
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type={showSignupPassword ? 'text' : 'password'}
                       value={signupPassword}
                       onChange={(e) => setSignupPassword(e.target.value)}
                       placeholder="Enter strong password"
-                      className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                      className="w-full pl-9 pr-10 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       required
                       minLength={6}
                     />
                     <button
                       type="button"
                       onClick={() => setShowSignupPassword(!showSignupPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B8988] hover:text-[#F7F7F8] p-0.5"
                     >
                       {showSignupPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -1370,17 +1363,17 @@ export function LoginPage() {
 
                 {/* Confirm Password */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                     Confirm Password *
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type={showSignupPassword ? 'text' : 'password'}
                       value={signupConfirmPassword}
                       onChange={(e) => setSignupConfirmPassword(e.target.value)}
                       placeholder="Re-enter password"
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                       required
                     />
                   </div>
@@ -1392,7 +1385,7 @@ export function LoginPage() {
                 <button
                   type="submit"
                   disabled={signupLoading}
-                  className="w-full sm:flex-1 py-3 px-6 bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+                  className="w-full sm:flex-1 py-3 px-6 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.3)] transition flex items-center justify-center gap-2 text-xs disabled:opacity-50"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>{signupLoading ? 'Creating Verified Account...' : 'Complete Registration & Create Account'}</span>
@@ -1401,7 +1394,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('login')}
-                  className="w-full sm:w-auto py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition text-xs"
+                  className="w-full sm:w-auto py-3 px-6 bg-[#13131E] hover:bg-[#1A1926] border border-[#232234] text-[#8B8988] hover:text-[#F7F7F8] font-bold rounded-xl transition text-xs"
                 >
                   Already have an account? Sign In
                 </button>
@@ -1409,23 +1402,9 @@ export function LoginPage() {
             </form>
           </div>
         )}
-
-        {/* Informative Evaluation Footer Link (Strictly No Exposed Quick-Fill Buttons) */}
-        <div className="mt-8 text-center text-xs text-slate-500">
-          <button
-            type="button"
-            onClick={() => setIsEvalAccountsOpen(true)}
-            className="inline-flex items-center gap-1.5 font-semibold text-slate-600 hover:text-[#0D9488] hover:underline transition"
-          >
-            <HelpCircle className="w-3.5 h-3.5 text-[#0D9488]" />
-            <span>SIH Evaluation Reference: Predefined Local Test Accounts</span>
-          </button>
-        </div>
       </main>
 
-      {/* ==================================================== */}
-      {/* MODAL: FORGOT PASSWORD (OFFICIAL / ADMIN)            */}
-      {/* ==================================================== */}
+      {/* MODAL: FORGOT PASSWORD (OFFICIAL / ADMIN) */}
       <Modal
         isOpen={isForgotOpen}
         onClose={() => setIsForgotOpen(false)}
@@ -1434,55 +1413,55 @@ export function LoginPage() {
       >
         <div className="space-y-4 text-xs">
           {forgotError && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
               <span>{forgotError}</span>
             </div>
           )}
 
           {forgotSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#45B558] flex-shrink-0 mt-0.5" />
               <span>{forgotSuccess}</span>
             </div>
           )}
 
           {forgotStep === 1 ? (
             <form onSubmit={handleForgotRequestSubmit} className="space-y-4">
-              <p className="text-slate-600">
+              <p className="text-[#8B8988]">
                 Enter your registered official username or government email address. A cryptographically signed reset token will be generated to re-authenticate your workspace.
               </p>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                   Official Username or Email *
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={forgotIdentifier}
                     onChange={(e) => setForgotIdentifier(e.target.value)}
                     placeholder="e.g. admin or official email"
-                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                     required
                     autoFocus
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-2 pt-2 border-t border-[#232234]">
                 <button
                   type="button"
                   onClick={() => setIsForgotOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-600 font-semibold hover:bg-slate-100 transition"
+                  className="px-4 py-2 rounded-xl text-[#8B8988] hover:text-[#F7F7F8] bg-[#13131E] border border-[#232234] font-semibold transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={forgotLoading}
-                  className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(147,18,255,0.3)] disabled:opacity-50"
                 >
                   <span>{forgotLoading ? 'Issuing Instructions...' : 'Request Reset Token'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1491,22 +1470,22 @@ export function LoginPage() {
             </form>
           ) : (
             <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
-              <p className="text-slate-600">
+              <p className="text-[#8B8988]">
                 Authorized identity confirmed. Create your new secure password below to complete account recovery.
               </p>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                   New Password *
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type={showNewPassword ? 'text' : 'password'}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full pl-9 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                    className="w-full pl-9 pr-10 py-2.5 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                     required
                     minLength={6}
                     autoFocus
@@ -1514,7 +1493,7 @@ export function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8B8988] hover:text-[#F7F7F8] p-0.5"
                   >
                     {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -1522,34 +1501,34 @@ export function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
                   Confirm New Password *
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type={showNewPassword ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter new password"
-                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                     required
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-2 pt-2 border-t border-[#232234]">
                 <button
                   type="button"
                   onClick={() => setIsForgotOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-600 font-semibold hover:bg-slate-100 transition"
+                  className="px-4 py-2 rounded-xl text-[#8B8988] hover:text-[#F7F7F8] bg-[#13131E] border border-[#232234] font-semibold transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={forgotLoading}
-                  className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(147,18,255,0.3)] disabled:opacity-50"
                 >
                   <span>{forgotLoading ? 'Updating Hash...' : 'Update Password & Return to Login'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1560,9 +1539,7 @@ export function LoginPage() {
         </div>
       </Modal>
 
-      {/* ==================================================== */}
-      {/* MODAL: ACCOUNT RECOVERY (STUDENT & PARENT)           */}
-      {/* ==================================================== */}
+      {/* MODAL: ACCOUNT RECOVERY (STUDENT & PARENT) */}
       <Modal
         isOpen={isRecoveryOpen}
         onClose={() => setIsRecoveryOpen(false)}
@@ -1571,59 +1548,59 @@ export function LoginPage() {
       >
         <form onSubmit={handleRecoverySubmit} className="space-y-4 text-xs">
           {recoveryError && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-[#F03B2A] flex-shrink-0 mt-0.5" />
               <span>{recoveryError}</span>
             </div>
           )}
 
           {recoverySuccess && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#45B558] flex-shrink-0 mt-0.5" />
               <span>{recoverySuccess}</span>
             </div>
           )}
 
-          <p className="text-slate-600">
+          <p className="text-[#8B8988]">
             If you have lost access to your registered mobile number or need an institutional identity reassignment, submit an inquiry to the AICTE Redressal Helpdesk.
           </p>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
               {recoveryRole === 'Student' ? 'Student USN or Faculty ID *' : 'Parent Identifier *'}
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <User className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={recoveryIdentifier}
                 onChange={(e) => setRecoveryIdentifier(e.target.value)}
                 placeholder="e.g. 1DS22CS089 or PAR-984501"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
               Alternative Contact Email or Mobile *
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-[#8B8988] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={recoveryContact}
                 onChange={(e) => setRecoveryContact(e.target.value)}
                 placeholder="Where should helpdesk reach you?"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-[#8B8988] uppercase tracking-wider mb-1.5">
               Reason / Issue Description (Optional)
             </label>
             <textarea
@@ -1631,22 +1608,22 @@ export function LoginPage() {
               onChange={(e) => setRecoveryReason(e.target.value)}
               placeholder="e.g. Changed phone number or unable to receive OTP"
               rows={3}
-              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] font-medium"
+              className="w-full p-3 bg-[#0D0D14] border border-[#232234] rounded-xl text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] font-medium"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-2 border-t border-[#232234]">
             <button
               type="button"
               onClick={() => setIsRecoveryOpen(false)}
-              className="px-4 py-2 rounded-xl text-slate-600 font-semibold hover:bg-slate-100 transition"
+              className="px-4 py-2 rounded-xl text-[#8B8988] hover:text-[#F7F7F8] bg-[#13131E] border border-[#232234] font-semibold transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={recoveryLoading}
-              className="px-5 py-2 rounded-xl bg-[#0D9488] hover:bg-[#0b7c72] text-white font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-bold transition flex items-center gap-1.5 shadow-[0_0_15px_rgba(147,18,255,0.3)] disabled:opacity-50"
             >
               <span>{recoveryLoading ? 'Registering Ticket...' : 'Submit Recovery Ticket'}</span>
               <ChevronRight className="w-4 h-4" />
@@ -1656,7 +1633,7 @@ export function LoginPage() {
       </Modal>
 
       {/* Government Portal Official Branding Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 px-6 text-xs text-slate-600 shadow-inner">
+      <footer className="bg-[#0D0D14] border-t border-[#232234] py-6 px-6 text-xs text-[#8B8988] shadow-inner relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <img 
@@ -1664,35 +1641,37 @@ export function LoginPage() {
               alt="AICTE Official Seal" 
               className="h-12 w-auto object-contain"
             />
-            <div className="h-10 w-px bg-slate-300 hidden sm:block" />
+            <div className="h-10 w-px bg-[#232234] hidden sm:block" />
             <img 
               src="/digital_india_logo.png" 
               alt="Digital India" 
               className="h-10 w-auto object-contain"
             />
-            <div className="h-10 w-px bg-slate-300 hidden sm:block" />
-            <img 
-              src="/anvesh_logo.png" 
-              alt="ANVESH Platform Logo" 
-              className="h-11 w-auto object-contain rounded"
-            />
+            <div className="h-10 w-px bg-[#232234] hidden sm:block" />
+            <div className="w-11 h-11 rounded-lg p-0.5 bg-[#9312FF]/20 border border-[#9312FF]/40 shadow-[0_0_10px_rgba(147,18,255,0.25)] flex items-center justify-center">
+              <img 
+                src="/anvesh_logo.png" 
+                alt="ANVESH Platform Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
 
           <div className="text-center md:text-right space-y-1">
             <div className="flex items-center justify-center md:justify-end gap-2 flex-wrap">
-              <span className="font-extrabold text-slate-800 tracking-wide">ANVESH</span>
+              <span className="font-extrabold text-[#F7F7F8] tracking-wide">ANVESH</span>
               <span>•</span>
-              <span className="text-slate-600">AICTE Inter-Bureau Grievance Intelligence Platform</span>
+              <span className="text-[#8B8988]">AICTE Inter-Bureau Grievance Intelligence Platform</span>
               <span>•</span>
-              <span className="text-emerald-700 font-bold inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[#45B558] font-bold inline-flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#45B558] animate-pulse" />
                 Active National Gateway
               </span>
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-[#8B8988]">
               Analytics-Driven Network for Verifying, Evaluating, and Synchronizing Higher-Education Grievances
             </p>
-            <p className="text-[10px] text-slate-400">
+            <p className="text-[10px] text-[#8B8988]/60">
               All India Council for Technical Education (AICTE) • Ministry of Education, Government of India
             </p>
           </div>
@@ -1701,3 +1680,4 @@ export function LoginPage() {
     </div>
   );
 }
+export default LoginPage;

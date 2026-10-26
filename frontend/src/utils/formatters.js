@@ -91,61 +91,63 @@ export function getStatusStyle(status) {
   switch (status) {
     case 'New':
     case 'Submitted':
-      return 'bg-blue-50 text-blue-700 border-blue-200';
+      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 font-semibold shadow-[0_0_8px_rgba(147,18,255,0.2)]';
     case 'Pending Bureau Review':
     case 'Pending Verification':
-      return 'bg-orange-50 text-orange-700 border-orange-200';
+      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
     case 'Under Review':
-      return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+      return 'bg-violet-950/50 text-[#C084FC] border-violet-800/50 font-semibold';
     case 'Under Process':
-      return 'bg-sky-50 text-sky-700 border-sky-200';
+      return 'bg-violet-900/40 text-[#D8B4FE] border-violet-700/50 font-semibold';
     case 'Hearing Scheduled':
-      return 'bg-amber-50 text-amber-800 border-amber-200';
+      return 'bg-[#F59E0B]/20 text-[#FCD34D] border-[#F59E0B]/40 font-semibold';
     case 'Action Taken Report Awaited':
-      return 'bg-orange-50 text-orange-700 border-orange-200';
+      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40';
     case 'Escalated to Committee':
-      return 'bg-red-50 text-red-700 border-red-200 font-semibold animate-pulse';
+      return 'bg-[#F03B2A]/20 text-[#F03B2A] border-[#F03B2A]/50 font-bold shadow-[0_0_10px_rgba(240,59,42,0.3)] animate-pulse';
     case 'Completed':
     case 'Disposed':
     case 'Resolved':
     case 'Closed':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      return 'bg-[#45B558]/20 text-[#45B558] border-[#45B558]/40 font-semibold shadow-[0_0_8px_rgba(69,181,88,0.25)]';
     case 'Transferred':
-      return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+      return 'bg-[#9312FF]/25 text-[#A020FF] border-[#9312FF]/50 font-semibold';
     case 'Rejected':
-      return 'bg-rose-50 text-rose-700 border-rose-200';
+      return 'bg-[#F03B2A]/20 text-[#F03B2A] border-[#F03B2A]/40 font-semibold';
     case 'Needs More Information':
-      return 'bg-amber-50 text-amber-800 border-amber-200';
+      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
+    case 'Duplicate Linked':
+      return 'bg-purple-900/40 text-purple-300 border-purple-700/50 font-semibold';
     default:
-      return 'bg-slate-100 text-slate-600 border-slate-200';
+      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
   }
 }
 
 export function getPriorityStyle(priority) {
   switch (priority) {
     case 'Urgent':
-      return 'bg-red-50 text-red-700 border-red-200 font-semibold';
+      return 'bg-[#F03B2A]/25 text-[#F03B2A] border-[#F03B2A]/50 font-bold shadow-[0_0_10px_rgba(240,59,42,0.35)]';
     case 'High':
-      return 'bg-orange-50 text-orange-700 border-orange-200';
+      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-bold';
     case 'Medium':
-      return 'bg-amber-50 text-amber-700 border-amber-200';
+      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 font-semibold';
     case 'Low':
-      return 'bg-slate-100 text-slate-600 border-slate-200';
+      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
     default:
-      return 'bg-slate-100 text-slate-600 border-slate-200';
+      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
   }
 }
 
 export function getConfidenceStyle(label) {
   switch (label) {
     case 'High':
-      return 'bg-red-50 text-red-700 border-red-200';
+      return 'bg-[#F03B2A]/25 text-[#F03B2A] border-[#F03B2A]/40 font-bold shadow-[0_0_8px_rgba(240,59,42,0.25)]';
     case 'Medium':
-      return 'bg-amber-50 text-amber-700 border-amber-200';
+      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
     case 'Low':
-      return 'bg-blue-50 text-blue-700 border-blue-200';
+      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40';
     default:
-      return 'bg-slate-100 text-slate-600 border-slate-200';
+      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
   }
 }
 

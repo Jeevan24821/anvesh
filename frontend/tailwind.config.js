@@ -7,6 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
+        royal: {
+          black: '#000000',
+          surface: '#0D0D14',
+          card: '#13131E',
+          cardHover: '#181826',
+          border: '#232234',
+          borderHover: '#3A3854',
+          borderViolet: '#9312FF',
+          text: '#F7F7F8',
+          muted: '#8B8988',
+          green: '#45B558',
+          red: '#F03B2A',
+          amber: '#F59E0B',
+          violet: '#9312FF',
+          violetLight: '#A020FF',
+          violetDark: '#7A1CF8',
+        },
+        violet: {
+          50: '#FAF5FF',
+          100: '#F3E8FF',
+          200: '#E9D5FF',
+          300: '#D8B4FE',
+          400: '#A020FF',
+          500: '#9312FF',
+          600: '#7A1CF8',
+          700: '#6110C9',
+          800: '#4B0C9C',
+          900: '#2E0566',
+          950: '#1A023B',
+        },
         ux4g: {
           primary: '#0B4F6C',
           primaryHover: '#083B52',

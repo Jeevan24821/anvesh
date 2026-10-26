@@ -73,7 +73,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-800 overflow-hidden">
+    <div className="flex h-screen bg-black text-[#F7F7F8] overflow-hidden">
       {/* Sidebar Navigation */}
       <Sidebar
         activePage={activePage}
@@ -89,21 +89,21 @@ function AppContent() {
 
         {/* Read-Only Notice Bar if in Viewer Mode */}
         {currentRole?.readOnly && (
-          <div className="bg-amber-50 border-b border-amber-200 px-6 py-2 text-xs text-amber-800 flex items-center justify-between font-medium">
+          <div className="bg-[#13131E] border-b border-[#232234] px-6 py-2 text-xs text-amber-400 flex items-center justify-between font-medium">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0" />
               <span>
                 <strong>Read-Only Audit Mode:</strong> Logged in as External Ministry Scrutiny Auditor. All administrative actions and state transitions are disabled.
               </span>
             </div>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-amber-800">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400 bg-amber-950/40 border border-amber-900/60 px-2 py-0.5 rounded">
               Audit Scrutiny View
             </span>
           </div>
         )}
 
         {/* Page Content Scrollable Container */}
-        <main className="flex-1 overflow-y-auto bg-slate-50">
+        <main className="flex-1 overflow-y-auto bg-black bg-[radial-gradient(ellipse_90%_50%_at_50%_-15%,rgba(147,18,255,0.15),transparent_75%)]">
           <ErrorBoundary>
             {activePage === 'dashboard' && (
               <Dashboard

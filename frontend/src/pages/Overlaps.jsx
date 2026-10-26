@@ -6,22 +6,15 @@ import { BureauBadge } from '../components/BureauBadge';
 import { Modal } from '../components/Modal';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { getConfidenceStyle, formatDate, formatDateTime } from '../utils/formatters';
+import { formatDateTime } from '../utils/formatters';
 import { OVERLAP_DECISION_ACTIONS, BUREAUS } from '../utils/constants';
 import { 
   GitMerge, 
   CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
   RefreshCw, 
-  Search, 
   ShieldCheck, 
   ArrowRight,
-  Eye,
   Info,
-  Layers,
-  Share2,
-  FileText,
   Download
 } from 'lucide-react';
 
@@ -191,11 +184,11 @@ export function Overlaps({ onViewCase }) {
   if (isComplainant) {
     return (
       <div className="p-8 max-w-3xl mx-auto text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 rounded-2xl bg-[#F59E0B]/20 text-[#FBBF24] border border-[#F59E0B]/30 flex items-center justify-center mx-auto">
           <ShieldCheck className="w-6 h-6" />
         </div>
-        <h2 className="text-lg font-bold text-slate-900">Access Restricted</h2>
-        <p className="text-xs text-slate-600">
+        <h2 className="text-lg font-bold text-[#F7F7F8]">Access Restricted</h2>
+        <p className="text-xs text-[#8B8988]">
           The Inter-Bureau Overlap Detection Centre contains internal cross-institutional intelligence and is accessible exclusively to authorized AICTE Reviewers and Administrators.
         </p>
       </div>
@@ -208,14 +201,14 @@ export function Overlaps({ onViewCase }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">
               Inter-Bureau Overlap & Duplicate Intelligence Centre
             </h1>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-bold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 font-bold">
               6 Administrative Actions
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#8B8988] mt-1">
             Deterministic, explainable cross-bureau matching. Authorize joint investigations, jurisdictional transfers, duplicate consolidations, and false positive dismissals.
           </p>
         </div>
@@ -224,10 +217,10 @@ export function Overlaps({ onViewCase }) {
           <button
             onClick={handleExportCsv}
             disabled={exportingCsv || alerts.length === 0}
-            className="flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-[#0F172A] border border-slate-200 text-xs font-semibold rounded-xl shadow-2xs transition disabled:opacity-50"
+            className="flex items-center gap-2 px-3.5 py-2 bg-[#13131E] hover:bg-[#1C1B2B] text-[#F7F7F8] border border-[#232234] hover:border-[#3A3854] text-xs font-semibold rounded-xl shadow-xs transition disabled:opacity-50"
             title="Download full overlap intelligence audit register in CSV format"
           >
-            <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+            <Download className="w-3.5 h-3.5 text-[#D8B4FE]" />
             <span>{exportingCsv ? 'Exporting CSV...' : 'Export Overlaps (CSV)'}</span>
           </button>
 
@@ -235,7 +228,7 @@ export function Overlaps({ onViewCase }) {
             <button
               onClick={handleTriggerScan}
               disabled={scanning}
-              className="flex items-center gap-2 px-3.5 py-2 bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold rounded-xl shadow-xs transition disabled:opacity-50"
+              className="flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white text-xs font-semibold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.3)] transition disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${scanning ? 'animate-spin' : ''}`} />
               {scanning ? 'Scanning Matrix...' : 'Run On-Demand Scan'}
@@ -245,7 +238,7 @@ export function Overlaps({ onViewCase }) {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-[#0D0D14] border border-[#232234] p-4 rounded-xl shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2">
           {['Pending Review', 'Confirmed Linked', 'Separate Proceeding', 'Confirmed Duplicate', 'Dismissed False Positive', 'All'].map((s) => (
             <button
@@ -253,8 +246,8 @@ export function Overlaps({ onViewCase }) {
               onClick={() => setStatusFilter(s)}
               className={`px-3 py-1.5 rounded-lg font-medium transition ${
                 statusFilter === s
-                  ? 'bg-[#0D9488] text-white font-semibold shadow-xs'
-                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white font-semibold shadow-[0_0_10px_rgba(147,18,255,0.3)]'
+                  : 'bg-[#13131E] text-[#8B8988] hover:text-[#F7F7F8] hover:bg-[#1A1926] border border-[#232234]'
               }`}
             >
               {s}
@@ -264,11 +257,11 @@ export function Overlaps({ onViewCase }) {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-[#64748B] font-medium">Confidence:</span>
+            <span className="text-[#8B8988] font-medium">Confidence:</span>
             <select
               value={confidenceFilter}
               onChange={(e) => setConfidenceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-[#0F172A] rounded-lg px-2.5 py-1.5 focus:outline-none"
+              className="bg-[#13131E] border border-[#232234] text-[#F7F7F8] rounded-lg px-2.5 py-1.5 focus:border-[#9312FF] focus:outline-none"
             >
               <option value="All">All Confidence</option>
               <option value="High">High Confidence</option>
@@ -278,11 +271,11 @@ export function Overlaps({ onViewCase }) {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-[#64748B] font-medium">Type:</span>
+            <span className="text-[#8B8988] font-medium">Type:</span>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-[#0F172A] rounded-lg px-2.5 py-1.5 focus:outline-none"
+              className="bg-[#13131E] border border-[#232234] text-[#F7F7F8] rounded-lg px-2.5 py-1.5 focus:border-[#9312FF] focus:outline-none"
             >
               <option value="All">All Types</option>
               <option value="Cross-Bureau Institution Overlap">Cross-Bureau Overlap</option>
@@ -296,7 +289,7 @@ export function Overlaps({ onViewCase }) {
       {loading ? (
         <LoadingSpinner text="Analyzing complaints for cross-bureau overlaps..." />
       ) : error ? (
-        <div className="p-8 text-center text-rose-600 bg-rose-50 border border-rose-200 rounded-xl">{error}</div>
+        <div className="p-8 text-center text-[#F03B2A] bg-[#F03B2A]/10 border border-[#F03B2A]/30 rounded-xl">{error}</div>
       ) : alerts.length === 0 ? (
         <EmptyState
           title="No overlap alerts match criteria"
@@ -313,32 +306,32 @@ export function Overlaps({ onViewCase }) {
             return (
               <div
                 key={alert.id}
-                className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4 hover:border-slate-300 transition"
+                className="bg-[#0D0D14] border border-[#232234] hover:border-[#3A3854] rounded-xl p-5 shadow-xs space-y-4 transition"
               >
                 {/* Card Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#232234]">
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">
+                    <span className="font-mono text-xs font-bold text-[#D8B4FE] bg-[#9312FF]/15 px-2.5 py-0.5 rounded border border-[#9312FF]/30">
                       Alert #{alert.id}
                     </span>
-                    <span className="font-bold text-[#0F172A] text-sm">
+                    <span className="font-bold text-[#F7F7F8] text-sm">
                       {alert.institution_1_name}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">
+                    <span className="text-[10px] text-[#8B8988] font-mono">
                       (AICTE ID: {alert.institution_1_aicte_id})
                     </span>
                     {/* Prominent Overall Similarity Score */}
-                    <span className="px-3 py-0.5 rounded-full text-xs font-bold border bg-teal-50 text-teal-800 border-teal-200 flex items-center gap-1">
-                      <span className="text-[10px] text-teal-600 font-normal">Similarity Score:</span>
+                    <span className="px-3 py-0.5 rounded-full text-xs font-bold border bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 drop-shadow-[0_0_8px_rgba(147,18,255,0.4)] flex items-center gap-1">
+                      <span className="text-[10px] text-[#D8B4FE]/80 font-normal">Similarity Score:</span>
                       {simScore}%
                     </span>
                     {/* Clear Relationship Distinction */}
                     <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
                       alert.status === 'Pending Review'
-                        ? 'bg-amber-50 text-amber-800 border-amber-200'
+                        ? 'bg-[#F59E0B]/15 text-[#FBBF24] border border-[#F59E0B]/30'
                         : alert.status === 'Dismissed False Positive'
-                        ? 'bg-slate-100 text-slate-600 border-slate-200'
-                        : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        ? 'bg-[#13131E] text-[#8B8988] border border-[#232234]'
+                        : 'bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30'
                     }`}>
                       {alert.status === 'Pending Review' ? 'Suggested Overlap (Awaiting Review)' : alert.status}
                     </span>
@@ -349,7 +342,7 @@ export function Overlaps({ onViewCase }) {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleOpenReview(alert, 'JOINT_INVESTIGATION')}
-                        className="px-3.5 py-1.5 rounded-lg bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold shadow-xs transition flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white text-xs font-semibold shadow-[0_0_12px_rgba(147,18,255,0.3)] transition flex items-center gap-1.5"
                       >
                         <GitMerge className="w-3.5 h-3.5" />
                         <span>Take Action</span>
@@ -359,22 +352,22 @@ export function Overlaps({ onViewCase }) {
                 </div>
 
                 {/* Component Similarities Metric Pills */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                    <span className="text-[#64748B] font-medium">Institution Match:</span>
-                    <span className={`font-bold ${componentSims.institutionSim !== 'N/A' ? 'text-emerald-700' : 'text-slate-500'}`}>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-[#13131E] p-2.5 rounded-xl border border-[#232234] text-xs">
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-[#0D0D14] rounded-lg border border-[#232234]">
+                    <span className="text-[#8B8988] font-medium">Institution Match:</span>
+                    <span className={`font-bold ${componentSims.institutionSim !== 'N/A' ? 'text-[#45B558]' : 'text-[#8B8988]'}`}>
                       {componentSims.institutionSim}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                    <span className="text-[#64748B] font-medium">Narrative Overlap:</span>
-                    <span className={`font-bold ${componentSims.narrativeSim !== 'N/A' ? 'text-teal-700' : 'text-slate-500'}`}>
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-[#0D0D14] rounded-lg border border-[#232234]">
+                    <span className="text-[#8B8988] font-medium">Narrative Overlap:</span>
+                    <span className={`font-bold ${componentSims.narrativeSim !== 'N/A' ? 'text-[#D8B4FE]' : 'text-[#8B8988]'}`}>
                       {componentSims.narrativeSim}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
-                    <span className="text-[#64748B] font-medium">Category Match:</span>
-                    <span className={`font-bold ${componentSims.categorySim !== 'N/A' ? 'text-blue-700' : 'text-slate-500'}`}>
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-[#0D0D14] rounded-lg border border-[#232234]">
+                    <span className="text-[#8B8988] font-medium">Category Match:</span>
+                    <span className={`font-bold ${componentSims.categorySim !== 'N/A' ? 'text-indigo-400' : 'text-[#8B8988]'}`}>
                       {componentSims.categorySim}
                     </span>
                   </div>
@@ -383,14 +376,14 @@ export function Overlaps({ onViewCase }) {
                 {/* Side-by-Side Case Comparison */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Case 1 */}
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[#12345A] text-xs">
+                      <span className="font-mono font-bold text-[#D8B4FE] text-xs">
                         {alert.case_1_id}
                       </span>
                       <button
                         onClick={() => onViewCase(alert.complaint_id_1)}
-                        className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                        className="text-[11px] font-semibold text-[#D8B4FE] hover:text-white flex items-center gap-1 transition"
                       >
                         View Case <ArrowRight className="w-3 h-3" />
                       </button>
@@ -399,23 +392,23 @@ export function Overlaps({ onViewCase }) {
                       <BureauBadge bureau={alert.case_1_bureau} />
                       <StatusBadge status={alert.case_1_status} />
                     </div>
-                    <div className="text-xs font-semibold text-[#0F172A]">
+                    <div className="text-xs font-semibold text-[#F7F7F8]">
                       {alert.case_1_subject}
                     </div>
-                    <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
+                    <p className="text-[11px] text-[#8B8988] line-clamp-3 bg-[#0D0D14] p-2.5 rounded-lg border border-[#232234] whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
                       {alert.case_1_description}
                     </p>
                   </div>
 
                   {/* Case 2 */}
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[#12345A] text-xs">
+                      <span className="font-mono font-bold text-[#D8B4FE] text-xs">
                         {alert.case_2_id}
                       </span>
                       <button
                         onClick={() => onViewCase(alert.complaint_id_2)}
-                        className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                        className="text-[11px] font-semibold text-[#D8B4FE] hover:text-white flex items-center gap-1 transition"
                       >
                         View Case <ArrowRight className="w-3 h-3" />
                       </button>
@@ -424,22 +417,22 @@ export function Overlaps({ onViewCase }) {
                       <BureauBadge bureau={alert.case_2_bureau} />
                       <StatusBadge status={alert.case_2_status} />
                     </div>
-                    <div className="text-xs font-semibold text-[#0F172A]">
+                    <div className="text-xs font-semibold text-[#F7F7F8]">
                       {alert.case_2_subject}
                     </div>
-                    <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
+                    <p className="text-[11px] text-[#8B8988] line-clamp-3 bg-[#0D0D14] p-2.5 rounded-lg border border-[#232234] whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
                       {alert.case_2_description}
                     </p>
                   </div>
                 </div>
 
                 {/* Explainability Card: Transparent Signal Breakdown */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-                  <div className="flex items-center gap-1.5 text-[#0F172A] font-bold uppercase tracking-wider text-[10px]">
-                    <Info className="w-3.5 h-3.5 text-[#0D9488]" />
+                <div className="p-3.5 rounded-xl bg-[#13131E] border border-[#232234] text-xs space-y-2">
+                  <div className="flex items-center gap-1.5 text-[#F7F7F8] font-bold uppercase tracking-wider text-[10px]">
+                    <Info className="w-3.5 h-3.5 text-[#D8B4FE]" />
                     Engine Match Signals & Explainability Breakdown:
                   </div>
-                  <ul className="list-disc list-inside space-y-0.5 text-[#64748B] text-[11px]">
+                  <ul className="list-disc list-inside space-y-0.5 text-[#8B8988] text-[11px]">
                     {alert.match_reasons.map((reason, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {reason}
@@ -447,13 +440,13 @@ export function Overlaps({ onViewCase }) {
                     ))}
                   </ul>
                   {componentSims.explanations.length > 0 && (
-                    <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-700 space-y-1">
-                      <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                    <div className="pt-2 border-t border-[#232234] text-[11px] text-[#D8B4FE] space-y-1">
+                      <div className="text-[10px] uppercase font-bold text-[#8B8988] tracking-wider">
                         Concise Signal Assessment:
                       </div>
                       {componentSims.explanations.map((exp, idx) => (
-                        <div key={idx} className="flex items-start gap-1.5 text-slate-700">
-                          <span className="text-[#0D9488] font-bold">•</span>
+                        <div key={idx} className="flex items-start gap-1.5 text-[#F7F7F8]">
+                          <span className="text-[#9312FF] font-bold">•</span>
                           <span>{exp}</span>
                         </div>
                       ))}
@@ -463,13 +456,13 @@ export function Overlaps({ onViewCase }) {
 
                 {/* Review History / Remarks if already reviewed */}
                 {alert.reviewed_by && (
-                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                    <div className="text-[10px] text-slate-500 uppercase font-semibold flex items-center justify-between">
+                  <div className="p-3.5 rounded-xl bg-[#13131E] border border-[#232234] text-xs space-y-1">
+                    <div className="text-[10px] text-[#8B8988] uppercase font-semibold flex items-center justify-between">
                       <span>Administrative Order by {alert.reviewed_by}</span>
                       <span>{formatDateTime(alert.reviewed_at)}</span>
                     </div>
-                    <p className="font-semibold text-slate-900">{alert.review_decision}</p>
-                    <p className="text-slate-700 italic">"{alert.review_remarks}"</p>
+                    <p className="font-semibold text-[#F7F7F8]">{alert.review_decision}</p>
+                    <p className="text-[#8B8988] italic">"{alert.review_remarks}"</p>
                   </div>
                 )}
               </div>
@@ -485,16 +478,16 @@ export function Overlaps({ onViewCase }) {
         title={`Administrative Review & Action on Alert #${selectedAlert?.id}`}
       >
         <form onSubmit={handleSubmitReview} className="space-y-4 text-xs">
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div className="font-bold text-slate-900">{selectedAlert?.institution_1_name}</div>
-            <div className="text-slate-600">
-              Examining pair: <span className="text-[#0845A8] font-mono font-bold">{selectedAlert?.case_1_id}</span> ({selectedAlert?.case_1_bureau}) and{' '}
-              <span className="text-[#0845A8] font-mono font-bold">{selectedAlert?.case_2_id}</span> ({selectedAlert?.case_2_bureau})
+          <div className="p-3 rounded-xl bg-[#13131E] border border-[#232234] space-y-1">
+            <div className="font-bold text-[#F7F7F8]">{selectedAlert?.institution_1_name}</div>
+            <div className="text-[#8B8988]">
+              Examining pair: <span className="text-[#D8B4FE] font-mono font-bold">{selectedAlert?.case_1_id}</span> ({selectedAlert?.case_1_bureau}) and{' '}
+              <span className="text-[#D8B4FE] font-mono font-bold">{selectedAlert?.case_2_id}</span> ({selectedAlert?.case_2_bureau})
             </div>
           </div>
 
           <div>
-            <label className="block text-slate-700 font-bold mb-2 uppercase text-[10px] tracking-wider">
+            <label className="block text-[#8B8988] font-bold mb-2 uppercase text-[10px] tracking-wider">
               Select Official Administrative Action *
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -519,17 +512,17 @@ export function Overlaps({ onViewCase }) {
                   }}
                   className={`p-3 rounded-xl border cursor-pointer transition text-left ${
                     reviewDecision === action.id
-                      ? 'bg-blue-50 border-blue-600 text-blue-900 shadow-sm'
-                      : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
+                      ? 'bg-[#9312FF]/20 border-[#9312FF] text-[#F7F7F8] shadow-[0_0_12px_rgba(147,18,255,0.25)]'
+                      : 'bg-[#13131E] border-[#232234] hover:bg-[#1A1926] text-[#8B8988]'
                   }`}
                 >
-                  <div className="font-bold text-slate-900 text-xs flex items-center justify-between">
+                  <div className="font-bold text-[#F7F7F8] text-xs flex items-center justify-between">
                     <span>{action.label}</span>
                     {reviewDecision === action.id && (
-                      <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                      <CheckCircle2 className="w-4 h-4 text-[#D8B4FE]" />
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">
+                  <p className="text-[11px] text-[#8B8988] mt-1 line-clamp-2">
                     {action.description}
                   </p>
                 </div>
@@ -539,8 +532,8 @@ export function Overlaps({ onViewCase }) {
 
           {/* Conditional Input: Target Bureau for Consolidated Transfer */}
           {reviewDecision === 'TRANSFER_BUREAU' && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-              <label className="block text-blue-900 font-bold text-xs">
+            <div className="p-3 bg-[#13131E] border border-[#9312FF]/30 rounded-xl space-y-2">
+              <label className="block text-[#D8B4FE] font-bold text-xs">
                 Consolidated Destination Bureau *
               </label>
               <select
@@ -549,7 +542,7 @@ export function Overlaps({ onViewCase }) {
                   setTargetBureau(e.target.value);
                   setReviewRemarks(`Consolidated transfer to ${e.target.value} to prevent overlapping proceedings.`);
                 }}
-                className="w-full p-2 bg-white border border-blue-300 rounded-lg text-slate-800 text-xs"
+                className="w-full p-2 bg-[#0D0D14] border border-[#232234] rounded-lg text-[#F7F7F8] text-xs focus:border-[#9312FF] focus:outline-none"
               >
                 {BUREAUS.filter(b => b !== 'All').map(b => (
                   <option key={b} value={b}>{b}</option>
@@ -560,8 +553,8 @@ export function Overlaps({ onViewCase }) {
 
           {/* Conditional Input: Primary Case for Duplicate Linking */}
           {reviewDecision === 'CONFIRM_DUPLICATE' && (
-            <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl space-y-2">
-              <label className="block text-purple-900 font-bold text-xs">
+            <div className="p-3 bg-[#13131E] border border-[#9312FF]/30 rounded-xl space-y-2">
+              <label className="block text-[#D8B4FE] font-bold text-xs">
                 Select Master / Primary Case ID *
               </label>
               <select
@@ -570,7 +563,7 @@ export function Overlaps({ onViewCase }) {
                   setPrimaryCaseId(e.target.value);
                   setReviewRemarks(`Confirmed identical duplicate; linked to master case #${e.target.value}.`);
                 }}
-                className="w-full p-2 bg-white border border-purple-300 rounded-lg text-slate-800 text-xs"
+                className="w-full p-2 bg-[#0D0D14] border border-[#232234] rounded-lg text-[#F7F7F8] text-xs focus:border-[#9312FF] focus:outline-none"
               >
                 <option value={selectedAlert?.case_1_id}>{selectedAlert?.case_1_id} ({selectedAlert?.case_1_bureau})</option>
                 <option value={selectedAlert?.case_2_id}>{selectedAlert?.case_2_id} ({selectedAlert?.case_2_bureau})</option>
@@ -579,31 +572,31 @@ export function Overlaps({ onViewCase }) {
           )}
 
           <div>
-            <label className="block text-slate-700 font-semibold mb-1">
+            <label className="block text-[#8B8988] font-semibold mb-1">
               Official Review Remarks & Audit Reason *
             </label>
             <textarea
               rows={3}
               value={reviewRemarks}
               onChange={(e) => setReviewRemarks(e.target.value)}
-              className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-[#0845A8] shadow-sm"
+              className="w-full p-2.5 bg-[#0D0D14] border border-[#232234] rounded-lg text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF] shadow-xs"
               placeholder="State the factual basis for this decision..."
               required
             />
           </div>
 
-          <div className="pt-3 border-t border-slate-200 flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-[#232234] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={() => setSelectedAlert(null)}
-              className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-medium transition"
+              className="px-4 py-2 rounded-lg bg-[#13131E] hover:bg-[#1A1926] border border-[#232234] text-[#8B8988] hover:text-[#F7F7F8] font-medium transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submittingReview}
-              className="px-5 py-2 rounded-lg bg-[#0845A8] text-white font-bold hover:bg-[#063B8B] shadow transition disabled:opacity-50"
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white font-bold hover:brightness-110 shadow-[0_0_15px_rgba(147,18,255,0.3)] transition disabled:opacity-50"
             >
               {submittingReview ? 'Recording...' : 'Authorize Administrative Action'}
             </button>

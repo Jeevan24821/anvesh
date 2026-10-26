@@ -93,25 +93,28 @@ export function Sidebar({ activePage, onNavigate, isCollapsed, onToggleCollapse,
 
   return (
     <aside 
-      className={`bg-white border-r border-slate-200 shadow-xs transition-all duration-300 flex flex-col justify-between z-20 flex-shrink-0 select-none ${
+      className={`bg-[#0D0D14] border-r border-[#232234] shadow-xl transition-all duration-300 flex flex-col justify-between z-20 flex-shrink-0 select-none ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
       <div className="flex flex-col min-h-0 flex-1">
         {/* Brand Header */}
-        <div className={`p-4 border-b border-slate-200 flex items-center bg-white ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
-          <img 
-            src="/anvesh_logo.png" 
-            alt="ANVESH" 
-            className="w-9 h-9 object-contain rounded-lg p-0.5 bg-slate-50 border border-slate-200 shadow-2xs flex-shrink-0" 
-          />
+        <div className={`p-4 border-b border-[#232234] flex items-center bg-[#0D0D14] ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
+          <div className="p-1 rounded-xl bg-[#13131E] border border-[#3A3854] shadow-[0_0_15px_rgba(147,18,255,0.25)] flex items-center justify-center flex-shrink-0">
+            <img 
+              src="/anvesh_logo.png" 
+              alt="ANVESH" 
+              className="w-8 h-8 object-contain rounded-lg" 
+            />
+          </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <span className="font-extrabold text-lg tracking-wider text-[#0F172A] block leading-none">
+              <span className="font-extrabold text-lg tracking-wider text-[#F7F7F8] block leading-none flex items-center gap-1.5">
                 ANVESH
+                <span className="w-1.5 h-1.5 rounded-full bg-[#9312FF] shadow-[0_0_8px_#9312FF]"></span>
               </span>
-              <span className="text-[10px] text-[#64748B] block truncate font-medium mt-1">
-                AICTE Grievance Platform
+              <span className="text-[10px] text-[#8B8988] block truncate font-medium mt-1">
+                AICTE Grievance Intelligence
               </span>
             </div>
           )}
@@ -129,12 +132,12 @@ export function Sidebar({ activePage, onNavigate, isCollapsed, onToggleCollapse,
             return (
               <div key={section.title}>
                 {!isCollapsed && (
-                  <div className="px-3 mb-1 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                  <div className="px-3 mb-1.5 text-[10px] font-bold tracking-widest text-[#8B8988] uppercase opacity-75">
                     {section.title}
                   </div>
                 )}
                 {isCollapsed && sIdx > 0 && (
-                  <div className="my-2 border-t border-slate-100" />
+                  <div className="my-2 border-t border-[#232234]" />
                 )}
                 <div className="space-y-1">
                   {visibleItems.map((item) => {
@@ -153,21 +156,19 @@ export function Sidebar({ activePage, onNavigate, isCollapsed, onToggleCollapse,
                       <button
                         key={item.id}
                         onClick={handleClick}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors text-left ${
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all text-left ${
                           isActive
-                            ? 'bg-teal-50 text-teal-800 font-semibold border-l-4 border-[#0D9488]'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium'
+                            ? 'bg-gradient-to-r from-[#9312FF]/25 to-[#7A1CF8]/10 text-[#F7F7F8] font-bold border-l-4 border-[#9312FF] shadow-[0_0_15px_rgba(147,18,255,0.15)]'
+                            : 'text-[#8B8988] hover:text-[#F7F7F8] hover:bg-[#181826] font-medium'
                         }`}
                         title={isCollapsed ? item.label : undefined}
                       >
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-[#0D9488]' : 'text-slate-500'}`} />
+                        <Icon className={`w-4 h-4 flex-shrink-0 transition ${isActive ? 'text-[#A020FF] drop-shadow-[0_0_8px_rgba(160,32,255,0.6)]' : 'text-[#8B8988]'}`} />
                         {!isCollapsed && (
                           <span className="flex-1 truncate">{item.label}</span>
                         )}
                         {!isCollapsed && item.badge && (
-                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                            item.badgeColor || (isActive ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-600 border-slate-200')
-                          }`}>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-[#9312FF]/25 text-[#D8B4FE] border-[#9312FF]/50 shadow-[0_0_8px_rgba(147,18,255,0.3)]">
                             {item.badge}
                           </span>
                         )}
@@ -182,27 +183,27 @@ export function Sidebar({ activePage, onNavigate, isCollapsed, onToggleCollapse,
       </div>
 
       {/* Footer Info & Collapse Toggle */}
-      <div className="p-3 border-t border-slate-200 bg-white">
+      <div className="p-3 border-t border-[#232234] bg-[#0D0D14]">
         {!isCollapsed && (
-          <div className="mb-2 px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-0.5">
+          <div className="mb-2 px-3 py-2 rounded-xl bg-[#13131E] border border-[#232234] text-[11px] text-[#8B8988] space-y-0.5">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-slate-900 font-semibold text-xs">
-                <span className="w-2 h-2 rounded-full bg-teal-500"></span>
-                ANVESH v2.0
+              <span className="flex items-center gap-1.5 text-[#F7F7F8] font-semibold text-xs">
+                <span className="w-2 h-2 rounded-full bg-[#9312FF] shadow-[0_0_8px_#9312FF]"></span>
+                Royal Violet v2.5
               </span>
-              <span className="text-teal-700 font-mono text-[9px] font-bold px-1.5 py-0.2 rounded bg-teal-50 border border-teal-200">
+              <span className="text-[#A020FF] font-mono text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#9312FF]/15 border border-[#9312FF]/30">
                 ACTIVE
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 truncate">
-              Role: <span className="font-semibold text-slate-700">{currentRole?.role || 'Guest'}</span>
+            <p className="text-[10px] text-[#8B8988] truncate mt-0.5">
+              Role: <span className="font-semibold text-[#F7F7F8]">{currentRole?.role || 'Guest'}</span>
             </p>
           </div>
         )}
 
         <button
           onClick={onToggleCollapse}
-          className="w-full flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition border border-transparent hover:border-slate-200"
+          className="w-full flex items-center justify-center p-2 rounded-xl text-[#8B8988] hover:text-[#F7F7F8] hover:bg-[#181826] transition border border-transparent hover:border-[#232234]"
           title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}

@@ -4,48 +4,83 @@
 
 @layer base {
   body {
-    background-color: #F8FAFC;
-    color: #0F172A;
+    background-color: #000000;
+    background-image: radial-gradient(ellipse 90% 50% at 50% -15%, rgba(147, 18, 255, 0.22), transparent 75%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #F7F7F8;
     font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
-  /* Accessible UX4G Focus Ring */
+  /* Accessible Royal Violet Focus Ring */
   :focus-visible {
-    outline: 2px solid #0D9488 !important;
+    outline: 2px solid #9312FF !important;
     outline-offset: 2px !important;
   }
 }
 
-/* Custom sleek scrollbar for enterprise tables */
+/* Custom sleek scrollbar for dark royal surfaces */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: #0D0D14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #232234;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #9312FF;
 }
 
-/* Restrained, soft enterprise card styling */
+/* Royal Dark Glass Card Styling */
 .anvesh-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background-color: #0D0D14;
+  border: 1px solid #232234;
   border-radius: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.15s ease-in-out;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .anvesh-card:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  border-color: rgba(147, 18, 255, 0.45);
+  box-shadow: 0 0 25px rgba(147, 18, 255, 0.15);
+}
+
+/* Royal Violet Gradient Text */
+.violet-text-gradient {
+  background: linear-gradient(135deg, #FFFFFF 0%, #D8B4FE 35%, #A020FF 70%, #7A1CF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Royal Violet Glow Button */
+.violet-glow-btn {
+  background: linear-gradient(135deg, #9312FF 0%, #7A1CF8 100%);
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(147, 18, 255, 0.35);
+  transition: all 0.2s ease-in-out;
+}
+
+.violet-glow-btn:hover {
+  background: linear-gradient(135deg, #A020FF 0%, #8522FB 100%);
+  box-shadow: 0 0 28px rgba(147, 18, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

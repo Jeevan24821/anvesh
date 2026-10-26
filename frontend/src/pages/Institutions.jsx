@@ -3,11 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { StatusBadge } from '../components/StatusBadge';
 import { BureauBadge } from '../components/BureauBadge';
-import { PriorityBadge } from '../components/PriorityBadge';
 import { Modal } from '../components/Modal';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { formatDate } from '../utils/formatters';
 import { REGIONS } from '../utils/constants';
 import { 
   Building2, 
@@ -15,13 +13,10 @@ import {
   MapPin, 
   Mail, 
   Phone, 
-  ShieldCheck, 
-  AlertTriangle, 
   GitMerge, 
-  FileText,
-  User,
-  ArrowRight,
-  ShieldAlert
+  User, 
+  ArrowRight, 
+  ShieldAlert 
 } from 'lucide-react';
 
 export function Institutions({ onViewCase }) {
@@ -77,11 +72,11 @@ export function Institutions({ onViewCase }) {
   if (currentRole?.role === 'Complainant') {
     return (
       <div className="p-8 max-w-2xl mx-auto text-center mt-12">
-        <div className="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-200 shadow-sm">
+        <div className="w-16 h-16 rounded-2xl bg-[#F03B2A]/15 text-[#F03B2A] flex items-center justify-center mx-auto mb-4 border border-[#F03B2A]/30 shadow-xs">
           <ShieldAlert className="w-8 h-8" />
         </div>
-        <h2 className="text-xl font-black text-slate-900 mb-2">Access Restricted</h2>
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+        <h2 className="text-xl font-black text-[#F7F7F8] mb-2">Access Restricted</h2>
+        <p className="text-xs sm:text-sm text-[#8B8988] leading-relaxed mb-6">
           The Institution Directory, aggregated complaint statistics, overdue metrics, and overlap intelligence are strictly restricted to authorized AICTE administrative and reviewer personnel.
         </p>
       </div>
@@ -93,26 +88,26 @@ export function Institutions({ onViewCase }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">Technical Institution Directory</h1>
-          <p className="text-xs text-[#64748B] mt-1">
+          <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">Technical Institution Directory</h1>
+          <p className="text-xs text-[#8B8988] mt-1">
             Consolidated profiles and multi-bureau grievance track records for AICTE approved colleges.
           </p>
         </div>
-        <div className="text-xs text-[#64748B] font-mono">
-          Showing <span className="text-[#0D9488] font-bold">{institutions.length}</span> of {total} Institutions
+        <div className="text-xs text-[#8B8988] font-mono">
+          Showing <span className="text-[#D8B4FE] font-bold">{institutions.length}</span> of {total} Institutions
         </div>
       </div>
 
       {/* Filter Row */}
-      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-xs flex flex-col md:flex-row items-center gap-3">
+      <div className="bg-[#0D0D14] border border-[#232234] p-4 rounded-xl shadow-xs flex flex-col md:flex-row items-center gap-3">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8B8988]" />
           <input
             type="text"
             placeholder="Search by Institution Name, AICTE Permanent ID (1-3349...), or District..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg text-xs text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] transition shadow-xs"
+            className="w-full pl-10 pr-4 py-2 bg-[#13131E] border border-[#232234] focus:border-[#9312FF] rounded-lg text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none transition shadow-xs"
           />
         </div>
 
@@ -120,7 +115,7 @@ export function Institutions({ onViewCase }) {
           <select
             value={region}
             onChange={(e) => setRegion(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
+            className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-xs text-[#F7F7F8] focus:outline-none focus:border-[#9312FF]"
           >
             {REGIONS.map((r) => (
               <option key={r} value={r}>Region: {r}</option>
@@ -133,7 +128,7 @@ export function Institutions({ onViewCase }) {
       {loading ? (
         <LoadingSpinner text="Retrieving institution profiles and complaint records..." />
       ) : error ? (
-        <div className="p-8 text-center text-rose-600 bg-rose-50 border border-rose-200 rounded-xl">{error}</div>
+        <div className="p-8 text-center text-[#F03B2A] bg-[#F03B2A]/10 border border-[#F03B2A]/30 rounded-xl">{error}</div>
       ) : institutions.length === 0 ? (
         <EmptyState title="No institutions found" description="Try clearing your search keyword or region filter." />
       ) : (
@@ -142,64 +137,64 @@ export function Institutions({ onViewCase }) {
             <div
               key={inst.id}
               onClick={() => handleOpenDetail(inst.id)}
-              className="bg-white border border-slate-200 hover:border-teal-300 hover:shadow-xs rounded-xl p-5 cursor-pointer transition flex flex-col justify-between"
+              className="bg-[#0D0D14] border border-[#232234] hover:border-[#3A3854] hover:shadow-[0_0_15px_rgba(147,18,255,0.15)] rounded-xl p-5 cursor-pointer transition flex flex-col justify-between"
             >
               <div>
                 {/* Header */}
                 <div className="flex items-start justify-between gap-2">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-teal-50 text-[#0D9488] border border-teal-200">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30">
                     {inst.aicte_id}
                   </span>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
                     inst.approval_status === 'Approved'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                      ? 'bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30'
+                      : 'bg-[#F59E0B]/15 text-[#FBBF24] border border-[#F59E0B]/30'
                   }`}>
                     {inst.approval_status}
                   </span>
                 </div>
 
-                <h3 className="text-sm font-bold text-[#0F172A] mt-2.5 leading-snug line-clamp-2" title={inst.name}>
+                <h3 className="text-sm font-bold text-[#F7F7F8] mt-2.5 leading-snug line-clamp-2" title={inst.name}>
                   {inst.name}
                 </h3>
 
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs text-[#8B8988] mt-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#8B8988] flex-shrink-0" />
                   <span className="truncate">{inst.district}, {inst.state} ({inst.region})</span>
                 </div>
 
-                <div className="text-[11px] text-slate-500 mt-1">
-                  Type: <span className="text-slate-700 font-medium">{inst.institution_type}</span>
+                <div className="text-[11px] text-[#8B8988] mt-1">
+                  Type: <span className="text-[#F7F7F8] font-medium">{inst.institution_type}</span>
                 </div>
               </div>
 
               {/* Bottom Metrics Bar */}
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <div className="mt-4 pt-3 border-t border-[#232234] flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase block">Complaints</span>
-                    <span className="font-bold text-[#0F172A]">{inst.complaint_count}</span>
+                    <span className="text-[10px] text-[#8B8988] uppercase block">Complaints</span>
+                    <span className="font-bold text-[#F7F7F8]">{inst.complaint_count}</span>
                   </div>
 
                   {inst.overdue_complaints > 0 && (
                     <div>
-                      <span className="text-[10px] text-rose-600 uppercase block">Overdue</span>
-                      <span className="font-bold text-rose-600">{inst.overdue_complaints}</span>
+                      <span className="text-[10px] text-[#F03B2A] uppercase block">Overdue</span>
+                      <span className="font-bold text-[#F03B2A]">{inst.overdue_complaints}</span>
                     </div>
                   )}
 
                   {inst.overlap_count > 0 && (
                     <div>
-                      <span className="text-[10px] text-purple-600 uppercase block">Overlaps</span>
-                      <span className="font-bold text-purple-700 flex items-center gap-0.5">
-                        <GitMerge className="w-3 h-3 text-purple-600" />
+                      <span className="text-[10px] text-[#D8B4FE] uppercase block">Overlaps</span>
+                      <span className="font-bold text-[#D8B4FE] flex items-center gap-0.5">
+                        <GitMerge className="w-3 h-3 text-[#D8B4FE]" />
                         {inst.overlap_count}
                       </span>
                     </div>
                   )}
                 </div>
 
-                <span className="text-xs text-[#0D9488] font-semibold flex items-center gap-1">
+                <span className="text-xs text-[#D8B4FE] hover:text-white font-semibold flex items-center gap-1 transition">
                   History <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -223,31 +218,31 @@ export function Institutions({ onViewCase }) {
         ) : (
           <div className="space-y-6 text-xs">
             {/* Header info */}
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+            <div className="bg-[#13131E] p-4 rounded-xl border border-[#232234] space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-[#0D9488]">
+                <span className="font-mono text-xs font-bold text-[#D8B4FE]">
                   Permanent AICTE ID: {detailData.aicte_id}
                 </span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30 font-semibold">
                   {detailData.approval_status}
                 </span>
               </div>
-              <h2 className="text-base font-bold text-[#0F172A]">{detailData.name}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600 text-xs pt-2">
+              <h2 className="text-base font-bold text-[#F7F7F8]">{detailData.name}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[#8B8988] text-xs pt-2">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-slate-400" />
+                  <MapPin className="w-4 h-4 text-[#8B8988]" />
                   <span>{detailData.address}, {detailData.district}, {detailData.state} - {detailData.pincode}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-slate-400" />
+                  <User className="w-4 h-4 text-[#8B8988]" />
                   <span>Head: {detailData.principal_name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-slate-400" />
+                  <Mail className="w-4 h-4 text-[#8B8988]" />
                   <span>{detailData.contact_email}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-slate-400" />
+                  <Phone className="w-4 h-4 text-[#8B8988]" />
                   <span>{detailData.contact_phone}</span>
                 </div>
               </div>
@@ -255,38 +250,38 @@ export function Institutions({ onViewCase }) {
 
             {/* Quick Summary Counts */}
             <div className="grid grid-cols-4 gap-3 text-center">
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-[10px] text-slate-500 uppercase">Total Filed</div>
-                <div className="text-lg font-bold text-[#0F172A] mt-0.5">{detailData.total_complaints}</div>
+              <div className="bg-[#13131E] p-2.5 rounded-xl border border-[#232234] shadow-xs">
+                <div className="text-[10px] text-[#8B8988] uppercase">Total Filed</div>
+                <div className="text-lg font-bold text-[#F7F7F8] mt-0.5">{detailData.total_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-[10px] text-teal-600 uppercase">Active Cases</div>
-                <div className="text-lg font-bold text-[#0D9488] mt-0.5">{detailData.active_complaints}</div>
+              <div className="bg-[#13131E] p-2.5 rounded-xl border border-[#232234] shadow-xs">
+                <div className="text-[10px] text-[#D8B4FE] uppercase">Active Cases</div>
+                <div className="text-lg font-bold text-[#D8B4FE] mt-0.5">{detailData.active_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-[10px] text-rose-600 uppercase">Overdue Breaches</div>
-                <div className="text-lg font-bold text-rose-700 mt-0.5">{detailData.overdue_complaints}</div>
+              <div className="bg-[#13131E] p-2.5 rounded-xl border border-[#232234] shadow-xs">
+                <div className="text-[10px] text-[#F03B2A] uppercase">Overdue Breaches</div>
+                <div className="text-lg font-bold text-[#F03B2A] mt-0.5">{detailData.overdue_complaints}</div>
               </div>
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-[10px] text-purple-600 uppercase">Overlap Alerts</div>
-                <div className="text-lg font-bold text-purple-700 mt-0.5">{detailData.overlap_alerts_count}</div>
+              <div className="bg-[#13131E] p-2.5 rounded-xl border border-[#232234] shadow-xs">
+                <div className="text-[10px] text-[#9312FF] uppercase">Overlap Alerts</div>
+                <div className="text-lg font-bold text-[#D8B4FE] mt-0.5">{detailData.overlap_alerts_count}</div>
               </div>
             </div>
 
             {/* Consolidated Complaints Table */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-bold text-[#0F172A] tracking-wide">
+                <h4 className="text-sm font-bold text-[#F7F7F8] tracking-wide">
                   Cross-Bureau Complaint History ({detailData.complaints.length})
                 </h4>
-                <span className="text-[11px] text-[#64748B]">
+                <span className="text-[11px] text-[#8B8988]">
                   Tracked across PGRC, Regulation, Approval, ARC, and SDC
                 </span>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden max-h-80 overflow-y-auto shadow-2xs">
+              <div className="bg-[#13131E] border border-[#232234] rounded-xl overflow-hidden max-h-80 overflow-y-auto shadow-xs">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200 sticky top-0">
+                  <thead className="bg-[#0D0D14] text-[#8B8988] uppercase text-[10px] tracking-wider border-b border-[#232234] sticky top-0">
                     <tr>
                       <th className="py-2.5 px-3">Case ID</th>
                       <th className="py-2.5 px-3">Bureau</th>
@@ -296,16 +291,16 @@ export function Institutions({ onViewCase }) {
                       <th className="py-2.5 px-3 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                  <tbody className="divide-y divide-[#232234] text-[#F7F7F8]">
                     {(detailData.complaints || []).map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50 transition">
-                        <td className="py-2.5 px-3 font-mono font-bold text-[#0D9488] whitespace-nowrap">
+                      <tr key={c.id} className="hover:bg-[#181826] transition">
+                        <td className="py-2.5 px-3 font-mono font-bold text-[#D8B4FE] whitespace-nowrap">
                           {c.case_id}
                         </td>
                         <td className="py-2.5 px-3 whitespace-nowrap">
                           <BureauBadge bureau={c.source_bureau} />
                         </td>
-                        <td className="py-2.5 px-3 whitespace-nowrap text-slate-500 text-[11px]">
+                        <td className="py-2.5 px-3 whitespace-nowrap text-[#8B8988] text-[11px]">
                           {c.category}
                         </td>
                         <td className="py-2.5 px-3 max-w-[200px] truncate" title={c.subject}>
@@ -320,7 +315,7 @@ export function Institutions({ onViewCase }) {
                               setSelectedInstId(null);
                               onViewCase(c.id);
                             }}
-                            className="text-xs px-2.5 py-1 rounded bg-teal-50 text-[#0D9488] hover:bg-teal-100 border border-teal-200 font-semibold transition"
+                            className="text-xs px-2.5 py-1 rounded bg-[#9312FF]/20 text-[#D8B4FE] hover:bg-[#9312FF]/30 border border-[#9312FF]/40 font-semibold transition"
                           >
                             Inspect
                           </button>
@@ -337,3 +332,4 @@ export function Institutions({ onViewCase }) {
     </div>
   );
 }
+export default Institutions;
