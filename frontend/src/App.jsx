@@ -146,6 +146,7 @@ function AppContent() {
               <Notifications
                 onViewCase={handleViewCase}
                 onViewOverlap={() => setActivePage('overlaps')}
+                initialFilter={complaintFilters}
               />
             )}
 

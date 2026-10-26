@@ -98,7 +98,7 @@ export const AFFILIATION_OPTIONS = [
   "Faculty",
   "Staff Member",
   "Alumni",
-  "Concerned Citizen / Other"
+  "Concerned Citizen"
 ];
 
 export const OFFICERS_LIST = [

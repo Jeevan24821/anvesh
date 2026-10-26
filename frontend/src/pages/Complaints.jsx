@@ -525,7 +525,7 @@ export function Complaints({ onViewCase, onViewInstitution, initialFilter = {} }
                 setSearch(e.target.value);
                 setPage(0);
               }}
-              className="w-full pl-10 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+              className="w-full pl-10 pr-9 py-2 bg-white border border-[#CBD5E1] rounded-xl text-xs text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] transition shadow-xs"
             />
             {search && (
               <button

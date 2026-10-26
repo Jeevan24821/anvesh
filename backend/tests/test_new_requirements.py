@@ -174,7 +174,7 @@ def test_admin_global_notifications(tokens):
     pgrc_headers = {"Authorization": f"Bearer {tokens['reviewer_pgrc']}"}
 
     # Admin querying notifications sees global feed (no bureau restriction)
-    res_admin = client.get("/api/notifications?limit=100", headers=admin_headers)
+    res_admin = client.get("/api/notifications?limit=300", headers=admin_headers)
     assert res_admin.status_code == 200
     admin_notifs = res_admin.json()
     assert len(admin_notifs) > 0

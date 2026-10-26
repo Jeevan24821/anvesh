@@ -27,15 +27,18 @@ import {
   Layers
 } from 'lucide-react';
 
-export function Notifications({ onViewCase, onViewOverlap }) {
+export function Notifications({ onViewCase, onViewOverlap, initialFilter = {} }) {
   const { currentRole, refreshNotifications } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [unreadOnly, setUnreadOnly] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all'); // 'all', 'complaints', 'overlaps', 'slas'
   const [selectedBureau, setSelectedBureau] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [actorSearchTerm, setActorSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const isAuditMode = Boolean(initialFilter?.audit_mode);
 
   const fetchNotifs = async () => {
     try {
@@ -95,14 +98,28 @@ export function Notifications({ onViewCase, onViewOverlap }) {
   };
 
   const filteredNotifications = notifications.filter(n => {
-    if (!searchTerm.trim()) return true;
-    const term = searchTerm.toLowerCase();
-    return (
-      n.title?.toLowerCase().includes(term) ||
-      n.message?.toLowerCase().includes(term) ||
-      n.bureau?.toLowerCase().includes(term) ||
-      (n.complaint_id && String(n.complaint_id).includes(term))
-    );
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      const matchesKeyword = (
+        n.title?.toLowerCase().includes(term) ||
+        n.message?.toLowerCase().includes(term) ||
+        n.bureau?.toLowerCase().includes(term) ||
+        (n.complaint_id && String(n.complaint_id).includes(term))
+      );
+      if (!matchesKeyword) return false;
+    }
+
+    if (actorSearchTerm.trim()) {
+      const actorTerm = actorSearchTerm.toLowerCase();
+      const matchesActor = (
+        n.message?.toLowerCase().includes(actorTerm) ||
+        n.title?.toLowerCase().includes(actorTerm) ||
+        n.bureau?.toLowerCase().includes(actorTerm)
+      );
+      if (!matchesActor) return false;
+    }
+
+    return true;
   });
 
   const getIcon = (type, severity) => {
@@ -148,7 +165,9 @@ export function Notifications({ onViewCase, onViewOverlap }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">Notification & Intelligence Feed</h1>
+            <h1 className="text-xl font-extrabold text-[#0F172A] tracking-tight">
+              {isAuditMode ? 'Audit Log Scrutiny & Statutory Ledger' : 'Notification & Intelligence Feed'}
+            </h1>
             {currentRole?.canEditAll && (
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200 uppercase">
                 Global Central Feed (All Departments)
@@ -156,7 +175,9 @@ export function Notifications({ onViewCase, onViewOverlap }) {
             )}
           </div>
           <p className="text-xs text-[#64748B] mt-1">
-            Real-time multi-department updates for complaint submissions, status transitions, officer assignments, and statutory alerts.
+            {isAuditMode 
+              ? 'Complete, cryptographically structured audit trail of grievance status transitions, reviewer deliberations, officer assignments, and statutory SLA milestones.'
+              : 'Real-time multi-department updates for complaint submissions, status transitions, officer assignments, and statutory alerts.'}
           </p>
         </div>
 
@@ -256,20 +277,33 @@ export function Notifications({ onViewCase, onViewOverlap }) {
           )}
         </div>
 
-        {/* Search bar & Unread toggle */}
+        {/* Search bar & Actor search & Unread toggle */}
         <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
-            <input
-              type="text"
-              placeholder="Search notifications by case ID, keyword, bureau..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-xs focus:outline-none focus:border-[#0D9488]"
-            />
+          <div className="flex flex-col sm:flex-row items-center gap-2 flex-1">
+            <div className="relative flex-1 w-full max-w-sm">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search by case ID, keyword, bureau..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] text-xs focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
+              />
+            </div>
+
+            <div className="relative flex-1 w-full max-w-xs">
+              <UserCheck className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search Actor / Official..."
+                value={actorSearchTerm}
+                onChange={(e) => setActorSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] text-xs focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto">
             <button
               onClick={() => setUnreadOnly(false)}
               className={`px-3 py-1 rounded-lg font-semibold transition ${

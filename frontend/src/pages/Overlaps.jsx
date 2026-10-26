@@ -21,8 +21,53 @@ import {
   Info,
   Layers,
   Share2,
-  FileText
+  FileText,
+  Download
 } from 'lucide-react';
+
+export function extractComponentSimilarities(reasons = []) {
+  let institutionSim = 'N/A';
+  let narrativeSim = 'N/A';
+  let categorySim = 'N/A';
+  let explanations = [];
+
+  for (const r of reasons) {
+    if (typeof r !== 'string') continue;
+
+    // Institution matching signal
+    if (r.includes('Exact AICTE Permanent Institution ID verified')) {
+      institutionSim = '100%';
+      explanations.push('Verified identical AICTE Permanent Institution ID.');
+    } else if (r.includes('institution name variant match')) {
+      const m = r.match(/(\d+)%/);
+      if (m) institutionSim = `${m[1]}%`;
+      explanations.push('High lexical and string similarity in institution name.');
+    }
+
+    // Category matching signal
+    if (r.includes('Identical grievance category')) {
+      categorySim = '100%';
+      explanations.push('Both complaints fall under the identical AICTE grievance category.');
+    }
+
+    // Narrative text matching signal
+    if (r.includes('High narrative overlap')) {
+      const m = r.match(/(\d+)%/);
+      if (m) narrativeSim = `${m[1]}%`;
+      explanations.push('Substantial semantic and keyword overlap between grievance narratives.');
+    } else if (r.includes('Shared case keywords')) {
+      const kw = r.split(':')[1]?.trim() || '';
+      if (kw) explanations.push(`Shared domain keywords: ${kw}`);
+    }
+
+    // Cross-bureau signal
+    if (r.includes('Cross-Bureau involvement detected')) {
+      explanations.push('Dual-bureau concurrent jurisdiction identified.');
+    }
+  }
+
+  return { institutionSim, narrativeSim, categorySim, explanations };
+}
 
 export function Overlaps({ onViewCase }) {
   const { currentRole, refreshNotifications } = useAuth();
@@ -32,6 +77,7 @@ export function Overlaps({ onViewCase }) {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [exportingCsv, setExportingCsv] = useState(false);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('Pending Review');
@@ -82,6 +128,19 @@ export function Overlaps({ onViewCase }) {
       alert(e.message || 'Scan failed');
     } finally {
       setScanning(false);
+    }
+  };
+
+  const handleExportCsv = async () => {
+    try {
+      setExportingCsv(true);
+      await api.exportOverlapsCsv({
+        status: statusFilter !== 'All' ? statusFilter : undefined
+      });
+    } catch (e) {
+      alert(e.message || 'Failed to export overlap report');
+    } finally {
+      setExportingCsv(false);
     }
   };
 
@@ -161,12 +220,22 @@ export function Overlaps({ onViewCase }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={handleExportCsv}
+            disabled={exportingCsv || alerts.length === 0}
+            className="flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-[#0F172A] border border-slate-200 text-xs font-semibold rounded-xl shadow-2xs transition disabled:opacity-50"
+            title="Download full overlap intelligence audit register in CSV format"
+          >
+            <Download className="w-3.5 h-3.5 text-[#0D9488]" />
+            <span>{exportingCsv ? 'Exporting CSV...' : 'Export Overlaps (CSV)'}</span>
+          </button>
+
           {!currentRole?.readOnly && (
             <button
               onClick={handleTriggerScan}
               disabled={scanning}
-              className="flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-[#0845A8] border border-slate-200 text-xs font-semibold rounded-xl shadow-2xs transition disabled:opacity-50"
+              className="flex items-center gap-2 px-3.5 py-2 bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold rounded-xl shadow-xs transition disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${scanning ? 'animate-spin' : ''}`} />
               {scanning ? 'Scanning Matrix...' : 'Run On-Demand Scan'}
@@ -235,135 +304,177 @@ export function Overlaps({ onViewCase }) {
         />
       ) : (
         <div className="space-y-4">
-          {alerts.map((alert) => (
-            <div
-              key={alert.id}
-              className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4 hover:border-slate-300 transition"
-            >
-              {/* Card Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">
-                    Alert #{alert.id}
-                  </span>
-                  <span className="font-bold text-[#0F172A] text-sm">
-                    {alert.institution_1_name}
-                  </span>
-                  <span className="text-[10px] text-slate-500 font-mono">
-                    (AICTE ID: {alert.institution_1_aicte_id})
-                  </span>
-                  {/* Prominent Similarity Score */}
-                  <span className="px-3 py-0.5 rounded-full text-xs font-bold border bg-teal-50 text-teal-800 border-teal-200 flex items-center gap-1">
-                    <span className="text-[10px] text-teal-600 font-normal">Similarity Score:</span>
-                    {alert.confidence_score}%
-                  </span>
-                  {/* Clear Relationship Distinction */}
-                  <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
-                    alert.status === 'Pending Review'
-                      ? 'bg-amber-50 text-amber-800 border-amber-200'
-                      : alert.status === 'Dismissed False Positive'
-                      ? 'bg-slate-100 text-slate-600 border-slate-200'
-                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                  }`}>
-                    {alert.status === 'Pending Review' ? 'Suggested Overlap (Awaiting Review)' : alert.status}
-                  </span>
+          {alerts.map((alert) => {
+            const simScore = alert.confidence_score <= 1.0 
+              ? Math.round(alert.confidence_score * 100) 
+              : Math.round(alert.confidence_score);
+            const componentSims = extractComponentSimilarities(alert.match_reasons || []);
+
+            return (
+              <div
+                key={alert.id}
+                className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4 hover:border-slate-300 transition"
+              >
+                {/* Card Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">
+                      Alert #{alert.id}
+                    </span>
+                    <span className="font-bold text-[#0F172A] text-sm">
+                      {alert.institution_1_name}
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      (AICTE ID: {alert.institution_1_aicte_id})
+                    </span>
+                    {/* Prominent Overall Similarity Score */}
+                    <span className="px-3 py-0.5 rounded-full text-xs font-bold border bg-teal-50 text-teal-800 border-teal-200 flex items-center gap-1">
+                      <span className="text-[10px] text-teal-600 font-normal">Similarity Score:</span>
+                      {simScore}%
+                    </span>
+                    {/* Clear Relationship Distinction */}
+                    <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                      alert.status === 'Pending Review'
+                        ? 'bg-amber-50 text-amber-800 border-amber-200'
+                        : alert.status === 'Dismissed False Positive'
+                        ? 'bg-slate-100 text-slate-600 border-slate-200'
+                        : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    }`}>
+                      {alert.status === 'Pending Review' ? 'Suggested Overlap (Awaiting Review)' : alert.status}
+                    </span>
+                  </div>
+
+                  {/* Review Action Trigger Buttons */}
+                  {!currentRole?.readOnly && alert.status === 'Pending Review' && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleOpenReview(alert, 'JOINT_INVESTIGATION')}
+                        className="px-3.5 py-1.5 rounded-lg bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold shadow-xs transition flex items-center gap-1.5"
+                      >
+                        <GitMerge className="w-3.5 h-3.5" />
+                        <span>Take Action</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {/* Review Action Trigger Buttons */}
-                {!currentRole?.readOnly && alert.status === 'Pending Review' && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleOpenReview(alert, 'JOINT_INVESTIGATION')}
-                      className="px-3.5 py-1.5 rounded-lg bg-[#0D9488] hover:bg-[#0F766E] text-white text-xs font-semibold shadow-xs transition flex items-center gap-1.5"
-                    >
-                      <GitMerge className="w-3.5 h-3.5" />
-                      <span>Take Action</span>
-                    </button>
+                {/* Component Similarities Metric Pills */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                    <span className="text-[#64748B] font-medium">Institution Match:</span>
+                    <span className={`font-bold ${componentSims.institutionSim !== 'N/A' ? 'text-emerald-700' : 'text-slate-500'}`}>
+                      {componentSims.institutionSim}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                    <span className="text-[#64748B] font-medium">Narrative Overlap:</span>
+                    <span className={`font-bold ${componentSims.narrativeSim !== 'N/A' ? 'text-teal-700' : 'text-slate-500'}`}>
+                      {componentSims.narrativeSim}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+                    <span className="text-[#64748B] font-medium">Category Match:</span>
+                    <span className={`font-bold ${componentSims.categorySim !== 'N/A' ? 'text-blue-700' : 'text-slate-500'}`}>
+                      {componentSims.categorySim}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Side-by-Side Case Comparison */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Case 1 */}
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono font-bold text-[#12345A] text-xs">
+                        {alert.case_1_id}
+                      </span>
+                      <button
+                        onClick={() => onViewCase(alert.complaint_id_1)}
+                        className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                      >
+                        View Case <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BureauBadge bureau={alert.case_1_bureau} />
+                      <StatusBadge status={alert.case_1_status} />
+                    </div>
+                    <div className="text-xs font-semibold text-[#0F172A]">
+                      {alert.case_1_subject}
+                    </div>
+                    <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
+                      {alert.case_1_description}
+                    </p>
+                  </div>
+
+                  {/* Case 2 */}
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono font-bold text-[#12345A] text-xs">
+                        {alert.case_2_id}
+                      </span>
+                      <button
+                        onClick={() => onViewCase(alert.complaint_id_2)}
+                        className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                      >
+                        View Case <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BureauBadge bureau={alert.case_2_bureau} />
+                      <StatusBadge status={alert.case_2_status} />
+                    </div>
+                    <div className="text-xs font-semibold text-[#0F172A]">
+                      {alert.case_2_subject}
+                    </div>
+                    <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
+                      {alert.case_2_description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Explainability Card: Transparent Signal Breakdown */}
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+                  <div className="flex items-center gap-1.5 text-[#0F172A] font-bold uppercase tracking-wider text-[10px]">
+                    <Info className="w-3.5 h-3.5 text-[#0D9488]" />
+                    Engine Match Signals & Explainability Breakdown:
+                  </div>
+                  <ul className="list-disc list-inside space-y-0.5 text-[#64748B] text-[11px]">
+                    {alert.match_reasons.map((reason, idx) => (
+                      <li key={idx} className="leading-relaxed">
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
+                  {componentSims.explanations.length > 0 && (
+                    <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-700 space-y-1">
+                      <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                        Concise Signal Assessment:
+                      </div>
+                      {componentSims.explanations.map((exp, idx) => (
+                        <div key={idx} className="flex items-start gap-1.5 text-slate-700">
+                          <span className="text-[#0D9488] font-bold">•</span>
+                          <span>{exp}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Review History / Remarks if already reviewed */}
+                {alert.reviewed_by && (
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                    <div className="text-[10px] text-slate-500 uppercase font-semibold flex items-center justify-between">
+                      <span>Administrative Order by {alert.reviewed_by}</span>
+                      <span>{formatDateTime(alert.reviewed_at)}</span>
+                    </div>
+                    <p className="font-semibold text-slate-900">{alert.review_decision}</p>
+                    <p className="text-slate-700 italic">"{alert.review_remarks}"</p>
                   </div>
                 )}
               </div>
-
-              {/* Side-by-Side Case Comparison */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Case 1 */}
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-[#12345A] text-xs">
-                      {alert.case_1_id}
-                    </span>
-                    <button
-                      onClick={() => onViewCase(alert.complaint_id_1)}
-                      className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
-                    >
-                      View Case <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BureauBadge bureau={alert.case_1_bureau} />
-                    <StatusBadge status={alert.case_1_status} />
-                  </div>
-                  <div className="text-xs font-semibold text-[#0F172A]">
-                    {alert.case_1_subject}
-                  </div>
-                  <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs break-words">
-                    {alert.case_1_description}
-                  </p>
-                </div>
-
-                {/* Case 2 */}
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-[#12345A] text-xs">
-                      {alert.case_2_id}
-                    </span>
-                    <button
-                      onClick={() => onViewCase(alert.complaint_id_2)}
-                      className="text-[11px] font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1"
-                    >
-                      View Case <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BureauBadge bureau={alert.case_2_bureau} />
-                    <StatusBadge status={alert.case_2_status} />
-                  </div>
-                  <div className="text-xs font-semibold text-[#0F172A]">
-                    {alert.case_2_subject}
-                  </div>
-                  <p className="text-[11px] text-[#64748B] line-clamp-3 bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs break-words">
-                    {alert.case_2_description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Explainability Card: Transparent Signal Breakdown */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[#0F172A] font-bold uppercase tracking-wider text-[10px]">
-                  <Info className="w-3.5 h-3.5 text-[#0D9488]" />
-                  Engine Match Signals & Explainability Breakdown:
-                </div>
-                <ul className="list-disc list-inside space-y-0.5 text-[#64748B] text-[11px]">
-                  {alert.match_reasons.map((reason, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {reason}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Review History / Remarks if already reviewed */}
-              {alert.reviewed_by && (
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                  <div className="text-[10px] text-slate-500 uppercase font-semibold flex items-center justify-between">
-                    <span>Administrative Order by {alert.reviewed_by}</span>
-                    <span>{formatDateTime(alert.reviewed_at)}</span>
-                  </div>
-                  <p className="font-semibold text-slate-900">{alert.review_decision}</p>
-                  <p className="text-slate-700 italic">"{alert.review_remarks}"</p>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

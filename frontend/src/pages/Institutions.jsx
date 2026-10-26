@@ -112,7 +112,7 @@ export function Institutions({ onViewCase }) {
             placeholder="Search by Institution Name, AICTE Permanent ID (1-3349...), or District..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition"
+            className="w-full pl-10 pr-4 py-2 bg-white border border-[#CBD5E1] rounded-lg text-xs text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] transition shadow-xs"
           />
         </div>
 

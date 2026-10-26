@@ -44,15 +44,6 @@ export function Sidebar({ activePage, onNavigate, isCollapsed, onToggleCollapse,
           roles: ['Reviewer', 'Administrator', 'Viewer'],
           onClick: () => onNavigate('complaints', { status: 'Pending Verification', filter_label: 'Review Queue' }),
         },
-        {
-          id: 'inspect_queue',
-          label: 'Inspect Queue',
-          icon: AlertTriangle,
-          roles: ['Reviewer', 'Administrator', 'Viewer'],
-          badge: 'SLA Priority',
-          badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
-          onClick: () => onNavigate('complaints', { overdue_only: true, filter_label: 'Inspect Queue (SLA Breach Warnings)' }),
-        },
       ]
     },
     {

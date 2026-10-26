@@ -377,6 +377,27 @@ export const api = {
     return `${API_BASE_URL}/reports/export-csv?${query.toString()}`;
   },
 
+  exportOverlapsCsv: async (filters = {}) => {
+    const query = new URLSearchParams();
+    if (filters.status && filters.status !== 'All') query.append('status', filters.status);
+
+    const blob = await request(`/reports/export-overlaps-csv?${query.toString()}`);
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `ANVESH_AICTE_Overlaps_Report_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+  },
+
+  getExportOverlapsCsvUrl: (filters = {}) => {
+    const query = new URLSearchParams();
+    if (filters.status && filters.status !== 'All') query.append('status', filters.status);
+    return `${API_BASE_URL}/reports/export-overlaps-csv?${query.toString()}`;
+  },
+
   // Notifications
   getNotifications: (params = {}) => {
     const query = new URLSearchParams();

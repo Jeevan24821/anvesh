@@ -36,9 +36,11 @@ export default function AcknowledgementModal({ isOpen, onClose, complaint }) {
           {/* Header with National Emblem / AICTE Seal */}
           <div className="border-b-2 border-slate-800 pb-4 text-center relative">
             <div className="flex justify-center mb-2">
-              <div className="w-14 h-14 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-xl border-2 border-amber-400 shadow">
-                AICTE
-              </div>
+              <img 
+                src="/aicte_logo.png" 
+                alt="AICTE Official Seal" 
+                className="h-16 w-auto object-contain mx-auto" 
+              />
             </div>
             <h2 className="text-lg font-bold uppercase tracking-wider text-slate-900">
               All India Council for Technical Education
@@ -163,8 +165,8 @@ export default function AcknowledgementModal({ isOpen, onClose, complaint }) {
                 AI-Assisted Cross-Bureau Overlap Correlation Assessment
               </span>
               <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-purple-200 text-purple-900">
-                {complaint.overlap_similarity_score 
-                  ? `${Math.round(complaint.overlap_similarity_score * 100)}% Potential Correlation`
+                {complaint.overlap_similarity_score != null
+                  ? `${complaint.overlap_similarity_score <= 1.0 ? Math.round(complaint.overlap_similarity_score * 100) : Math.round(complaint.overlap_similarity_score)}% Potential Correlation`
                   : 'Independent Grievance (0% Overlap)'}
               </span>
             </div>

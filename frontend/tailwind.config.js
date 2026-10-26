@@ -7,6 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
+        ux4g: {
+          primary: '#0B4F6C',
+          primaryHover: '#083B52',
+          secondary: '#1363DF',
+          accent: '#0D9488',
+          accentHover: '#0F766E',
+          surface: '#F8FAFC',
+          card: '#FFFFFF',
+          border: '#E2E8F0',
+          borderDark: '#CBD5E1',
+          text: '#0F172A',
+          muted: '#64748B',
+          success: '#16A34A',
+          warning: '#D97706',
+          danger: '#DC2626',
+        },
         anvesh: {
           bg: '#F8FAFC',
           card: '#FFFFFF',
@@ -40,7 +56,7 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['"Noto Sans"', '"Noto Sans Devanagari"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
       }
     },
   },

@@ -1433,7 +1433,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                             placeholder="Officer Name / Bureau Official (e.g. Dr. Sunita Sharma, Regional Officer)"
                             value={actionForm.officer_name}
                             onChange={(e) => setActionForm({ ...actionForm, officer_name: e.target.value })}
-                            className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-[#0845A8]"
+                            className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] shadow-xs"
                           />
                         </div>
 
@@ -1446,7 +1446,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                             placeholder="Detail the official inquiry findings, notice reference numbers, directives to college administration, hearing venue/date, or interim relief granted..."
                             value={actionForm.action_details}
                             onChange={(e) => setActionForm({ ...actionForm, action_details: e.target.value })}
-                            className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-[#0845A8]"
+                            className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] shadow-xs"
                             required
                           />
                         </div>
@@ -1714,7 +1714,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                       placeholder="e.g. Evidence shows immediate threat requiring expedited 15-day resolution"
                       value={modalForm.priority_override_reason || ''}
                       onChange={(e) => setModalForm({ ...modalForm, priority_override_reason: e.target.value })}
-                      className="w-full p-2 bg-white border border-slate-300 rounded-lg text-slate-800"
+                      className="w-full p-2 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
                       required
                     />
                   </div>
@@ -1728,7 +1728,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   value={modalForm.remarks || ''}
                   onChange={(e) => setModalForm({ ...modalForm, remarks: e.target.value })}
                   placeholder="Record summary of verified documents, transaction IDs, or initial findings..."
-                  className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800"
+                  className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
                   required
                 />
               </div>
@@ -1753,7 +1753,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   placeholder="e.g. Please furnish copy of the original fee receipt, fee breakdown circular issued by college, or attendance sheet..."
                   value={modalForm.request_notes || ''}
                   onChange={(e) => setModalForm({ ...modalForm, request_notes: e.target.value })}
-                  className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800"
+                  className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
                   required
                 />
               </div>
@@ -1778,7 +1778,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   placeholder="Provide transaction details, receipts, or explanations requested..."
                   value={modalForm.response_notes || ''}
                   onChange={(e) => setModalForm({ ...modalForm, response_notes: e.target.value })}
-                  className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800"
+                  className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
                   required
                 />
               </div>
@@ -1803,7 +1803,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   placeholder="State why the matter is rejected (e.g. Outside AICTE statutory purview, sub-judice in high court, anonymous without actionable proof, unsubstantiated claims)..."
                   value={modalForm.rejection_reason || ''}
                   onChange={(e) => setModalForm({ ...modalForm, rejection_reason: e.target.value })}
-                  className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800"
+                  className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488]"
                   required
                 />
               </div>
@@ -1884,7 +1884,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                 placeholder="State final findings, directive issued to institute, refund ordered, or penalties imposed..."
                 value={modalForm.resolution_summary || ''}
                 onChange={(e) => setModalForm({ ...modalForm, resolution_summary: e.target.value })}
-                className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-[#0845A8] shadow-sm"
+                className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] shadow-xs"
                 required
               />
             </div>
@@ -1901,7 +1901,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                 placeholder="State administrative justification for this change..."
                 value={modalForm.remarks || ''}
                 onChange={(e) => setModalForm({ ...modalForm, remarks: e.target.value })}
-                className="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-[#0845A8] shadow-sm"
+                className="w-full p-2.5 bg-white border border-[#CBD5E1] rounded-lg text-[#0F172A] placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#0D9488] shadow-xs"
                 required
               />
             </div>
