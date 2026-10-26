@@ -32,3 +32,9 @@ Thumbs.db
 # Bundled Node.js runtime and npm dependencies
 tools/node-v*/
 **/node_modules/
+node_modules/
+
+# Frontend and build outputs
+**/dist/
+frontend/dist/
+.vercel/

@@ -100,29 +100,41 @@ DEMO_ACCOUNTS = [
 
 def seed_demo_users(db):
     """Idempotently creates or updates predefined demo user accounts."""
+    from app.config import (
+        ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL, ADMIN_FULL_NAME, RESET_ADMIN_PASSWORD
+    )
     print(f"[SENTRIX Seed] Seeding / updating {len(DEMO_ACCOUNTS)} predefined demo users...")
     updated = 0
     created = 0
     for u in DEMO_ACCOUNTS:
-        existing = db.query(User).filter(User.username == u["username"]).first()
-        h, s = hash_password(u["password"])
+        # If this is the admin account, respect env configuration
+        is_admin_account = (u["username"].lower() == ADMIN_USERNAME.lower() or u["role"] == "Administrator")
+        username = ADMIN_USERNAME if is_admin_account else u["username"]
+        password = ADMIN_PASSWORD if is_admin_account else u["password"]
+        full_name = ADMIN_FULL_NAME if is_admin_account else u["full_name"]
+        email = ADMIN_EMAIL if is_admin_account else u["email"]
+
+        existing = db.query(User).filter(User.username.ilike(username)).first()
+        h, s = hash_password(password)
         if existing:
-            existing.full_name = u["full_name"]
-            existing.email = u["email"]
+            existing.full_name = full_name
+            existing.email = email
             existing.role = u["role"]
             existing.bureau = u["bureau"]
             existing.designation = u["designation"]
-            existing.password_hash = h
-            existing.salt = s
+            # Do NOT overwrite an existing password unless explicitly instructed or not the admin
+            if not is_admin_account or RESET_ADMIN_PASSWORD:
+                existing.password_hash = h
+                existing.salt = s
             existing.complainant_id = u["complainant_id"]
             existing.phone = u["phone"]
             existing.is_active = True
             updated += 1
         else:
             new_user = User(
-                username=u["username"],
-                full_name=u["full_name"],
-                email=u["email"],
+                username=username,
+                full_name=full_name,
+                email=email,
                 role=u["role"],
                 bureau=u["bureau"],
                 designation=u["designation"],

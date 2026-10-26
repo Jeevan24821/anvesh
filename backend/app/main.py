@@ -1,15 +1,24 @@
+import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import CORS_ORIGINS
-from app.database import engine, Base
+from app.init_db import init_database_on_startup
 from app.routers import (
     auth, dashboard, institutions, complaints, overlaps, reports, notifications
 )
 
-# Create tables if not already present
-Base.metadata.create_all(bind=engine)
-from app.database import apply_safe_migrations
-apply_safe_migrations()
+logger = logging.getLogger("anvesh.main")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize database tables, schema migrations, and idempotent admin credentials on startup
+    try:
+        init_database_on_startup()
+        logger.info("ANVESH application initialized successfully.")
+    except Exception as e:
+        logger.error("Failed to initialize database on startup: %s", str(e))
+    yield
 
 app = FastAPI(
     title="ANVESH — AICTE Inter-Bureau Grievance Intelligence API",
@@ -19,13 +28,15 @@ app = FastAPI(
     ),
     version="2.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
-# CORS configuration restricted to local frontend
+# CORS configuration supporting localhost, Vercel deployments, and custom Render origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"^https://.*\.vercel\.app$|^https://.*\.onrender\.com$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,4 +65,8 @@ def root():
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "service": "anvesh-backend"}
+    return {
+        "status": "healthy",
+        "service": "anvesh-backend",
+        "database": "connected"
+    }

@@ -1,7 +1,25 @@
-export const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL ||
-  'https://sentrix-api-ak86.onrender.com/api'
-).replace(/\/+$/, '');
+// Environment-aware API Base URL:
+// 1. Prioritize VITE_API_BASE_URL environment variable (configured in Vercel or .env)
+// 2. In local development (localhost / 127.0.0.1) without custom env, use local backend
+// 3. In cloud production deployments, default to the live Render backend
+const getApiBaseUrl = () => {
+  const envUrl = typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL 
+    ? String(import.meta.env.VITE_API_BASE_URL).trim() 
+    : '';
+
+  if (envUrl) {
+    const clean = envUrl.replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return 'http://localhost:8000/api';
+  }
+
+  return 'https://sentrix-api-ak86.onrender.com/api';
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 export const BUREAUS = [
   "All",
