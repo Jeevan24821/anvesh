@@ -91,63 +91,64 @@ export function getStatusStyle(status) {
   switch (status) {
     case 'New':
     case 'Submitted':
-      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 font-semibold shadow-[0_0_8px_rgba(147,18,255,0.2)]';
+    case 'Registered':
+      return 'bg-[#EAF3FF] text-[#0645A8] border-[#0645A8]/30 font-semibold shadow-2xs';
     case 'Pending Bureau Review':
     case 'Pending Verification':
-      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
+      return 'bg-amber-50 text-amber-700 border-amber-200 font-semibold';
     case 'Under Review':
-      return 'bg-violet-950/50 text-[#C084FC] border-violet-800/50 font-semibold';
+    case 'Under Investigation':
     case 'Under Process':
-      return 'bg-violet-900/40 text-[#D8B4FE] border-violet-700/50 font-semibold';
+      return 'bg-blue-50 text-[#1769D2] border-blue-200 font-semibold';
     case 'Hearing Scheduled':
-      return 'bg-[#F59E0B]/20 text-[#FCD34D] border-[#F59E0B]/40 font-semibold';
     case 'Action Taken Report Awaited':
-      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40';
+    case 'Needs More Information':
+    case 'Info Requested':
+      return 'bg-amber-50 text-amber-800 border-amber-200 font-semibold';
+    case 'Escalated':
     case 'Escalated to Committee':
-      return 'bg-[#F03B2A]/20 text-[#F03B2A] border-[#F03B2A]/50 font-bold shadow-[0_0_10px_rgba(240,59,42,0.3)] animate-pulse';
+      return 'bg-red-50 text-[#DC3545] border-red-200 font-bold shadow-2xs';
     case 'Completed':
     case 'Disposed':
     case 'Resolved':
     case 'Closed':
-      return 'bg-[#45B558]/20 text-[#45B558] border-[#45B558]/40 font-semibold shadow-[0_0_8px_rgba(69,181,88,0.25)]';
+      return 'bg-emerald-50 text-[#16A765] border-emerald-200 font-semibold shadow-2xs';
     case 'Transferred':
-      return 'bg-[#9312FF]/25 text-[#A020FF] border-[#9312FF]/50 font-semibold';
+      return 'bg-[#EAF3FF] text-[#0645A8] border-[#0645A8]/30 font-semibold';
     case 'Rejected':
-      return 'bg-[#F03B2A]/20 text-[#F03B2A] border-[#F03B2A]/40 font-semibold';
-    case 'Needs More Information':
-      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
+      return 'bg-red-50 text-[#DC3545] border-red-200 font-semibold';
     case 'Duplicate Linked':
-      return 'bg-purple-900/40 text-purple-300 border-purple-700/50 font-semibold';
+      return 'bg-purple-50 text-purple-700 border-purple-200 font-semibold';
     default:
-      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
+      return 'bg-[#F3F5F8] text-[#687386] border-[#DCE3EC]';
   }
 }
 
 export function getPriorityStyle(priority) {
   switch (priority) {
     case 'Urgent':
-      return 'bg-[#F03B2A]/25 text-[#F03B2A] border-[#F03B2A]/50 font-bold shadow-[0_0_10px_rgba(240,59,42,0.35)]';
+      return 'bg-red-50 text-[#DC3545] border-red-200 font-bold shadow-2xs';
     case 'High':
-      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-bold';
+      return 'bg-amber-50 text-[#F59E0B] border-amber-200 font-bold';
     case 'Medium':
-      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 font-semibold';
+      return 'bg-[#EAF3FF] text-[#0645A8] border-blue-200 font-semibold';
     case 'Low':
-      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
+      return 'bg-[#F3F5F8] text-[#687386] border-[#DCE3EC]';
     default:
-      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
+      return 'bg-[#F3F5F8] text-[#687386] border-[#DCE3EC]';
   }
 }
 
 export function getConfidenceStyle(label) {
   switch (label) {
     case 'High':
-      return 'bg-[#F03B2A]/25 text-[#F03B2A] border-[#F03B2A]/40 font-bold shadow-[0_0_8px_rgba(240,59,42,0.25)]';
+      return 'bg-red-50 text-[#DC3545] border-red-200 font-bold shadow-2xs';
     case 'Medium':
-      return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40 font-semibold';
+      return 'bg-amber-50 text-[#F59E0B] border-amber-200 font-semibold';
     case 'Low':
-      return 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40';
+      return 'bg-[#EAF3FF] text-[#0645A8] border-blue-200';
     default:
-      return 'bg-[#13131E] text-[#8B8988] border-[#232234]';
+      return 'bg-[#F3F5F8] text-[#687386] border-[#DCE3EC]';
   }
 }
 

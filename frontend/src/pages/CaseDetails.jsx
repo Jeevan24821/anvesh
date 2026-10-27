@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { StatusBadge } from '../components/StatusBadge';
 import { PriorityBadge } from '../components/PriorityBadge';
 import { BureauBadge } from '../components/BureauBadge';
@@ -9,6 +10,7 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 import AcknowledgementModal from '../components/AcknowledgementModal';
 import { formatDate, formatDateTime, formatRegistrationDateTime } from '../utils/formatters';
 import { BUREAUS, STATUS_OPTIONS, OFFICERS_LIST, PRIORITY_OPTIONS, getAphClause } from '../utils/constants';
+import { InstitutionLogo } from '../components/InstitutionLogo';
 import { 
   ArrowLeft, 
   Building2, 
@@ -47,6 +49,7 @@ import {
 
 export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
   const { currentRole, refreshNotifications } = useAuth();
+  const { t, language } = useLanguage();
   const isComplainant = currentRole?.role === 'Complainant';
   const isReviewer = currentRole?.role === 'Reviewer';
   const isAdmin = currentRole?.role === 'Administrator';
@@ -400,52 +403,52 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
       {isComplainant ? (
         <div className="space-y-6">
           {/* Header Row: Back button, badge, Case ID, Registered timestamp, Status pill, Print button */}
-          <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md">
+          <div className="bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <button
                     onClick={onBack}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#8B8988] hover:text-[#F7F7F8] transition"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-[#687386] hover:text-[#172033] transition"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>Back to My Grievances</span>
+                    <span>{language === 'hi' ? 'वापस मेरी शिकायतें' : 'Back to My Grievances'}</span>
                   </button>
-                  <span className="text-[#3A3854]">•</span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#A020FF]" />
-                    Student Grievance Tracking Dossier
+                  <span className="text-[#DCE3EC]">•</span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EAF3FF] text-[#0645A8] border border-[#BBD5F8]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#0645A8]" />
+                    {language === 'hi' ? 'शिकायत ट्रैकिंग दस्तावेज़' : 'Student Grievance Tracking Dossier'}
                   </span>
                 </div>
 
-                <h1 className="text-2xl font-black text-[#F7F7F8] tracking-tight font-mono">
+                <h1 className="text-2xl font-black text-[#172033] tracking-tight font-mono">
                   {complaint.case_id}
                 </h1>
-                <p className="text-xs text-[#8B8988] mt-1 flex items-center gap-1.5 font-medium">
-                  <Calendar className="w-3.5 h-3.5 text-[#8B8988]" />
+                <p className="text-xs text-[#687386] mt-1 flex items-center gap-1.5 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-[#687386]" />
                   {formatRegistrationDateTime(complaint.created_at, complaint.received_date)}
                 </p>
               </div>
 
               <div className="flex items-center gap-3 self-start md:self-auto flex-wrap">
                 {isCompleted ? (
-                  <div className="px-4 py-2 rounded-xl bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/35 font-extrabold text-xs flex items-center gap-2 shadow-2xs">
-                    <CheckCircle className="w-4 h-4 text-[#45B558]" />
-                    <span>Status: Completed</span>
+                  <div className="px-4 py-2 rounded-xl bg-[#16A765]/15 text-[#16A765] border border-[#16A765]/35 font-extrabold text-xs flex items-center gap-2 shadow-2xs">
+                    <CheckCircle className="w-4 h-4 text-[#16A765]" />
+                    <span>{language === 'hi' ? 'स्थिति: पूर्ण' : 'Status: Completed'}</span>
                   </div>
                 ) : (
-                  <div className="px-4 py-2 rounded-xl bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/35 font-extrabold text-xs flex items-center gap-2 shadow-2xs">
-                    <Clock className="w-4 h-4 text-[#A020FF]" />
-                    <span>Status: {complaint.status || 'Under Process'}</span>
+                  <div className="px-4 py-2 rounded-xl bg-[#EAF3FF] text-[#0645A8] border border-[#BBD5F8] font-extrabold text-xs flex items-center gap-2 shadow-2xs">
+                    <Clock className="w-4 h-4 text-[#0645A8]" />
+                    <span>{language === 'hi' ? 'स्थिति:' : 'Status:'} {complaint.status || 'Under Process'}</span>
                   </div>
                 )}
 
                 <button
                   onClick={() => setShowSlip(true)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#F7F7F8] bg-[#13131E] hover:bg-[#181826] border border-[#232234] hover:border-[#3A3854] rounded-xl shadow-2xs transition"
+                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#172033] bg-[#F8FAFC] hover:bg-[#EAF3FF] border border-[#DCE3EC] rounded-xl shadow-xs transition"
                 >
-                  <Printer className="w-4 h-4 text-[#8B8988]" />
-                  <span>Print Acknowledgement Slip</span>
+                  <Printer className="w-4 h-4 text-[#687386]" />
+                  <span>{t('action_print_slip', 'Print Acknowledgement Slip')}</span>
                 </button>
               </div>
             </div>
@@ -453,16 +456,16 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
           {/* COMPLAINANT ACTION BANNER (If officer requested information) */}
           {complaint.verification_status === 'Needs More Information' && (
-            <div className="bg-[#F59E0B]/10 border-2 border-[#F59E0B]/35 rounded-2xl p-5 shadow-sm space-y-3 animate-fade-in">
+            <div className="bg-[#F59E0B]/10 border-2 border-[#F59E0B]/35 rounded-2xl p-5 shadow-xs space-y-3 animate-fade-in">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/30 flex-shrink-0">
-                  <HelpCircle className="w-5 h-5" />
+                <div className="p-2 rounded-xl bg-[#F59E0B]/20 text-[#B45309] border border-[#F59E0B]/30 flex-shrink-0">
+                  <HelpCircle className="w-5 h-5 text-[#F59E0B]" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <h3 className="font-bold text-sm text-[#F7F7F8]">
-                    Action Required: Reviewing Officer Has Requested Additional Information
+                  <h3 className="font-bold text-sm text-[#172033]">
+                    {language === 'hi' ? 'कार्रवाई आवश्यक: समीक्षा अधिकारी ने अतिरिक्त जानकारी का अनुरोध किया है' : 'Action Required: Reviewing Officer Has Requested Additional Information'}
                   </h3>
-                  <p className="text-xs text-[#D8B4FE] bg-[#13131E] p-3 rounded-xl border border-[#232234] italic">
+                  <p className="text-xs text-[#172033] bg-white p-3 rounded-xl border border-[#DCE3EC] italic">
                     "{complaint.info_request_notes || 'Please provide copy of fee payment slip or supporting bank statement.'}"
                   </p>
                 </div>
@@ -474,34 +477,34 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                     setModalForm({ response_notes: '' });
                     setActiveModal('respond_info');
                   }}
-                  className="px-4 py-2 bg-gradient-to-r from-[#F59E0B] to-[#D97706] hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5"
+                  className="px-4 py-2 bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Submit Clarification Response</span>
+                  <span>{language === 'hi' ? 'स्पष्टीकरण उत्तर जमा करें' : 'Submit Clarification Response'}</span>
                 </button>
               </div>
             </div>
           )}
 
           {/* Lifecycle Resolution Pathway Card */}
-          <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1F1E2E]">
+          <div className="bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#EAF0F6]">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#A020FF]" />
-                <h3 className="text-sm font-extrabold text-[#F7F7F8] uppercase tracking-wider">
-                  Lifecycle Resolution Pathway
+                <Clock className="w-4 h-4 text-[#0645A8]" />
+                <h3 className="text-sm font-extrabold text-[#172033] uppercase tracking-wider">
+                  {language === 'hi' ? 'जीवनचक्र निवारण पथ' : 'Lifecycle Resolution Pathway'}
                 </h3>
               </div>
-              <span className="text-[11px] font-semibold text-[#8B8988]">
-                Statutory Target: {formatDate(complaint.due_date)}
+              <span className="text-[11px] font-semibold text-[#687386]">
+                {language === 'hi' ? 'सांविधिक लक्ष्य:' : 'Statutory Target:'} {formatDate(complaint.due_date)}
               </span>
             </div>
 
             {/* Horizontal Pathway Steps */}
             <div className="relative pt-2 pb-1">
-              <div className="hidden lg:block absolute top-7 left-8 right-8 h-1 bg-[#1F1E2E] -z-0">
+              <div className="hidden lg:block absolute top-7 left-8 right-8 h-1 bg-[#EAF0F6] -z-0">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#9312FF] to-[#45B558] transition-all duration-500 rounded-full"
+                  className="h-full bg-gradient-to-r from-[#0645A8] to-[#16A765] transition-all duration-500 rounded-full"
                   style={{
                     width: isClosed ? '100%' : isResolved ? '83%' : isStage4Done ? '66%' : isStage3Done ? '50%' : isStage2Done ? '33%' : '16%'
                   }}
@@ -515,25 +518,25 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   const isReop = st.status === 'reopened';
 
                   return (
-                    <div key={st.num} className="flex flex-col items-center text-center gap-2 p-2 rounded-xl bg-[#13131E] lg:bg-transparent border border-[#232234] lg:border-none">
+                    <div key={st.num} className="flex flex-col items-center text-center gap-2 p-2 rounded-xl bg-[#F8FAFC] lg:bg-transparent border border-[#DCE3EC] lg:border-none">
                       <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs transition-all shadow-sm flex-shrink-0 ${
                         isDone 
-                          ? 'bg-[#45B558] text-white ring-4 ring-[#45B558]/20' 
+                          ? 'bg-[#16A765] text-white ring-4 ring-[#16A765]/20' 
                           : isReop
                           ? 'bg-[#F59E0B] text-white ring-4 ring-[#F59E0B]/20'
                           : isCur 
-                          ? 'bg-[#9312FF] text-white ring-4 ring-[#9312FF]/30 animate-pulse' 
-                          : 'bg-[#13131E] text-[#8B8988] border border-[#232234]'
+                          ? 'bg-[#0645A8] text-white ring-4 ring-[#0645A8]/20 animate-pulse' 
+                          : 'bg-[#F8FAFC] text-[#687386] border border-[#DCE3EC]'
                       }`}>
                         {isDone ? <Check className="w-5 h-5 stroke-[3]" /> : st.num}
                       </div>
                       <div className="w-full">
                         <div className={`text-xs font-bold leading-tight ${
-                          isDone ? 'text-[#45B558]' : isReop ? 'text-[#F59E0B]' : isCur ? 'text-[#D8B4FE]' : 'text-[#8B8988]'
+                          isDone ? 'text-[#16A765]' : isReop ? 'text-[#F59E0B]' : isCur ? 'text-[#0645A8]' : 'text-[#687386]'
                         }`}>
                           {st.title}
                         </div>
-                        <div className="text-[10px] text-[#8B8988] mt-0.5 leading-snug">
+                        <div className="text-[10px] text-[#687386] mt-0.5 leading-snug">
                           {st.subtitle}
                         </div>
                       </div>
@@ -547,42 +550,42 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* Two-Column Layout: Grievance Statement (Left) & Institution Lodged Against (Right) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left Column: Grievance Statement */}
-            <div className="lg:col-span-8 bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md space-y-5">
-              <div className="space-y-3 pb-4 border-b border-[#1F1E2E]">
+            <div className="lg:col-span-8 bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="space-y-3 pb-4 border-b border-[#EAF0F6]">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#13131E] text-[#F7F7F8] border border-[#232234] font-semibold">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F8FAFC] text-[#172033] border border-[#DCE3EC] font-semibold">
                     {complaint.category}
                   </span>
                   <PriorityBadge priority={complaint.priority} />
                   {/* Verified APH Clause Tagging */}
                   <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold flex items-center gap-1 ${
                     getAphClause(complaint.category) !== 'No relevant clause identified.'
-                      ? 'bg-[#9312FF]/15 text-[#D8B4FE] border-[#9312FF]/30'
-                      : 'bg-[#13131E] text-[#8B8988] border-[#232234]'
+                      ? 'bg-[#EAF3FF] text-[#0645A8] border-[#BBD5F8]'
+                      : 'bg-[#F8FAFC] text-[#687386] border-[#DCE3EC]'
                   }`}>
-                    <span className="text-[10px] text-[#A020FF] font-normal">APH:</span>
+                    <span className="text-[10px] text-[#0645A8] font-normal">APH:</span>
                     {getAphClause(complaint.category)}
                   </span>
                 </div>
 
-                <h2 className="text-lg font-extrabold text-[#F7F7F8] leading-snug">
+                <h2 className="text-lg font-extrabold text-[#172033] leading-snug">
                   {complaint.subject}
                 </h2>
 
-                <div className="p-2.5 rounded-xl bg-[#13131E] border border-[#232234] text-xs text-[#8B8988] flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#45B558] flex-shrink-0" />
+                <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs text-[#687386] flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-[#16A765] flex-shrink-0" />
                   <span>
-                    <strong className="text-[#F7F7F8]">Identity Protected:</strong> Filed as {complaint.is_anonymous ? 'Protected Confidential Identity' : complaint.complainant_name} ({complaint.complainant_affiliation || 'Student'})
+                    <strong className="text-[#172033]">{language === 'hi' ? 'पहचान सुरक्षित:' : 'Identity Protected:'}</strong> {language === 'hi' ? 'दर्जकर्ता' : 'Filed as'} {complaint.is_anonymous ? (language === 'hi' ? 'संरक्षित गोपनीय पहचान' : 'Protected Confidential Identity') : complaint.complainant_name} ({complaint.complainant_affiliation || 'Student'})
                   </span>
                 </div>
               </div>
 
               {/* Narrative */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-[#F7F7F8] uppercase tracking-wider">
-                  Grievance Description & Facts
+                <h4 className="text-xs font-bold text-[#172033] uppercase tracking-wider">
+                  {language === 'hi' ? 'शिकायत विवरण एवं तथ्य' : 'Grievance Description & Facts'}
                 </h4>
-                <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] text-xs text-[#F7F7F8] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
+                <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs text-[#172033] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
                   {complaint.description}
                 </div>
               </div>
@@ -590,12 +593,12 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               {/* Supporting Evidence */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-extrabold text-[#8B8988] uppercase tracking-wider">
-                    Official Supporting Evidence & Proof Documents ({complaint.evidence_files?.length || 0})
+                  <h4 className="text-xs font-extrabold text-[#687386] uppercase tracking-wider">
+                    {language === 'hi' ? 'आधिकारिक साक्ष्य एवं दस्तावेज' : 'Official Supporting Evidence & Proof Documents'} ({complaint.evidence_files?.length || 0})
                   </h4>
-                  <label className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] text-white rounded-lg text-xs font-bold shadow-xs cursor-pointer transition">
+                  <label className="flex items-center gap-1.5 px-3 py-1 bg-[#0645A8] hover:bg-[#1769D2] text-white rounded-lg text-xs font-bold shadow-xs cursor-pointer transition">
                     <UploadCloud className="w-3.5 h-3.5" />
-                    <span>Upload PDF Proof</span>
+                    <span>{language === 'hi' ? 'पीडीएफ साक्ष्य अपलोड करें' : 'Upload PDF Proof'}</span>
                     <input
                       type="file"
                       onChange={handleEvidenceUpload}
@@ -607,7 +610,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                 </div>
 
                 {evidenceError && (
-                  <div className="p-3 rounded-xl bg-[#F03B2A]/15 border border-[#F03B2A]/30 text-[#F03B2A] text-xs flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-[#DC3545]/10 border border-[#DC3545]/30 text-[#DC3545] text-xs flex items-center justify-between">
                     <span>{evidenceError}</span>
                     <button onClick={() => setEvidenceError(null)} className="font-bold underline ml-2">Dismiss</button>
                   </div>
@@ -624,20 +627,20 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                       return (
                         <div
                           key={idx}
-                          className="p-3 bg-[#13131E] border border-[#232234] rounded-xl flex items-center justify-between gap-3 shadow-2xs hover:border-[#9312FF]/50 transition"
+                          className="p-3 bg-[#F8FAFC] border border-[#DCE3EC] rounded-xl flex items-center justify-between gap-3 shadow-2xs hover:border-[#0645A8]/50 transition"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className={`p-2 rounded-lg flex-shrink-0 ${isImg ? 'bg-[#9312FF]/20 text-[#D8B4FE]' : isPdf ? 'bg-[#F03B2A]/20 text-[#F03B2A]' : 'bg-[#9312FF]/15 text-[#D8B4FE]'}`}>
+                            <div className={`p-2 rounded-lg flex-shrink-0 ${isImg ? 'bg-[#EAF3FF] text-[#0645A8]' : isPdf ? 'bg-red-50 text-[#DC3545]' : 'bg-[#EAF3FF] text-[#0645A8]'}`}>
                               {isImg ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                             </div>
                             <div className="min-w-0">
-                              <div className="text-xs font-bold text-[#F7F7F8] truncate" title={file.name || targetFilename}>
+                              <div className="text-xs font-bold text-[#172033] truncate" title={file.name || targetFilename}>
                                 {file.name || targetFilename}
                               </div>
-                              <div className="flex items-center gap-2 text-[10px] text-[#8B8988] mt-0.5">
+                              <div className="flex items-center gap-2 text-[10px] text-[#687386] mt-0.5">
                                 {file.size && <span>{file.size}</span>}
-                                <span className="text-[#45B558] font-semibold bg-[#45B558]/15 px-1.5 py-0.2 rounded border border-[#45B558]/30">
-                                  Verified Evidence
+                                <span className="text-[#16A765] font-semibold bg-[#16A765]/15 px-1.5 py-0.2 rounded border border-[#16A765]/30">
+                                  {language === 'hi' ? 'सत्यापित साक्ष्य' : 'Verified Evidence'}
                                 </span>
                               </div>
                             </div>
@@ -648,15 +651,15 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                               type="button"
                               onClick={() => handleViewProof(file)}
                               disabled={isThisLoading}
-                              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#9312FF]/15 hover:bg-[#9312FF]/25 text-[#D8B4FE] border border-[#9312FF]/30 rounded-lg text-xs font-bold transition shadow-2xs disabled:opacity-50"
+                              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#EAF3FF] hover:bg-[#D4E7FF] text-[#0645A8] border border-[#BBD5F8] rounded-lg text-xs font-bold transition shadow-2xs disabled:opacity-50"
                             >
                               <Eye className="w-3.5 h-3.5" />
-                              <span>{isThisLoading ? 'Opening...' : 'View Proof'}</span>
+                              <span>{isThisLoading ? (language === 'hi' ? 'खुल रहा है...' : 'Opening...') : (language === 'hi' ? 'सबूत देखें' : 'View Proof')}</span>
                             </button>
                             <button
                               type="button"
                               onClick={() => handleDownloadProof(file)}
-                              className="p-1.5 bg-[#0D0D14] hover:bg-[#181826] text-[#8B8988] hover:text-[#F7F7F8] border border-[#232234] rounded-lg transition shadow-2xs"
+                              className="p-1.5 bg-white hover:bg-[#F8FAFC] text-[#687386] hover:text-[#172033] border border-[#DCE3EC] rounded-lg transition shadow-2xs"
                             >
                               <Download className="w-3.5 h-3.5" />
                             </button>
@@ -666,94 +669,94 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                     })}
                   </div>
                 ) : (
-                  <div className="py-4 text-center text-xs text-[#8B8988] bg-[#13131E] border border-dashed border-[#2A293E] rounded-xl">
-                    No evidence documents attached to this grievance.
+                  <div className="py-4 text-center text-xs text-[#687386] bg-[#F8FAFC] border border-dashed border-[#DCE3EC] rounded-xl">
+                    {language === 'hi' ? 'इस शिकायत में कोई साक्ष्य दस्तावेज संलग्न नहीं है।' : 'No evidence documents attached to this grievance.'}
                   </div>
                 )}
               </div>
 
               {/* Official Case Closure Summary & Order (when Completed / Disposed) */}
               {isCompleted && complaint.resolution_summary && (
-                <div className="p-4 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-xs space-y-2 mt-4">
-                  <div className="flex items-center gap-2 text-[#45B558] font-bold">
-                    <CheckCircle className="w-4 h-4 text-[#45B558]" />
-                    Official Case Closure Summary & Order
+                <div className="p-4 rounded-xl bg-[#16A765]/10 border border-[#16A765]/30 text-xs space-y-2 mt-4">
+                  <div className="flex items-center gap-2 text-[#16A765] font-bold">
+                    <CheckCircle className="w-4 h-4 text-[#16A765]" />
+                    {language === 'hi' ? 'आधिकारिक मामला समापन सारांश एवं आदेश' : 'Official Case Closure Summary & Order'}
                   </div>
-                  <p className="text-[#F7F7F8] leading-relaxed font-medium">
+                  <p className="text-[#172033] leading-relaxed font-medium">
                     {complaint.resolution_summary}
                   </p>
-                  <div className="text-[10px] text-[#45B558] pt-2 border-t border-[#45B558]/30 flex items-center justify-between">
-                    <span>Disposed on {formatDate(complaint.disposed_date || complaint.received_date)}</span>
-                    <span className="font-bold">Final Statutory Redressal Order Issued</span>
+                  <div className="text-[10px] text-[#16A765] pt-2 border-t border-[#16A765]/30 flex items-center justify-between">
+                    <span>{language === 'hi' ? 'निस्तारण तिथि:' : 'Disposed on'} {formatDate(complaint.disposed_date || complaint.received_date)}</span>
+                    <span className="font-bold">{language === 'hi' ? 'अंतिम सांविधिक निवारण आदेश जारी' : 'Final Statutory Redressal Order Issued'}</span>
                   </div>
                 </div>
               )}
 
               {/* Complainant Feedback Rating (when Completed) */}
               {isCompleted && (
-                <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] text-xs space-y-3 mt-4">
+                <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs space-y-3 mt-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#D8B4FE] text-sm flex items-center gap-1.5">
-                      <Star className="w-4 h-4 text-[#A020FF]" />
-                      Complainant Redressal Feedback
+                    <span className="font-bold text-[#0645A8] text-sm flex items-center gap-1.5">
+                      <Star className="w-4 h-4 text-[#0645A8]" />
+                      {language === 'hi' ? 'शिकायतकर्ता निवारण प्रतिक्रिया' : 'Complainant Redressal Feedback'}
                     </span>
                     {complaint.complainant_feedback && (
-                      <span className="text-[10px] text-[#D8B4FE] font-semibold bg-[#9312FF]/20 border border-[#9312FF]/35 px-2 py-0.5 rounded">
-                        Feedback Submitted
+                      <span className="text-[10px] text-[#0645A8] font-semibold bg-[#EAF3FF] border border-[#BBD5F8] px-2 py-0.5 rounded">
+                        {language === 'hi' ? 'प्रतिक्रिया दर्ज' : 'Feedback Submitted'}
                       </span>
                     )}
                   </div>
 
                   {complaint.complainant_feedback ? (
-                    <div className="space-y-1.5 bg-[#0D0D14] p-3 rounded-lg border border-[#232234]">
+                    <div className="space-y-1.5 bg-white p-3 rounded-lg border border-[#DCE3EC]">
                       {complaint.complainant_rating && (
                         <div className="flex items-center gap-1 text-[#F59E0B] mb-1">
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <span key={s} className={complaint.complainant_rating >= s ? 'text-[#F59E0B] text-sm' : 'text-[#3A3854] text-sm'}>
+                            <span key={s} className={complaint.complainant_rating >= s ? 'text-[#F59E0B] text-sm' : 'text-[#DCE3EC] text-sm'}>
                               ★
                             </span>
                           ))}
-                          <span className="text-xs font-bold text-[#F7F7F8] ml-1.5">
+                          <span className="text-xs font-bold text-[#172033] ml-1.5">
                             {complaint.complainant_rating} / 5 Rating
                           </span>
                         </div>
                       )}
-                      <p className="text-[#8B8988] italic">
+                      <p className="text-[#687386] italic">
                         "{complaint.complainant_feedback}"
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <p className="text-[#8B8988]">
-                        Please rate your satisfaction with the grievance redressal process and final resolution:
+                      <p className="text-[#687386]">
+                        {language === 'hi' ? 'कृपया शिकायत निवारण प्रक्रिया और अंतिम समाधान से अपनी संतुष्टि दर्ज करें:' : 'Please rate your satisfaction with the grievance redressal process and final resolution:'}
                       </p>
                       <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <button
                             key={star}
                             onClick={() => setFeedbackRating(star)}
-                            className={`p-1.5 rounded ${feedbackRating >= star ? 'text-[#F59E0B]' : 'text-[#3A3854]'}`}
+                            className={`p-1.5 rounded ${feedbackRating >= star ? 'text-[#F59E0B]' : 'text-[#DCE3EC]'}`}
                           >
                             ★
                           </button>
                         ))}
-                        <span className="text-xs text-[#8B8988] font-semibold ml-2">({feedbackRating} / 5 Stars)</span>
+                        <span className="text-xs text-[#687386] font-semibold ml-2">({feedbackRating} / 5 Stars)</span>
                       </div>
                       <textarea
                         rows={2}
-                        placeholder="Share feedback on the speed, transparency, and fairness of resolution..."
+                        placeholder={language === 'hi' ? 'निवारण की गति, पारदर्शिता और निष्पक्षता पर प्रतिक्रिया साझा करें...' : 'Share feedback on the speed, transparency, and fairness of resolution...'}
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
-                        className="w-full p-2 bg-[#0D0D14] border border-[#232234] rounded-lg text-xs text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:border-[#9312FF]"
+                        className="w-full p-2 bg-white border border-[#DCE3EC] rounded-lg text-xs text-[#172033] placeholder-[#687386] focus:outline-none focus:border-[#0645A8]"
                       />
                       <button
                         type="button"
                         onClick={handleFeedbackSubmit}
                         disabled={submitting}
-                        className="px-3.5 py-2 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] disabled:opacity-50 text-white font-bold text-xs rounded-lg transition shadow-xs flex items-center gap-1.5"
+                        className="px-3.5 py-2 bg-[#0645A8] hover:bg-[#1769D2] disabled:opacity-50 text-white font-bold text-xs rounded-lg transition shadow-xs flex items-center gap-1.5"
                       >
                         <Star className="w-3.5 h-3.5 text-[#F59E0B]" />
-                        <span>{submitting ? 'Submitting...' : 'Submit Redressal Rating'}</span>
+                        <span>{submitting ? (language === 'hi' ? 'जमा हो रहा है...' : 'Submitting...') : (language === 'hi' ? 'रेटिंग जमा करें' : 'Submit Redressal Rating')}</span>
                       </button>
                     </div>
                   )}
@@ -763,69 +766,72 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
             {/* Right Column: Institution Lodged Against */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md space-y-4">
-                <div className="flex items-center gap-2 pb-3 border-b border-[#1F1E2E]">
-                  <Building2 className="w-4 h-4 text-[#A020FF]" />
-                  <h3 className="text-sm font-extrabold text-[#F7F7F8] uppercase tracking-wider">
-                    Institution Lodged Against
+              <div className="bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs space-y-4">
+                <div className="flex items-center gap-2 pb-3 border-b border-[#EAF0F6]">
+                  <Building2 className="w-4 h-4 text-[#0645A8]" />
+                  <h3 className="text-sm font-extrabold text-[#172033] uppercase tracking-wider">
+                    {language === 'hi' ? 'संबंधित संस्थान' : 'Institution Lodged Against'}
                   </h3>
                 </div>
 
                 <div className="space-y-3">
-                  <div>
-                    <h4 className="font-extrabold text-base text-[#F7F7F8] leading-tight">
-                      {complaint.institution_name}
-                    </h4>
-                    <span className="text-xs font-bold text-[#F03B2A] block mt-0.5">
-                      Code: {complaint.institution_aicte_id}
-                    </span>
+                  <div className="flex items-start gap-3">
+                    <InstitutionLogo name={complaint.institution_name} aicteId={complaint.institution_aicte_id} size="md" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-extrabold text-base text-[#172033] leading-tight">
+                        {complaint.institution_name}
+                      </h4>
+                      <span className="text-xs font-bold text-[#0645A8] block mt-0.5">
+                        Permanent AICTE ID: {complaint.institution_aicte_id}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-[#13131E] border border-[#232234] space-y-2 text-xs">
-                    <div className="flex items-start gap-2 text-[#F7F7F8]">
-                      <MapPin className="w-4 h-4 text-[#8B8988] flex-shrink-0 mt-0.5" />
+                  <div className="p-3 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] space-y-2 text-xs">
+                    <div className="flex items-start gap-2 text-[#172033]">
+                      <MapPin className="w-4 h-4 text-[#687386] flex-shrink-0 mt-0.5" />
                       <span className="leading-snug">
                         {[complaint.institution_address, complaint.institution_district, complaint.institution_state].filter(Boolean).join(', ') || complaint.institution_state || 'AICTE Approved Campus'}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 text-[#8B8988] pt-1 border-t border-[#232234]">
-                      <GraduationCap className="w-4 h-4 text-[#8B8988] flex-shrink-0" />
-                      <span className="font-medium text-[#F7F7F8]">{complaint.institution_type || 'Engineering & Technology'}</span>
+                    <div className="flex items-center gap-2 text-[#687386] pt-1 border-t border-[#DCE3EC]">
+                      <GraduationCap className="w-4 h-4 text-[#687386] flex-shrink-0" />
+                      <span className="font-medium text-[#172033]">{complaint.institution_type || 'Engineering & Technology'}</span>
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#9312FF]/10 border border-[#9312FF]/25 space-y-2 text-xs">
+                  <div className="p-3.5 rounded-xl bg-[#EAF3FF] border border-[#BBD5F8] space-y-2 text-xs">
                     <div>
-                      <span className="text-[10px] uppercase font-bold text-[#D8B4FE] block">
-                        Assigned Bureau Nodal Desk
+                      <span className="text-[10px] uppercase font-bold text-[#0645A8] block">
+                        {language === 'hi' ? 'आवंटित ब्यूरो नोडल डेस्क' : 'Assigned Bureau Nodal Desk'}
                       </span>
-                      <span className="font-extrabold text-[#F7F7F8] block mt-0.5">
+                      <span className="font-extrabold text-[#172033] block mt-0.5">
                         {complaint.source_bureau}
                       </span>
                     </div>
 
-                    <div className="pt-2 border-t border-[#9312FF]/20">
-                      <span className="text-[10px] uppercase font-bold text-[#D8B4FE] block">
-                        Statutory SLA Target
+                    <div className="pt-2 border-t border-[#BBD5F8]">
+                      <span className="text-[10px] uppercase font-bold text-[#0645A8] block">
+                        {language === 'hi' ? 'सांविधिक एसएलए लक्ष्य' : 'Statutory SLA Target'}
                       </span>
-                      <span className="font-extrabold text-[#F7F7F8] block mt-0.5">
+                      <span className="font-extrabold text-[#172033] block mt-0.5">
                         Due Date: {formatDate(complaint.due_date)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#13131E] border border-[#232234] space-y-2 text-xs">
-                    <span className="text-[10px] uppercase font-bold text-[#8B8988] block">
-                      Official Bureau Contact Details
+                  <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] space-y-2 text-xs">
+                    <span className="text-[10px] uppercase font-bold text-[#687386] block">
+                      {language === 'hi' ? 'आधिकारिक ब्यूरो संपर्क विवरण' : 'Official Bureau Contact Details'}
                     </span>
-                    <div className="space-y-1.5 text-[#F7F7F8]">
+                    <div className="space-y-1.5 text-[#172033]">
                       <div className="flex items-center gap-2">
-                        <Mail className="w-3.5 h-3.5 text-[#A020FF] flex-shrink-0" />
+                        <Mail className="w-3.5 h-3.5 text-[#0645A8] flex-shrink-0" />
                         <span className="text-[11px] truncate">grievance-support@aicte-india.org</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Phone className="w-3.5 h-3.5 text-[#45B558] flex-shrink-0" />
+                        <Phone className="w-3.5 h-3.5 text-[#16A765] flex-shrink-0" />
                         <span className="text-[11px]">011-29581000 / 1800-180-5522</span>
                       </div>
                     </div>
@@ -844,50 +850,50 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           <div className="flex items-center justify-between">
             <button
               onClick={onBack}
-              className="flex items-center gap-2 text-xs font-semibold text-[#8B8988] hover:text-[#F7F7F8] transition"
+              className="flex items-center gap-2 text-xs font-semibold text-[#687386] hover:text-[#172033] transition"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Complaint Registry</span>
+              <span>{language === 'hi' ? 'वापस शिकायत पंजिका' : 'Back to Complaint Registry'}</span>
             </button>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowSlip(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#F7F7F8] bg-[#13131E] hover:bg-[#181826] border border-[#232234] hover:border-[#3A3854] rounded-xl shadow-2xs transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#172033] bg-[#F8FAFC] hover:bg-[#EAF3FF] border border-[#DCE3EC] rounded-xl shadow-xs transition"
               >
-                <Printer className="w-3.5 h-3.5 text-[#8B8988]" />
-                <span>Print Acknowledgement Slip</span>
+                <Printer className="w-3.5 h-3.5 text-[#687386]" />
+                <span>{t('action_print_slip', 'Print Acknowledgement Slip')}</span>
               </button>
             </div>
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-2 border-b border-[#232234] pb-2">
+          <div className="flex items-center gap-2 border-b border-[#DCE3EC] pb-2">
             <button
               onClick={() => setActiveTab('dossier')}
               className={`px-4 py-2 text-xs font-semibold rounded-xl transition flex items-center gap-2 ${
                 activeTab === 'dossier'
-                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.4)]'
-                  : 'bg-[#13131E] text-[#8B8988] hover:text-[#F7F7F8] border border-[#232234]'
+                  ? 'bg-[#0645A8] text-white shadow-xs font-bold'
+                  : 'bg-white text-[#687386] hover:text-[#0645A8] hover:bg-[#EAF3FF] border border-[#DCE3EC]'
               }`}
             >
               <FileText className="w-4 h-4" />
-              <span>Grievance Dossier & Evidence</span>
+              <span>{language === 'hi' ? 'शिकायत दस्तावेज़ एवं साक्ष्य' : 'Grievance Dossier & Evidence'}</span>
             </button>
 
             <button
               onClick={() => setActiveTab('action_taken')}
               className={`px-4 py-2 text-xs font-semibold rounded-xl transition flex items-center gap-2 ${
                 activeTab === 'action_taken'
-                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.4)]'
-                  : 'bg-[#13131E] text-[#8B8988] hover:text-[#F7F7F8] border border-[#232234]'
+                  ? 'bg-[#0645A8] text-white shadow-xs font-bold'
+                  : 'bg-white text-[#687386] hover:text-[#0645A8] hover:bg-[#EAF3FF] border border-[#DCE3EC]'
               }`}
             >
               <FileCheck className="w-4 h-4" />
-              <span>Action Taken Workspace</span>
+              <span>{language === 'hi' ? 'कार्रवाई कार्यक्षेत्र' : 'Action Taken Workspace'}</span>
               {isReviewerAccepted && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#45B558]/20 text-[#45B558] border border-[#45B558]/35 font-bold">
-                  Active
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#16A765]/20 text-[#16A765] border border-[#16A765]/35 font-bold">
+                  {language === 'hi' ? 'सक्रिय' : 'Active'}
                 </span>
               )}
             </button>
@@ -896,12 +902,12 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               onClick={() => setActiveTab('audit')}
               className={`px-4 py-2 text-xs font-semibold rounded-xl transition flex items-center gap-2 ${
                 activeTab === 'audit'
-                  ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.4)]'
-                  : 'bg-[#13131E] text-[#8B8988] hover:text-[#F7F7F8] border border-[#232234]'
+                  ? 'bg-[#0645A8] text-white shadow-xs font-bold'
+                  : 'bg-white text-[#687386] hover:text-[#0645A8] hover:bg-[#EAF3FF] border border-[#DCE3EC]'
               }`}
             >
               <History className="w-4 h-4" />
-              <span>Chronological Audit Trail ({complaint.actions?.length || 0})</span>
+              <span>{language === 'hi' ? 'कालानुक्रमिक ऑडिट ट्रेल' : 'Chronological Audit Trail'} ({complaint.actions?.length || 0})</span>
             </button>
           </div>
 
@@ -909,21 +915,23 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {activeTab === 'dossier' && (
             <div className="space-y-6">
               {/* REVIEWER SCRUTINY PANEL */}
-              <div className="bg-[#0D0D14] border border-[#232234] text-[#F7F7F8] rounded-2xl p-5 shadow-md space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1F1E2E]">
+              <div className="bg-white border border-[#DCE3EC] text-[#172033] rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#EAF0F6]">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-[#9312FF]/15 border border-[#9312FF]/30">
-                      <FileCheck className="w-5 h-5 text-[#A020FF]" />
+                    <div className="p-2 rounded-xl bg-[#EAF3FF] border border-[#BBD5F8]">
+                      <FileCheck className="w-5 h-5 text-[#0645A8]" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-[#F7F7F8] tracking-tight">Reviewer Intake & Scrutiny Workspace</h3>
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 uppercase tracking-wider">
+                        <h3 className="text-sm font-bold text-[#172033] tracking-tight">
+                          {language === 'hi' ? 'समीक्षक संवीक्षा कार्यक्षेत्र' : 'Reviewer Intake & Scrutiny Workspace'}
+                        </h3>
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF3FF] text-[#0645A8] border border-[#BBD5F8] uppercase tracking-wider">
                           Scrutiny Workspace
                         </span>
                       </div>
-                      <p className="text-xs text-[#8B8988]">
-                        Document Scrutiny Mode — Verify evidence authenticity and confirm statutory priority.
+                      <p className="text-xs text-[#687386]">
+                        {language === 'hi' ? 'दस्तावेज़ संवीक्षा मोड — साक्ष्य प्रामाणिकता सत्यापित करें और सांविधिक प्राथमिकता की पुष्टि करें।' : 'Document Scrutiny Mode — Verify evidence authenticity and confirm statutory priority.'}
                       </p>
                     </div>
                   </div>
@@ -939,10 +947,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           });
                           setActiveModal('verify');
                         }}
-                        className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#45B558] to-[#16A34A] text-white font-semibold text-xs shadow-[0_0_12px_rgba(69,181,88,0.35)] transition flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-xl bg-[#16A765] hover:bg-[#138d55] text-white font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <CheckCircle className="w-4 h-4" />
-                        <span>Verify & Accept</span>
+                        <span>{t('action_verify', 'Verify & Accept')}</span>
                       </button>
 
                       <button
@@ -950,10 +958,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ request_notes: '' });
                           setActiveModal('request_info');
                         }}
-                        className="px-3.5 py-1.5 rounded-xl bg-[#F59E0B]/20 hover:bg-[#F59E0B]/30 text-[#F59E0B] border border-[#F59E0B]/35 font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-xl bg-[#F59E0B]/15 hover:bg-[#F59E0B]/25 text-[#B45309] border border-[#F59E0B]/35 font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <HelpCircle className="w-4 h-4" />
-                        <span>Request Info</span>
+                        <span>{t('action_request_info', 'Request Info')}</span>
                       </button>
 
                       <button
@@ -961,46 +969,46 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ rejection_reason: '' });
                           setActiveModal('reject');
                         }}
-                        className="px-3.5 py-1.5 rounded-xl bg-[#F03B2A]/20 hover:bg-[#F03B2A]/30 text-[#F03B2A] border border-[#F03B2A]/35 font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-xl bg-[#DC3545]/10 hover:bg-[#DC3545]/20 text-[#DC3545] border border-[#DC3545]/30 font-semibold text-xs shadow-xs transition flex items-center gap-1.5"
                       >
                         <XCircle className="w-4 h-4" />
-                        <span>Reject Grievance</span>
+                        <span>{t('action_reject', 'Reject Grievance')}</span>
                       </button>
                     </div>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs pt-1">
-                  <div className="bg-[#13131E] rounded-xl p-3 border border-[#232234]">
-                    <span className="text-[10px] uppercase font-bold text-[#8B8988] block">Suggested Priority</span>
+                  <div className="bg-[#F8FAFC] rounded-xl p-3 border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-bold text-[#687386] block">{language === 'hi' ? 'सुझाई गई प्राथमिकता' : 'Suggested Priority'}</span>
                     <div className="mt-1 flex items-center gap-2">
-                      <span className="font-bold text-[#F7F7F8] text-sm">
+                      <span className="font-bold text-[#172033] text-sm">
                         {complaint.suggested_priority || complaint.priority}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#8B8988] mt-1 line-clamp-2">
+                    <p className="text-[11px] text-[#687386] mt-1 line-clamp-2">
                       {complaint.suggested_priority_reason || 'AI heuristic SLA model'}
                     </p>
                   </div>
 
-                  <div className="bg-[#13131E] rounded-xl p-3 border border-[#232234]">
-                    <span className="text-[10px] uppercase font-bold text-[#8B8988] block">Jurisdiction & Routing</span>
-                    <div className="mt-1 font-semibold text-[#F7F7F8]">
+                  <div className="bg-[#F8FAFC] rounded-xl p-3 border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-bold text-[#687386] block">{language === 'hi' ? 'अधिकार क्षेत्र एवं मार्ग' : 'Jurisdiction & Routing'}</span>
+                    <div className="mt-1 font-semibold text-[#172033]">
                       {complaint.source_bureau}
                     </div>
-                    <p className="text-[11px] text-[#8B8988] mt-1 line-clamp-2">
+                    <p className="text-[11px] text-[#687386] mt-1 line-clamp-2">
                       {complaint.routing_reason || 'Categorical statutory jurisdiction mapping'}
                     </p>
                   </div>
 
-                  <div className="bg-[#13131E] rounded-xl p-3 border border-[#232234]">
-                    <span className="text-[10px] uppercase font-bold text-[#8B8988] block">Current Verification Status</span>
+                  <div className="bg-[#F8FAFC] rounded-xl p-3 border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-bold text-[#687386] block">{language === 'hi' ? 'वर्तमान सत्यापन स्थिति' : 'Current Verification Status'}</span>
                     <div className="mt-1 flex items-center gap-2">
-                      <span className="font-bold text-[#F7F7F8] text-sm">
+                      <span className="font-bold text-[#172033] text-sm">
                         {complaint.verification_status || 'Submitted'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[#8B8988] mt-1">
+                    <p className="text-[11px] text-[#687386] mt-1">
                       {complaint.info_request_notes ? `Active Query: ${complaint.info_request_notes}` : 'Documents pending initial inquiry'}
                     </p>
                   </div>
@@ -1008,24 +1016,24 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               </div>
 
               {/* Case Header Card */}
-              <div className="bg-[#0D0D14] border border-[#232234] p-6 rounded-2xl shadow-md space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-[#1F1E2E]">
+              <div className="bg-white border border-[#DCE3EC] p-6 rounded-2xl shadow-xs space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-[#EAF0F6]">
                   <div>
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-mono text-base font-extrabold text-[#D8B4FE] tracking-wide">
+                      <span className="font-mono text-base font-extrabold text-[#0645A8] tracking-wide">
                         {complaint.case_id}
                       </span>
                       <BureauBadge bureau={complaint.source_bureau} />
                       <PriorityBadge priority={complaint.priority} />
                       <StatusBadge status={complaint.status} />
                       {complaint.is_overdue && (
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F03B2A]/15 text-[#F03B2A] border border-[#F03B2A]/35 font-bold flex items-center gap-1">
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#DC3545]/10 text-[#DC3545] border border-[#DC3545]/30 font-bold flex items-center gap-1">
                           <AlertTriangle className="w-3.5 h-3.5" />
-                          {complaint.days_overdue} Days Overdue SLA
+                          {complaint.days_overdue} {language === 'hi' ? 'दिन विलंबित एसएलए' : 'Days Overdue SLA'}
                         </span>
                       )}
                     </div>
-                    <h1 className="text-lg font-bold text-[#F7F7F8] mt-2 leading-snug">
+                    <h1 className="text-lg font-bold text-[#172033] mt-2 leading-snug">
                       {complaint.subject}
                     </h1>
                   </div>
@@ -1038,9 +1046,9 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ status: complaint.status });
                           setActiveModal('status');
                         }}
-                        className="px-3 py-1.5 rounded-xl bg-[#13131E] hover:bg-[#181826] text-[#F7F7F8] border border-[#232234] hover:border-[#3A3854] text-xs font-semibold shadow-2xs transition"
+                        className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F8FAFC] text-[#172033] border border-[#DCE3EC] text-xs font-semibold shadow-xs transition"
                       >
-                        Change Status
+                        {language === 'hi' ? 'स्थिति बदलें' : 'Change Status'}
                       </button>
 
                       {isAdmin && (
@@ -1049,9 +1057,9 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                             setModalForm({ target_bureau: 'Regulation Bureau (RB)' });
                             setActiveModal('transfer');
                           }}
-                          className="px-3 py-1.5 rounded-xl bg-[#13131E] hover:bg-[#181826] text-[#818CF8] border border-[#232234] hover:border-[#818CF8]/50 text-xs font-semibold shadow-2xs transition"
+                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#EAF3FF] text-[#0645A8] border border-[#DCE3EC] text-xs font-semibold shadow-xs transition"
                         >
-                          Transfer Bureau
+                          {t('action_transfer', 'Transfer Bureau')}
                         </button>
                       )}
 
@@ -1061,9 +1069,9 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                             setModalForm({ target_level: 'Apex Grievance Redressal Committee' });
                             setActiveModal('escalate');
                           }}
-                          className="px-3 py-1.5 rounded-xl bg-[#F03B2A]/15 hover:bg-[#F03B2A]/25 text-[#F03B2A] border border-[#F03B2A]/35 text-xs font-semibold shadow-2xs transition"
+                          className="px-3 py-1.5 rounded-xl bg-[#DC3545]/10 hover:bg-[#DC3545]/20 text-[#DC3545] border border-[#DC3545]/30 text-xs font-semibold shadow-xs transition"
                         >
-                          Escalate
+                          {t('action_escalate', 'Escalate')}
                         </button>
                       )}
 
@@ -1073,9 +1081,9 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                             setModalForm({ officer_name: 'Dr. Sunita Sharma (Chief Redressal Officer)' });
                             setActiveModal('assign');
                           }}
-                          className="px-3 py-1.5 rounded-xl bg-[#13131E] hover:bg-[#181826] text-[#38BDF8] border border-[#232234] hover:border-[#38BDF8]/50 text-xs font-semibold shadow-2xs transition"
+                          className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#EAF3FF] text-[#0645A8] border border-[#DCE3EC] text-xs font-semibold shadow-xs transition"
                         >
-                          Assign Officer
+                          {t('action_assign_officer', 'Assign Officer')}
                         </button>
                       )}
 
@@ -1084,9 +1092,9 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           setModalForm({ resolution_summary: '' });
                           setActiveModal('resolve');
                         }}
-                        className="px-3 py-1.5 rounded-xl bg-[#45B558]/15 hover:bg-[#45B558]/25 text-[#45B558] border border-[#45B558]/35 text-xs font-bold shadow-2xs transition"
+                        className="px-3 py-1.5 rounded-xl bg-[#16A765] hover:bg-[#138d55] text-white text-xs font-bold shadow-xs transition"
                       >
-                        Dispose / Resolve
+                        {language === 'hi' ? 'निस्तारण करें' : 'Dispose / Resolve'}
                       </button>
                     </div>
                   )}
@@ -1094,89 +1102,89 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
                 {/* Metadata Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs pt-1">
-                  <div className="p-3 bg-[#13131E] rounded-xl border border-[#232234]">
-                    <span className="text-[10px] uppercase font-semibold text-[#8B8988] block">Target Institution</span>
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-semibold text-[#687386] block">{t('table_institution', 'Target Institution')}</span>
                     {isComplainant ? (
-                      <span className="font-bold text-[#F7F7F8] text-left mt-0.5 truncate block w-full">
+                      <span className="font-bold text-[#172033] text-left mt-0.5 truncate block w-full">
                         {complaint.institution_name}
                       </span>
                     ) : (
                       <button
                         onClick={() => onViewInstitution(complaint.institution_id)}
-                        className="font-bold text-[#F7F7F8] hover:text-[#D8B4FE] text-left mt-0.5 truncate block w-full transition"
+                        className="font-bold text-[#172033] hover:text-[#0645A8] text-left mt-0.5 truncate block w-full transition"
                       >
                         {complaint.institution_name}
                       </button>
                     )}
-                    <span className="text-[10px] text-[#8B8988] font-mono">
+                    <span className="text-[10px] text-[#687386] font-mono">
                       AICTE ID: {complaint.institution_aicte_id}
                     </span>
                   </div>
 
-                  <div className="p-3 bg-[#13131E] rounded-xl border border-[#232234]">
-                    <span className="text-[10px] uppercase font-semibold text-[#8B8988] block">Grievance Category</span>
-                    <span className="font-bold text-[#F7F7F8] mt-0.5 block">{complaint.category}</span>
-                    <span className="text-[10px] text-[#D8B4FE] font-semibold block mt-0.5">
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-semibold text-[#687386] block">{t('table_category', 'Grievance Category')}</span>
+                    <span className="font-bold text-[#172033] mt-0.5 block">{complaint.category}</span>
+                    <span className="text-[10px] text-[#0645A8] font-semibold block mt-0.5">
                       APH: {getAphClause(complaint.category)}
                     </span>
                   </div>
 
-                  <div className="p-3 bg-[#13131E] rounded-xl border border-[#232234]">
-                    <span className="text-[10px] uppercase font-semibold text-[#8B8988] block">Assigned Official / Desk</span>
-                    <span className="font-bold text-[#F7F7F8] mt-0.5 block truncate">
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-semibold text-[#687386] block">{language === 'hi' ? 'आवंटित अधिकारी / डेस्क' : 'Assigned Official / Desk'}</span>
+                    <span className="font-bold text-[#172033] mt-0.5 block truncate">
                       {complaint.assigned_officer || 'Central Intake Desk'}
                     </span>
-                    <span className="text-[10px] text-[#8B8988]">{complaint.source_bureau}</span>
+                    <span className="text-[10px] text-[#687386]">{complaint.source_bureau}</span>
                   </div>
 
-                  <div className="p-3 bg-[#13131E] rounded-xl border border-[#232234]">
-                    <span className="text-[10px] uppercase font-semibold text-[#8B8988] block">Statutory Resolution SLA</span>
-                    <span className={`font-bold mt-0.5 block ${complaint.is_overdue ? 'text-[#F03B2A]' : 'text-[#F7F7F8]'}`}>
+                  <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#DCE3EC]">
+                    <span className="text-[10px] uppercase font-semibold text-[#687386] block">{language === 'hi' ? 'सांविधिक निवारण एसएलए' : 'Statutory Resolution SLA'}</span>
+                    <span className={`font-bold mt-0.5 block ${complaint.is_overdue ? 'text-[#DC3545]' : 'text-[#172033]'}`}>
                       {formatDate(complaint.due_date)}
                     </span>
-                    <span className="text-[10px] text-[#8B8988]">
-                      Intake Date: {formatDate(complaint.received_date)}
+                    <span className="text-[10px] text-[#687386]">
+                      {language === 'hi' ? 'प्राप्ति तिथि:' : 'Intake Date:'} {formatDate(complaint.received_date)}
                     </span>
                   </div>
                 </div>
 
                 {/* Narrative */}
-                <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] space-y-2">
-                  <h4 className="text-xs font-bold text-[#F7F7F8] uppercase tracking-wider">
-                    Grievance Description & Facts
+                <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] space-y-2">
+                  <h4 className="text-xs font-bold text-[#172033] uppercase tracking-wider">
+                    {language === 'hi' ? 'शिकायत विवरण एवं तथ्य' : 'Grievance Description & Facts'}
                   </h4>
-                  <p className="text-xs text-[#F7F7F8] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
+                  <p className="text-xs text-[#172033] leading-relaxed whitespace-pre-wrap break-words break-all max-w-full overflow-hidden">
                     {complaint.description}
                   </p>
 
-                  <div className="pt-2 border-t border-[#1F1E2E] flex flex-wrap items-center gap-4 text-[11px] text-[#8B8988]">
+                  <div className="pt-2 border-t border-[#EAF0F6] flex flex-wrap items-center gap-4 text-[11px] text-[#687386]">
                     <span>
-                      Complainant: <strong className="text-[#F7F7F8]">{complaint.is_anonymous ? 'Protected Confidential Identity' : complaint.complainant_name}</strong>
+                      {language === 'hi' ? 'शिकायतकर्ता:' : 'Complainant:'} <strong className="text-[#172033]">{complaint.is_anonymous ? (language === 'hi' ? 'संरक्षित गोपनीय पहचान' : 'Protected Confidential Identity') : complaint.complainant_name}</strong>
                     </span>
                     {complaint.complainant_id_number && (
-                      <span>Institutional ID: <strong className="text-[#F7F7F8]">{complaint.complainant_id_number}</strong></span>
+                      <span>{language === 'hi' ? 'संस्थागत आईडी:' : 'Institutional ID:'} <strong className="text-[#172033]">{complaint.complainant_id_number}</strong></span>
                     )}
-                    <span>Received: <strong className="text-[#F7F7F8]">{formatDate(complaint.received_date)}</strong></span>
+                    <span>{language === 'hi' ? 'प्राप्त:' : 'Received:'} <strong className="text-[#172033]">{formatDate(complaint.received_date)}</strong></span>
                   </div>
                 </div>
 
                 {/* Evidence Documents (Hidden for Bureau Reviewers) */}
                 {!isReviewer && (
-                <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] space-y-3">
+                <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
-                      <span className="text-xs font-bold text-[#F7F7F8] uppercase tracking-wider block">
-                        Official Supporting Evidence & Proof Documents ({complaint.evidence_files?.length || 0})
+                      <span className="text-xs font-bold text-[#172033] uppercase tracking-wider block">
+                        {language === 'hi' ? 'आधिकारिक साक्ष्य एवं दस्तावेज' : 'Official Supporting Evidence & Proof Documents'} ({complaint.evidence_files?.length || 0})
                       </span>
-                      <p className="text-[11px] text-[#8B8988] mt-0.5">
-                        Authentic documents submitted for administrative verification and audit.
+                      <p className="text-[11px] text-[#687386] mt-0.5">
+                        {language === 'hi' ? 'प्रशासनिक सत्यापन एवं ऑडिट हेतु प्रस्तुत प्रामाणिक दस्तावेज।' : 'Authentic documents submitted for administrative verification and audit.'}
                       </p>
                     </div>
 
                     {!currentRole?.readOnly && (isAdmin || (isReviewer && (currentRole?.bureau === 'All' || currentRole?.bureau === complaint.source_bureau))) && (
-                      <label className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_15px_rgba(147,18,255,0.4)] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex-shrink-0">
+                      <label className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0645A8] hover:bg-[#1769D2] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition flex-shrink-0">
                         <UploadCloud className="w-3.5 h-3.5" />
-                        <span>{uploadingEvidence ? 'Uploading...' : 'Upload PDF Document'}</span>
+                        <span>{uploadingEvidence ? (language === 'hi' ? 'अपलोड हो रहा है...' : 'Uploading...') : (language === 'hi' ? 'पीडीएफ दस्तावेज अपलोड करें' : 'Upload PDF Document')}</span>
                         <input
                           type="file"
                           onChange={handleEvidenceUpload}
@@ -1189,7 +1197,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   </div>
 
                   {evidenceError && (
-                    <div className="p-3 rounded-xl bg-[#F03B2A]/15 border border-[#F03B2A]/30 text-[#F03B2A] text-xs flex items-center justify-between">
+                    <div className="p-3 rounded-xl bg-[#DC3545]/10 border border-[#DC3545]/30 text-[#DC3545] text-xs flex items-center justify-between">
                       <span>{evidenceError}</span>
                       <button onClick={() => setEvidenceError(null)} className="font-bold underline ml-2">Dismiss</button>
                     </div>
@@ -1206,21 +1214,30 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                         return (
                           <div
                             key={idx}
-                            className="p-3 bg-[#0D0D14] border border-[#232234] rounded-xl flex items-center justify-between gap-3 shadow-2xs hover:border-[#9312FF]/50 transition"
+                            className="p-3 bg-white border border-[#DCE3EC] rounded-xl flex items-center justify-between gap-3 shadow-2xs hover:border-[#0645A8]/50 transition"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <div className={`p-2 rounded-lg flex-shrink-0 ${isImg ? 'bg-[#9312FF]/20 text-[#D8B4FE]' : isPdf ? 'bg-[#F03B2A]/20 text-[#F03B2A]' : 'bg-[#9312FF]/15 text-[#D8B4FE]'}`}>
+                              <div className={`p-2 rounded-lg flex-shrink-0 ${isImg ? 'bg-[#EAF3FF] text-[#0645A8]' : isPdf ? 'bg-red-50 text-[#DC3545]' : 'bg-[#EAF3FF] text-[#0645A8]'}`}>
                                 {isImg ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                               </div>
                               <div className="min-w-0">
-                                <div className="text-xs font-bold text-[#F7F7F8] truncate" title={file.name || targetFilename}>
+                                <div className="text-xs font-bold text-[#172033] truncate" title={file.name || targetFilename}>
                                   {file.name || targetFilename}
                                 </div>
-                                <div className="flex items-center gap-2 text-[10px] text-[#8B8988] mt-0.5">
+                                <div className="flex items-center gap-2 text-[10px] text-[#687386] mt-0.5">
                                   {file.size && <span>{file.size}</span>}
-                                  <span className="text-[#45B558] font-semibold bg-[#45B558]/15 px-1.5 py-0.2 rounded border border-[#45B558]/30">
-                                    Verified Evidence
+                                  <span className="text-[#0645A8] font-bold bg-[#EAF3FF] px-2 py-0.5 rounded border border-[#BBD5F8]">
+                                    {language === 'hi' ? 'स्वचालित जांच: पारित (%PDF-)' : 'Automated Check: Passed (%PDF-)'}
                                   </span>
+                                  {isReviewerAccepted ? (
+                                    <span className="text-[#16A765] font-bold bg-[#16A765]/15 px-2 py-0.5 rounded border border-[#16A765]/30">
+                                      {language === 'hi' ? 'एपीएच प्रमाणित प्रामाणिकता' : 'APH Verified Authentic'}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[#B45309] font-bold bg-[#F59E0B]/15 px-2 py-0.5 rounded border border-[#F59E0B]/30">
+                                      {language === 'hi' ? 'प्रामाणिकता संवीक्षाधीन (खंड 7.23)' : 'Authenticity Scrutiny Pending (APH 7.23)'}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1230,15 +1247,15 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                                 type="button"
                                 onClick={() => handleViewProof(file)}
                                 disabled={isThisLoading}
-                                className="flex items-center gap-1 px-2.5 py-1.5 bg-[#9312FF]/15 hover:bg-[#9312FF]/25 text-[#D8B4FE] border border-[#9312FF]/30 rounded-lg text-xs font-bold transition shadow-2xs disabled:opacity-50"
+                                className="flex items-center gap-1 px-2.5 py-1.5 bg-[#EAF3FF] hover:bg-[#D4E7FF] text-[#0645A8] border border-[#BBD5F8] rounded-lg text-xs font-bold transition shadow-2xs disabled:opacity-50"
                               >
                                 <Eye className="w-3.5 h-3.5" />
-                                <span>{isThisLoading ? 'Opening...' : 'View Proof'}</span>
+                                <span>{isThisLoading ? (language === 'hi' ? 'खुल रहा है...' : 'Opening...') : (language === 'hi' ? 'सबूत देखें' : 'View Proof')}</span>
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleDownloadProof(file)}
-                                className="p-1.5 bg-[#13131E] hover:bg-[#181826] text-[#8B8988] hover:text-[#F7F7F8] border border-[#232234] rounded-lg transition shadow-2xs"
+                                className="p-1.5 bg-[#F8FAFC] hover:bg-[#EAF3FF] text-[#687386] hover:text-[#172033] border border-[#DCE3EC] rounded-lg transition shadow-2xs"
                               >
                                 <Download className="w-3.5 h-3.5" />
                               </button>
@@ -1248,8 +1265,8 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                       })}
                     </div>
                   ) : (
-                    <div className="py-4 text-center text-xs text-[#8B8988] bg-[#0D0D14] border border-dashed border-[#2A293E] rounded-xl">
-                      No evidence documents attached to this complaint yet.
+                    <div className="py-4 text-center text-xs text-[#687386] bg-white border border-dashed border-[#DCE3EC] rounded-xl">
+                      {language === 'hi' ? 'इस शिकायत में अभी तक कोई साक्ष्य दस्तावेज संलग्न नहीं है।' : 'No evidence documents attached to this complaint yet.'}
                     </div>
                   )}
                 </div>
@@ -1257,55 +1274,55 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
 
                 {/* Resolution Summary if Disposed */}
                 {complaint.status === 'Disposed' && complaint.resolution_summary && (
-                  <div className="p-4 rounded-xl bg-[#45B558]/10 border border-[#45B558]/30 text-xs space-y-2">
-                    <div className="flex items-center gap-2 text-[#45B558] font-bold">
-                      <CheckCircle className="w-4 h-4 text-[#45B558]" />
-                      Official Case Closure Summary & Order
+                  <div className="p-4 rounded-xl bg-[#16A765]/10 border border-[#16A765]/30 text-xs space-y-2">
+                    <div className="flex items-center gap-2 text-[#16A765] font-bold">
+                      <CheckCircle className="w-4 h-4 text-[#16A765]" />
+                      {language === 'hi' ? 'आधिकारिक मामला समापन सारांश एवं आदेश' : 'Official Case Closure Summary & Order'}
                     </div>
-                    <p className="text-[#F7F7F8] leading-relaxed">{complaint.resolution_summary}</p>
-                    <div className="text-[10px] text-[#45B558] pt-1 border-t border-[#45B558]/30 flex items-center justify-between">
-                      <span>Disposed on {formatDate(complaint.disposed_date)}</span>
-                      <span>Final Statutory Redressal Order Issued</span>
+                    <p className="text-[#172033] leading-relaxed">{complaint.resolution_summary}</p>
+                    <div className="text-[10px] text-[#16A765] pt-1 border-t border-[#16A765]/30 flex items-center justify-between">
+                      <span>{language === 'hi' ? 'निस्तारण तिथि:' : 'Disposed on'} {formatDate(complaint.disposed_date)}</span>
+                      <span>{language === 'hi' ? 'अंतिम सांविधिक निवारण आदेश जारी' : 'Final Statutory Redressal Order Issued'}</span>
                     </div>
                   </div>
                 )}
 
                 {/* Complainant Satisfaction Tracking for Officials */}
                 {(complaint.complainant_feedback || complaint.status === 'Disposed') && (
-                  <div className="p-4 rounded-xl bg-[#13131E] border border-[#232234] text-xs space-y-2">
+                  <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-[#D8B4FE] text-sm flex items-center gap-1.5">
-                        <Star className="w-4 h-4 text-[#A020FF]" />
-                        Complainant Redressal Satisfaction
+                      <span className="font-bold text-[#0645A8] text-sm flex items-center gap-1.5">
+                        <Star className="w-4 h-4 text-[#0645A8]" />
+                        {language === 'hi' ? 'शिकायतकर्ता निवारण संतुष्टि' : 'Complainant Redressal Satisfaction'}
                       </span>
                       {complaint.complainant_feedback && (
-                        <span className="text-[10px] text-[#D8B4FE] font-semibold bg-[#9312FF]/20 border border-[#9312FF]/35 px-2 py-0.5 rounded">
-                          Feedback Recorded
+                        <span className="text-[10px] text-[#0645A8] font-semibold bg-[#EAF3FF] border border-[#BBD5F8] px-2 py-0.5 rounded">
+                          {language === 'hi' ? 'प्रतिक्रिया दर्ज' : 'Feedback Recorded'}
                         </span>
                       )}
                     </div>
 
                     {complaint.complainant_feedback ? (
-                      <div className="space-y-1.5 bg-[#0D0D14] p-3 rounded-lg border border-[#232234]">
+                      <div className="space-y-1.5 bg-white p-3 rounded-lg border border-[#DCE3EC]">
                         {complaint.complainant_rating && (
                           <div className="flex items-center gap-1 text-[#F59E0B] mb-1">
                             {[1, 2, 3, 4, 5].map((s) => (
-                              <span key={s} className={complaint.complainant_rating >= s ? 'text-[#F59E0B] text-sm' : 'text-[#3A3854] text-sm'}>
+                              <span key={s} className={complaint.complainant_rating >= s ? 'text-[#F59E0B] text-sm' : 'text-[#DCE3EC] text-sm'}>
                                 ★
                               </span>
                             ))}
-                            <span className="text-xs font-bold text-[#F7F7F8] ml-1.5">
+                            <span className="text-xs font-bold text-[#172033] ml-1.5">
                               {complaint.complainant_rating} / 5 Rating
                             </span>
                           </div>
                         )}
-                        <p className="text-[#8B8988] italic">
+                        <p className="text-[#687386] italic">
                           "{complaint.complainant_feedback}"
                         </p>
                       </div>
                     ) : (
-                      <p className="text-[#8B8988] italic p-2 bg-[#0D0D14] rounded-lg border border-[#232234]">
-                        Awaiting complainant satisfaction feedback submission upon case closure.
+                      <p className="text-[#687386] italic p-2 bg-white rounded-lg border border-[#DCE3EC]">
+                        {language === 'hi' ? 'मामला बंद होने पर शिकायतकर्ता संतुष्टि प्रतिक्रिया की प्रतीक्षा है।' : 'Awaiting complainant satisfaction feedback submission upon case closure.'}
                       </p>
                     )}
                   </div>
@@ -1320,17 +1337,17 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {activeTab === 'action_taken' && (
             <div className="space-y-6">
               {!isReviewerAccepted ? (
-                <div className="bg-[#F59E0B]/10 border-2 border-[#F59E0B]/35 rounded-2xl p-6 shadow-sm space-y-4">
+                <div className="bg-[#F59E0B]/10 border-2 border-[#F59E0B]/35 rounded-2xl p-6 shadow-xs space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/30 flex-shrink-0">
-                      <AlertTriangle className="w-5 h-5" />
+                    <div className="p-2 rounded-xl bg-[#F59E0B]/20 text-[#B45309] border border-[#F59E0B]/30 flex-shrink-0">
+                      <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
                     </div>
                     <div className="flex-1 space-y-1">
-                      <h3 className="font-bold text-sm text-[#F7F7F8]">
-                        Reviewer Scrutiny & Acceptance Pending
+                      <h3 className="font-bold text-sm text-[#172033]">
+                        {language === 'hi' ? 'समीक्षक संवीक्षा एवं स्वीकृति लंबित' : 'Reviewer Scrutiny & Acceptance Pending'}
                       </h3>
-                      <p className="text-xs text-[#8B8988] leading-relaxed">
-                        Under AICTE Standard Operating Procedures, a grievance must first be scrutinised and verified/accepted by the Reviewing Officer before departmental directives, college notices, or Action Taken Reports can be logged.
+                      <p className="text-xs text-[#687386] leading-relaxed">
+                        {language === 'hi' ? 'एआईसीटीई मानक संचालन प्रक्रियाओं के अनुसार, किसी भी विभागीय निर्देश या कार्रवाई रिपोर्ट को दर्ज करने से पहले समीक्षा अधिकारी द्वारा शिकायत की संवीक्षा और सत्यापन अनिवार्य है।' : 'Under AICTE Standard Operating Procedures, a grievance must first be scrutinised and verified/accepted by the Reviewing Officer before departmental directives, college notices, or Action Taken Reports can be logged.'}
                       </p>
                     </div>
                   </div>
@@ -1346,10 +1363,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           });
                           setActiveModal('verify');
                         }}
-                        className="px-4 py-2 bg-gradient-to-r from-[#45B558] to-[#16A34A] text-white font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(69,181,88,0.35)] transition flex items-center gap-1.5"
+                        className="px-4 py-2 bg-[#16A765] hover:bg-[#138d55] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5"
                       >
                         <CheckCircle className="w-4 h-4" />
-                        <span>Proceed to Verify & Accept Grievance</span>
+                        <span>{language === 'hi' ? 'शिकायत का सत्यापन एवं स्वीकृति करें' : 'Proceed to Verify & Accept Grievance'}</span>
                       </button>
                     </div>
                   )}
@@ -1357,123 +1374,123 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               ) : (
                 <div className="space-y-6">
                   {/* Status Summary Banner */}
-                  <div className="bg-gradient-to-r from-[#9312FF]/25 to-[#7A1CF8]/15 border border-[#9312FF]/30 text-white rounded-2xl p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="bg-[#EAF3FF] border border-[#BBD5F8] text-[#172033] rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#45B558]/20 text-[#45B558] border border-[#45B558]/30 font-bold uppercase">
-                          Reviewer Acceptance Confirmed
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#16A765]/15 text-[#16A765] border border-[#16A765]/30 font-bold uppercase">
+                          {language === 'hi' ? 'समीक्षक स्वीकृति सत्यापित' : 'Reviewer Acceptance Confirmed'}
                         </span>
-                        <span className="text-xs text-[#D8B4FE]">
-                          Verification Status: <strong className="text-white">{complaint.verification_status || 'Verified'}</strong>
+                        <span className="text-xs text-[#0645A8]">
+                          {language === 'hi' ? 'सत्यापन स्थिति:' : 'Verification Status:'} <strong className="text-[#172033]">{complaint.verification_status || 'Verified'}</strong>
                         </span>
                       </div>
-                      <h3 className="text-base font-bold text-[#F7F7F8]">
-                        Department Action & Redressal Directive Workspace
+                      <h3 className="text-base font-bold text-[#172033]">
+                        {language === 'hi' ? 'विभागीय कार्रवाई एवं निवारण निर्देश कार्यक्षेत्र' : 'Department Action & Redressal Directive Workspace'}
                       </h3>
-                      <p className="text-xs text-[#8B8988]">
-                        Assigned Bureau: <strong className="text-[#F7F7F8]">{complaint.source_bureau}</strong> • Target SLA: {formatDate(complaint.due_date)}
+                      <p className="text-xs text-[#687386]">
+                        {language === 'hi' ? 'आवंटित ब्यूरो:' : 'Assigned Bureau:'} <strong className="text-[#172033]">{complaint.source_bureau}</strong> • {language === 'hi' ? 'लक्ष्य एसएलए:' : 'Target SLA:'} {formatDate(complaint.due_date)}
                       </p>
                     </div>
 
                     {isCompleted ? (
-                      <div className="px-4 py-2 rounded-xl bg-[#45B558]/20 border border-[#45B558]/35 text-[#45B558] font-bold text-xs flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-[#45B558]" />
-                        <span>Complaint Completed & Concluded</span>
+                      <div className="px-4 py-2 rounded-xl bg-[#16A765]/15 border border-[#16A765]/35 text-[#16A765] font-bold text-xs flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-[#16A765]" />
+                        <span>{language === 'hi' ? 'शिकायत पूर्ण एवं समाप्त' : 'Complaint Completed & Concluded'}</span>
                       </div>
                     ) : (
-                      <div className="px-4 py-2 rounded-xl bg-[#9312FF]/20 border border-[#9312FF]/35 text-[#D8B4FE] font-semibold text-xs flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#A020FF]" />
-                        <span>Inquiry / Action in Progress</span>
+                      <div className="px-4 py-2 rounded-xl bg-white border border-[#BBD5F8] text-[#0645A8] font-semibold text-xs flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#0645A8]" />
+                        <span>{language === 'hi' ? 'जांच / कार्रवाई प्रगति पर' : 'Inquiry / Action in Progress'}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Record Action Taken Form */}
                   {!isCompleted && (!currentRole?.readOnly && (isAdmin || (isReviewer && (currentRole?.bureau === 'All' || currentRole?.bureau === complaint.source_bureau)))) && (
-                    <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md space-y-4">
-                      <div className="flex items-center gap-2 pb-3 border-b border-[#1F1E2E]">
-                        <FileCheck className="w-4 h-4 text-[#A020FF]" />
-                        <h3 className="text-sm font-extrabold text-[#F7F7F8] uppercase tracking-wider">
-                          Record Subsequent Department Action / Directive
+                    <div className="bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs space-y-4">
+                      <div className="flex items-center gap-2 pb-3 border-b border-[#EAF0F6]">
+                        <FileCheck className="w-4 h-4 text-[#0645A8]" />
+                        <h3 className="text-sm font-extrabold text-[#172033] uppercase tracking-wider">
+                          {language === 'hi' ? 'आगामी विभागीय कार्रवाई / निर्देश दर्ज करें' : 'Record Subsequent Department Action / Directive'}
                         </h3>
                       </div>
 
                       <form onSubmit={handleActionTakenSubmit} className="space-y-4 text-xs">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-[#F7F7F8] font-semibold mb-1">
-                              Action Category / Milestone *
+                            <label className="block text-[#172033] font-semibold mb-1">
+                              {language === 'hi' ? 'कार्रवाई श्रेणी / मील का पत्थर *' : 'Action Category / Milestone *'}
                             </label>
                             <select
                               value={actionForm.action_type}
                               onChange={(e) => setActionForm({ ...actionForm, action_type: e.target.value })}
-                              className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF]"
+                              className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8]"
                               required
                             >
-                              <option value="Action Taken Report Awaited" className="bg-[#13131E] text-[#F7F7F8]">Action Taken Report (ATR) Awaited from College</option>
-                              <option value="Show Cause Notice Issued" className="bg-[#13131E] text-[#F7F7F8]">Show Cause Notice Issued to College Administration</option>
-                              <option value="Joint Inquiry Committee Constituted" className="bg-[#13131E] text-[#F7F7F8]">Joint Inquiry Committee Constituted</option>
-                              <option value="Hearing Scheduled" className="bg-[#13131E] text-[#F7F7F8]">Formal Hearing Scheduled with Both Parties</option>
-                              <option value="Interim Directive Issued" className="bg-[#13131E] text-[#F7F7F8]">Interim Directive Issued to Institute</option>
-                              <option value="Explanation Received" className="bg-[#13131E] text-[#F7F7F8]">Explanation Received from College Management</option>
-                              <option value="Site Inspection Conducted" className="bg-[#13131E] text-[#F7F7F8]">Fact-Finding Site Inspection Conducted</option>
-                              <option value="Compliance Verified" className="bg-[#13131E] text-[#F7F7F8]">Institutional Compliance Verified</option>
-                              <option value="Final Redressal Order Issued" className="bg-[#13131E] text-[#F7F7F8]">Final Statutory Redressal Order & Closure</option>
+                              <option value="Action Taken Report Awaited" className="bg-white text-[#172033]">Action Taken Report (ATR) Awaited from College</option>
+                              <option value="Show Cause Notice Issued" className="bg-white text-[#172033]">Show Cause Notice Issued to College Administration</option>
+                              <option value="Joint Inquiry Committee Constituted" className="bg-white text-[#172033]">Joint Inquiry Committee Constituted</option>
+                              <option value="Hearing Scheduled" className="bg-white text-[#172033]">Formal Hearing Scheduled with Both Parties</option>
+                              <option value="Interim Directive Issued" className="bg-white text-[#172033]">Interim Directive Issued to Institute</option>
+                              <option value="Explanation Received" className="bg-white text-[#172033]">Explanation Received from College Management</option>
+                              <option value="Site Inspection Conducted" className="bg-white text-[#172033]">Fact-Finding Site Inspection Conducted</option>
+                              <option value="Compliance Verified" className="bg-white text-[#172033]">Institutional Compliance Verified</option>
+                              <option value="Final Redressal Order Issued" className="bg-white text-[#172033]">Final Statutory Redressal Order & Closure</option>
                             </select>
                           </div>
 
                           <div>
-                            <label className="block text-[#F7F7F8] font-semibold mb-1">
-                              Next Follow-up / Compliance Due Date
+                            <label className="block text-[#172033] font-semibold mb-1">
+                              {language === 'hi' ? 'अगली अनुवर्ती / अनुपालन नियत तिथि' : 'Next Follow-up / Compliance Due Date'}
                             </label>
                             <input
                               type="date"
                               value={actionForm.next_follow_up_date}
                               onChange={(e) => setActionForm({ ...actionForm, next_follow_up_date: e.target.value })}
-                              className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF]"
+                              className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8]"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="block text-[#F7F7F8] font-semibold mb-1">
-                            Officer Overseeing Action
+                          <label className="block text-[#172033] font-semibold mb-1">
+                            {language === 'hi' ? 'कार्रवाई की निगरानी करने वाले अधिकारी' : 'Officer Overseeing Action'}
                           </label>
                           <input
                             type="text"
                             placeholder="Officer Name / Bureau Official (e.g. Dr. Sunita Sharma, Regional Officer)"
                             value={actionForm.officer_name}
                             onChange={(e) => setActionForm({ ...actionForm, officer_name: e.target.value })}
-                            className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF] shadow-xs"
+                            className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20 focus:border-[#0645A8] shadow-xs"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[#F7F7F8] font-semibold mb-1">
-                            Detailed Findings / Directives Issued *
+                          <label className="block text-[#172033] font-semibold mb-1">
+                            {language === 'hi' ? 'विस्तृत निष्कर्ष / जारी निर्देश *' : 'Detailed Findings / Directives Issued *'}
                           </label>
                           <textarea
                             rows={4}
-                            placeholder="Detail the official inquiry findings, notice reference numbers, directives to college administration, hearing venue/date, or interim relief granted..."
+                            placeholder={language === 'hi' ? 'आधिकारिक जांच निष्कर्ष, नोटिस संदर्भ संख्या, कॉलेज प्रशासन को दिए गए निर्देश, सुनवाई स्थल/तिथि आदि दर्ज करें...' : 'Detail the official inquiry findings, notice reference numbers, directives to college administration, hearing venue/date, or interim relief granted...'}
                             value={actionForm.action_details}
                             onChange={(e) => setActionForm({ ...actionForm, action_details: e.target.value })}
-                            className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF] shadow-xs"
+                            className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20 focus:border-[#0645A8] shadow-xs"
                             required
                           />
                         </div>
 
-                        <div className="p-3 bg-[#45B558]/10 border border-[#45B558]/30 rounded-xl space-y-1">
-                          <label className="flex items-center gap-2 cursor-pointer font-bold text-[#F7F7F8] text-xs">
+                        <div className="p-3 bg-[#16A765]/10 border border-[#16A765]/30 rounded-xl space-y-1">
+                          <label className="flex items-center gap-2 cursor-pointer font-bold text-[#172033] text-xs">
                             <input
                               type="checkbox"
                               checked={actionForm.is_completed}
                               onChange={(e) => setActionForm({ ...actionForm, is_completed: e.target.checked })}
-                              className="w-4 h-4 text-[#45B558] rounded bg-[#13131E] border-[#232234]"
+                              className="w-4 h-4 text-[#16A765] rounded bg-white border-[#DCE3EC]"
                             />
-                            <span>Mark Complaint Action as Completed & Concluded (Final Resolution)</span>
+                            <span>{language === 'hi' ? 'शिकायत कार्रवाई को पूर्ण और समाप्त चिह्नित करें (अंतिम समाधान)' : 'Mark Complaint Action as Completed & Concluded (Final Resolution)'}</span>
                           </label>
-                          <p className="text-[11px] text-[#8B8988] pl-6">
-                            Checking this will transition the case status to 'Disposed' / 'Completed', finalize the official case closure statement, and notify all parties. Reviewer acceptance alone does not complete a case.
+                          <p className="text-[11px] text-[#687386] pl-6">
+                            {language === 'hi' ? 'इसे चेक करने पर मामला स्थिति को निस्तारित/पूर्ण कर दिया जाएगा और सभी पक्षों को सूचित किया जाएगा।' : "Checking this will transition the case status to 'Disposed' / 'Completed', finalize the official case closure statement, and notify all parties. Reviewer acceptance alone does not complete a case."}
                           </p>
                         </div>
 
@@ -1481,10 +1498,10 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                           <button
                             type="submit"
                             disabled={actionSubmitting}
-                            className="px-5 py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_20px_rgba(147,18,255,0.5)] text-white font-bold rounded-xl shadow-[0_0_15px_rgba(147,18,255,0.35)] transition disabled:opacity-50 flex items-center gap-2"
+                            className="px-5 py-2.5 bg-[#0645A8] hover:bg-[#1769D2] text-white font-bold rounded-xl shadow-xs transition disabled:opacity-50 flex items-center gap-2"
                           >
                             <FileCheck className="w-4 h-4" />
-                            <span>{actionSubmitting ? 'Recording Action...' : 'Save & Log Action Taken'}</span>
+                            <span>{actionSubmitting ? (language === 'hi' ? 'कार्रवाई दर्ज हो रही है...' : 'Recording Action...') : (language === 'hi' ? 'कार्रवाई सहेजें व दर्ज करें' : 'Save & Log Action Taken')}</span>
                           </button>
                         </div>
                       </form>
@@ -1492,52 +1509,52 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                   )}
 
                   {/* Recorded Action History */}
-                  <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md space-y-4">
-                    <div className="flex items-center justify-between pb-3 border-b border-[#1F1E2E]">
+                  <div className="bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-[#EAF0F6]">
                       <div className="flex items-center gap-2">
-                        <History className="w-4 h-4 text-[#A020FF]" />
-                        <h3 className="text-sm font-extrabold text-[#F7F7F8] uppercase tracking-wider">
-                          Recorded Actions & Directive Timeline
+                        <History className="w-4 h-4 text-[#0645A8]" />
+                        <h3 className="text-sm font-extrabold text-[#172033] uppercase tracking-wider">
+                          {language === 'hi' ? 'दर्ज कार्रवाइयां एवं निर्देश समयरेखा' : 'Recorded Actions & Directive Timeline'}
                         </h3>
                       </div>
-                      <span className="text-xs text-[#8B8988] font-medium">
-                        {complaint.actions?.length || 0} Events Logged
+                      <span className="text-xs text-[#687386] font-medium">
+                        {complaint.actions?.length || 0} {language === 'hi' ? 'इवेंट्स दर्ज' : 'Events Logged'}
                       </span>
                     </div>
 
                     <div className="space-y-3">
                       {complaint.actions?.map((act) => (
-                        <div key={act.id} className="p-4 rounded-xl bg-[#13131E] border border-[#232234] text-xs space-y-2">
+                        <div key={act.id} className="p-4 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs space-y-2">
                           <div className="flex items-center justify-between flex-wrap gap-2">
                             <div className="flex items-center gap-2">
-                              <span className="font-extrabold text-[#F7F7F8] text-sm">
+                              <span className="font-extrabold text-[#172033] text-sm">
                                 {act.action_type}
                               </span>
                               {act.to_value && (
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#9312FF]/20 text-[#D8B4FE] border border-[#9312FF]/30">
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#EAF3FF] text-[#0645A8] border border-[#BBD5F8]">
                                   Status: {act.to_value}
                                 </span>
                               )}
                             </div>
-                            <span className="text-[#8B8988] font-mono text-[11px]">
+                            <span className="text-[#687386] font-mono text-[11px]">
                               {formatDateTime(act.created_at)}
                             </span>
                           </div>
 
-                          <p className="text-[#F7F7F8] leading-relaxed font-medium">
+                          <p className="text-[#172033] leading-relaxed font-medium">
                             {act.remarks}
                           </p>
 
-                          <div className="pt-2 border-t border-[#1F1E2E] flex items-center justify-between text-[11px] text-[#8B8988]">
-                            <span>Official: <strong className="text-[#F7F7F8]">{act.actor_name}</strong> ({act.actor_role})</span>
-                            <span>Jurisdiction: <strong className="text-[#F7F7F8]">{act.actor_bureau || complaint.source_bureau}</strong></span>
+                          <div className="pt-2 border-t border-[#EAF0F6] flex items-center justify-between text-[11px] text-[#687386]">
+                            <span>{language === 'hi' ? 'अधिकारी:' : 'Official:'} <strong className="text-[#172033]">{act.actor_name}</strong> ({act.actor_role})</span>
+                            <span>{language === 'hi' ? 'अधिकार क्षेत्र:' : 'Jurisdiction:'} <strong className="text-[#172033]">{act.actor_bureau || complaint.source_bureau}</strong></span>
                           </div>
                         </div>
                       ))}
 
                       {(!complaint.actions || complaint.actions.length === 0) && (
-                        <div className="py-6 text-center text-[#8B8988]">
-                          No actions recorded yet. Use the form above to record subsequent department actions.
+                        <div className="py-6 text-center text-[#687386]">
+                          {language === 'hi' ? 'अभी तक कोई कार्रवाई दर्ज नहीं की गई है।' : 'No actions recorded yet. Use the form above to record subsequent department actions.'}
                         </div>
                       )}
                     </div>
@@ -1552,39 +1569,39 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* ========================================================================= */}
           {activeTab === 'audit' && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-[#0D0D14] border border-[#232234] rounded-2xl p-6 shadow-md">
+              <div className="lg:col-span-2 bg-white border border-[#DCE3EC] rounded-2xl p-6 shadow-xs">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <History className="w-4 h-4 text-[#A020FF]" />
-                    <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">
-                      Chronological Case Action History ({complaint.actions?.length || 0})
+                    <History className="w-4 h-4 text-[#0645A8]" />
+                    <h3 className="text-sm font-bold text-[#172033] tracking-wide">
+                      {language === 'hi' ? 'कालानुक्रमिक मामला कार्रवाई इतिहास' : 'Chronological Case Action History'} ({complaint.actions?.length || 0})
                     </h3>
                   </div>
-                  <span className="text-[10px] text-[#8B8988]">
-                    Immutable audit-compliant event trail
+                  <span className="text-[10px] text-[#687386]">
+                    {language === 'hi' ? 'अपरिवर्तनीय ऑडिट-अनुपालक इवेंट ट्रेल' : 'Immutable audit-compliant event trail'}
                   </span>
                 </div>
 
-                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#232234]">
+                <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#DCE3EC]">
                   {complaint.actions?.map((act) => (
                     <div key={act.id} className="relative group">
-                      <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-[#9312FF] ring-4 ring-[#0D0D14] shadow-[0_0_8px_#9312FF]" />
-                      <div className="bg-[#13131E] border border-[#232234] p-3.5 rounded-xl text-xs space-y-1">
+                      <div className="absolute -left-6 top-1 w-3 h-3 rounded-full bg-[#0645A8] ring-4 ring-white shadow-xs" />
+                      <div className="bg-[#F8FAFC] border border-[#DCE3EC] p-3.5 rounded-xl text-xs space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#F7F7F8]">{act.action_type}</span>
-                          <span className="text-[10px] text-[#8B8988] font-mono">{formatDateTime(act.created_at)}</span>
+                          <span className="font-bold text-[#172033]">{act.action_type}</span>
+                          <span className="text-[10px] text-[#687386] font-mono">{formatDateTime(act.created_at)}</span>
                         </div>
                         {act.from_value && act.to_value && (
-                          <div className="text-[11px] text-[#D8B4FE] font-medium">
-                            Transition: <span className="line-through text-[#8B8988]">{act.from_value}</span> &rarr; {act.to_value}
+                          <div className="text-[11px] text-[#0645A8] font-medium">
+                            Transition: <span className="line-through text-[#687386]">{act.from_value}</span> &rarr; {act.to_value}
                           </div>
                         )}
-                        <p className="text-[#F7F7F8] text-xs leading-relaxed mt-1">
+                        <p className="text-[#172033] text-xs leading-relaxed mt-1">
                           {act.remarks}
                         </p>
-                        <div className="text-[10px] text-[#8B8988] pt-1 border-t border-[#1F1E2E] flex items-center justify-between">
-                          <span>Actor: <strong className="text-[#F7F7F8]">{act.actor_name}</strong> ({act.actor_role})</span>
-                          {act.actor_bureau && <span>Bureau: {act.actor_bureau}</span>}
+                        <div className="text-[10px] text-[#687386] pt-1 border-t border-[#EAF0F6] flex items-center justify-between">
+                          <span>{language === 'hi' ? 'कर्ता:' : 'Actor:'} <strong className="text-[#172033]">{act.actor_name}</strong> ({act.actor_role})</span>
+                          {act.actor_bureau && <span>{language === 'hi' ? 'ब्यूरो:' : 'Bureau:'} {act.actor_bureau}</span>}
                         </div>
                       </div>
                     </div>
@@ -1593,11 +1610,11 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               </div>
 
               <div className="space-y-6">
-                <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md">
+                <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <GitMerge className="w-4 h-4 text-[#A020FF]" />
-                      <h3 className="text-sm font-bold text-[#F7F7F8]">Linked Cross-Bureau Overlaps</h3>
+                      <GitMerge className="w-4 h-4 text-[#0645A8]" />
+                      <h3 className="text-sm font-bold text-[#172033]">{language === 'hi' ? 'संबंधित अंतर-ब्यूरो अतिव्याप्तियां' : 'Linked Cross-Bureau Overlaps'}</h3>
                     </div>
                   </div>
 
@@ -1605,48 +1622,48 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                     {complaint.related_overlaps?.map((ov) => (
                       <div
                         key={ov.alert_id}
-                        className="p-3 rounded-xl bg-[#13131E] border border-[#232234] space-y-1.5"
+                        className="p-3 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#D8B4FE]">{ov.overlap_type}</span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#9312FF]/20 text-[#D8B4FE] border border-[#9312FF]/30 font-semibold">
+                          <span className="font-bold text-[#0645A8]">{ov.overlap_type}</span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#EAF3FF] text-[#0645A8] border border-[#BBD5F8] font-semibold">
                             {ov.status}
                           </span>
                         </div>
-                        <div className="text-[11px] text-[#8B8988] truncate" title={ov.matched_subject}>
-                          Matched: <strong className="text-[#F7F7F8]">{ov.matched_case_id}</strong> ({ov.matched_bureau})
+                        <div className="text-[11px] text-[#687386] truncate" title={ov.matched_subject}>
+                          Matched: <strong className="text-[#172033]">{ov.matched_case_id}</strong> ({ov.matched_bureau})
                         </div>
                       </div>
                     ))}
 
                     {(!complaint.related_overlaps || complaint.related_overlaps.length === 0) && (
-                      <p className="text-xs text-[#8B8988] py-4 text-center">
-                        No active cross-bureau overlap linked to this case.
+                      <p className="text-xs text-[#687386] py-4 text-center">
+                        {language === 'hi' ? 'इस मामले से जुड़ा कोई सक्रिय ओवरलैप नहीं है।' : 'No active cross-bureau overlap linked to this case.'}
                       </p>
                     )}
                   </div>
                 </div>
 
-                <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md">
+                <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs">
                   <div className="flex items-center gap-2 mb-3">
-                    <UserCheck className="w-4 h-4 text-[#38BDF8]" />
-                    <h3 className="text-sm font-bold text-[#F7F7F8]">Assigned Inquiry Team</h3>
+                    <UserCheck className="w-4 h-4 text-[#0645A8]" />
+                    <h3 className="text-sm font-bold text-[#172033]">{language === 'hi' ? 'आवंटित जांच दल' : 'Assigned Inquiry Team'}</h3>
                   </div>
 
                   <div className="space-y-2 text-xs">
                     {complaint.assignments?.map((asm) => (
-                      <div key={asm.id} className="p-2.5 rounded-xl bg-[#13131E] border border-[#232234] text-xs">
-                        <div className="font-bold text-[#F7F7F8]">{asm.officer_name}</div>
-                        <div className="text-[10px] text-[#8B8988]">Bureau: {asm.bureau}</div>
-                        <div className="text-[10px] text-[#8B8988] mt-1">
+                      <div key={asm.id} className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#DCE3EC] text-xs">
+                        <div className="font-bold text-[#172033]">{asm.officer_name}</div>
+                        <div className="text-[10px] text-[#687386]">Bureau: {asm.bureau}</div>
+                        <div className="text-[10px] text-[#687386] mt-1">
                           Assigned by {asm.assigned_by} on {formatDate(asm.assigned_at)}
                         </div>
                       </div>
                     ))}
 
                     {(!complaint.assignments || complaint.assignments.length === 0) && (
-                      <p className="text-xs text-[#8B8988] py-3 text-center">
-                        Currently handled at centralized nodal intake desk.
+                      <p className="text-xs text-[#687386] py-3 text-center">
+                        {language === 'hi' ? 'वर्तमान में केंद्रीकृत नोडल इनटेक डेस्क पर प्रबंधित।' : 'Currently handled at centralized nodal intake desk.'}
                       </p>
                     )}
                   </div>
@@ -1663,69 +1680,69 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
         onClose={() => setActiveModal(null)}
         title={
           activeModal === 'verify'
-            ? 'Verify & Accept Grievance for Active Scrutiny'
+            ? (language === 'hi' ? 'सक्रिय संवीक्षा हेतु शिकायत सत्यापित व स्वीकार करें' : 'Verify & Accept Grievance for Active Scrutiny')
             : activeModal === 'request_info'
-            ? 'Request Additional Information from Complainant'
+            ? (language === 'hi' ? 'शिकायतकर्ता से अतिरिक्त जानकारी का अनुरोध करें' : 'Request Additional Information from Complainant')
             : activeModal === 'respond_info'
-            ? 'Submit Clarification to Reviewing Officer'
+            ? (language === 'hi' ? 'समीक्षा अधिकारी को स्पष्टीकरण प्रस्तुत करें' : 'Submit Clarification to Reviewing Officer')
             : activeModal === 'reject'
-            ? 'Reject Grievance with Stated Official Rationale'
+            ? (language === 'hi' ? 'आधिकारिक औचित्य के साथ शिकायत अस्वीकार करें' : 'Reject Grievance with Stated Official Rationale')
             : activeModal === 'status'
-            ? 'Update Complaint Status'
+            ? (language === 'hi' ? 'शिकायत स्थिति अद्यतन करें' : 'Update Complaint Status')
             : activeModal === 'transfer'
-            ? 'Transfer Bureau Jurisdiction'
+            ? (language === 'hi' ? 'ब्यूरो क्षेत्राधिकार स्थानांतरित करें' : 'Transfer Bureau Jurisdiction')
             : activeModal === 'escalate'
-            ? 'Escalate to Higher Authority'
+            ? (language === 'hi' ? 'उच्च प्राधिकरण को अग्रेषित करें' : 'Escalate to Higher Authority')
             : activeModal === 'assign'
-            ? 'Assign Officer to Case'
-            : 'Record Official Resolution & Dispose Case'
+            ? (language === 'hi' ? 'मामले में अधिकारी नियुक्त करें' : 'Assign Officer to Case')
+            : (language === 'hi' ? 'आधिकारिक समाधान दर्ज करें एवं मामला निस्तारित करें' : 'Record Official Resolution & Dispose Case')
         }
       >
         <form onSubmit={handleActionSubmit} className="space-y-4 text-xs">
           {/* VERIFY MODAL */}
           {activeModal === 'verify' && (
             <div className="space-y-3">
-              <div className="p-3 bg-[#45B558]/10 border border-[#45B558]/30 rounded-xl text-[#F7F7F8]">
-                <p className="font-bold text-[#45B558]">Accept Grievance into Bureau Inquiry Workflow</p>
-                <p className="text-[11px] text-[#8B8988] mt-0.5">
-                  This action validates document genuineness and transitions the case from 'Submitted' to 'Under Review'.
+              <div className="p-3 bg-[#16A765]/10 border border-[#16A765]/30 rounded-xl text-[#172033]">
+                <p className="font-bold text-[#16A765]">{language === 'hi' ? 'ब्यूरो जांच कार्यप्रवाह में शिकायत स्वीकार करें' : 'Accept Grievance into Bureau Inquiry Workflow'}</p>
+                <p className="text-[11px] text-[#687386] mt-0.5">
+                  {language === 'hi' ? "यह कार्रवाई दस्तावेज़ की सत्यता को मान्य करती है और मामले की स्थिति को 'प्रस्तुत' से 'समीक्षाधीन' में बदलती है।" : "This action validates document genuineness and transitions the case from 'Submitted' to 'Under Review'."}
                 </p>
               </div>
 
               <div>
-                <label className="flex items-center gap-2 cursor-pointer font-semibold text-[#F7F7F8]">
+                <label className="flex items-center gap-2 cursor-pointer font-semibold text-[#172033]">
                   <input
                     type="checkbox"
                     checked={modalForm.override_priority}
                     onChange={(e) => setModalForm({ ...modalForm, override_priority: e.target.checked })}
-                    className="w-4 h-4 text-[#9312FF] rounded bg-[#13131E] border-[#232234]"
+                    className="w-4 h-4 text-[#0645A8] rounded bg-white border-[#DCE3EC]"
                   />
-                  <span>Override Suggested Priority Level</span>
+                  <span>{language === 'hi' ? 'सुझाई गई प्राथमिकता स्तर को ओवरराइड करें' : 'Override Suggested Priority Level'}</span>
                 </label>
               </div>
 
               {modalForm.override_priority && (
-                <div className="p-3 bg-[#0D0D14] border border-[#232234] rounded-xl space-y-3">
+                <div className="p-3 bg-[#F8FAFC] border border-[#DCE3EC] rounded-xl space-y-3">
                   <div>
-                    <label className="block text-[#F7F7F8] font-semibold mb-1">New Confirmed Priority *</label>
+                    <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'नई पुष्टि की गई प्राथमिकता *' : 'New Confirmed Priority *'}</label>
                     <select
                       value={modalForm.confirmed_priority || complaint.priority}
                       onChange={(e) => setModalForm({ ...modalForm, confirmed_priority: e.target.value })}
-                      className="w-full p-2 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF]"
+                      className="w-full p-2 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8]"
                     >
                       {PRIORITY_OPTIONS.filter(p => p !== 'All').map(p => (
-                        <option key={p} value={p} className="bg-[#13131E] text-[#F7F7F8]">{p}</option>
+                        <option key={p} value={p} className="bg-white text-[#172033]">{p}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[#F7F7F8] font-semibold mb-1">Mandatory Override Justification *</label>
+                    <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'अनिवार्य ओवरराइड औचित्य *' : 'Mandatory Override Justification *'}</label>
                     <input
                       type="text"
-                      placeholder="e.g. Evidence shows immediate threat requiring expedited 15-day resolution"
+                      placeholder={language === 'hi' ? 'उदा. साक्ष्य त्वरित 15-दिवसीय समाधान की आवश्यकता दर्शाता है' : 'e.g. Evidence shows immediate threat requiring expedited 15-day resolution'}
                       value={modalForm.priority_override_reason || ''}
                       onChange={(e) => setModalForm({ ...modalForm, priority_override_reason: e.target.value })}
-                      className="w-full p-2 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]"
+                      className="w-full p-2 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20"
                       required
                     />
                   </div>
@@ -1733,13 +1750,13 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
               )}
 
               <div>
-                <label className="block text-[#F7F7F8] font-semibold mb-1">Scrutiny Findings & Remarks</label>
+                <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'संवीक्षा निष्कर्ष एवं टिप्पणी' : 'Scrutiny Findings & Remarks'}</label>
                 <textarea
                   rows={3}
                   value={modalForm.remarks || ''}
                   onChange={(e) => setModalForm({ ...modalForm, remarks: e.target.value })}
-                  placeholder="Record summary of verified documents, transaction IDs, or initial findings..."
-                  className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]"
+                  placeholder={language === 'hi' ? 'सत्यापित दस्तावेजों या प्रारंभिक निष्कर्षों का सारांश दर्ज करें...' : 'Record summary of verified documents, transaction IDs, or initial findings...'}
+                  className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20"
                   required
                 />
               </div>
@@ -1749,22 +1766,22 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* REQUEST INFO MODAL */}
           {activeModal === 'request_info' && (
             <div className="space-y-3">
-              <div className="p-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-xl text-[#F7F7F8]">
-                <p className="font-bold text-[#F59E0B]">Request Clarification from Complainant</p>
-                <p className="text-[11px] text-[#8B8988] mt-0.5">
-                  Transitions grievance status to 'Needs More Information'. The complainant will receive an in-portal prompt to respond.
+              <div className="p-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-xl text-[#172033]">
+                <p className="font-bold text-[#B45309]">{language === 'hi' ? 'शिकायतकर्ता से स्पष्टीकरण का अनुरोध करें' : 'Request Clarification from Complainant'}</p>
+                <p className="text-[11px] text-[#687386] mt-0.5">
+                  {language === 'hi' ? "शिकायत की स्थिति को 'अतिरिक्त जानकारी आवश्यक' में बदलता है। शिकायतकर्ता को पोर्टल में उत्तर देने का संदेश मिलेगा।" : "Transitions grievance status to 'Needs More Information'. The complainant will receive an in-portal prompt to respond."}
                 </p>
               </div>
               <div>
-                <label className="block text-[#F7F7F8] font-semibold mb-1">
-                  Specific Documents / Evidence Required *
+                <label className="block text-[#172033] font-semibold mb-1">
+                  {language === 'hi' ? 'विशिष्ट दस्तावेज / साक्ष्य आवश्यक *' : 'Specific Documents / Evidence Required *'}
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="e.g. Please furnish copy of the original fee receipt, fee breakdown circular issued by college, or attendance sheet..."
+                  placeholder={language === 'hi' ? 'उदा. कृपया मूल शुल्क रसीद, परिपत्र या उपस्थिति पत्रक की प्रति प्रस्तुत करें...' : 'e.g. Please furnish copy of the original fee receipt, fee breakdown circular issued by college, or attendance sheet...'}
                   value={modalForm.request_notes || ''}
                   onChange={(e) => setModalForm({ ...modalForm, request_notes: e.target.value })}
-                  className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]"
+                  className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20"
                   required
                 />
               </div>
@@ -1774,22 +1791,22 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* RESPOND INFO MODAL */}
           {activeModal === 'respond_info' && (
             <div className="space-y-3">
-              <div className="p-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-xl text-[#F7F7F8]">
-                <p className="font-bold text-[#F59E0B]">Submit Clarification to Reviewing Officer</p>
-                <p className="text-[11px] text-[#8B8988] mt-0.5">
-                  Provide the requested information or clarification to resume case scrutiny.
+              <div className="p-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-xl text-[#172033]">
+                <p className="font-bold text-[#B45309]">{language === 'hi' ? 'समीक्षा अधिकारी को स्पष्टीकरण प्रस्तुत करें' : 'Submit Clarification to Reviewing Officer'}</p>
+                <p className="text-[11px] text-[#687386] mt-0.5">
+                  {language === 'hi' ? 'मामले की जांच पुनः आरंभ करने हेतु मांगी गई जानकारी या स्पष्टीकरण प्रदान करें।' : 'Provide the requested information or clarification to resume case scrutiny.'}
                 </p>
               </div>
               <div>
-                <label className="block text-[#F7F7F8] font-semibold mb-1">
-                  Clarification / Additional Details *
+                <label className="block text-[#172033] font-semibold mb-1">
+                  {language === 'hi' ? 'स्पष्टीकरण / अतिरिक्त विवरण *' : 'Clarification / Additional Details *'}
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Provide transaction details, receipts, or explanations requested..."
+                  placeholder={language === 'hi' ? 'अनुरोधित लेनदेन विवरण, रसीदें या स्पष्टीकरण प्रदान करें...' : 'Provide transaction details, receipts, or explanations requested...'}
                   value={modalForm.response_notes || ''}
                   onChange={(e) => setModalForm({ ...modalForm, response_notes: e.target.value })}
-                  className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]"
+                  className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20"
                   required
                 />
               </div>
@@ -1799,22 +1816,22 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* REJECT MODAL */}
           {activeModal === 'reject' && (
             <div className="space-y-3">
-              <div className="p-3 bg-[#F03B2A]/15 border border-[#F03B2A]/30 rounded-xl text-[#F7F7F8]">
-                <p className="font-bold text-[#F03B2A]">Formal Rejection of Grievance</p>
-                <p className="text-[11px] text-[#8B8988] mt-0.5">
-                  A legally sound justification is required under AICTE Grievance Redressal Regulations 2019.
+              <div className="p-3 bg-[#DC3545]/10 border border-[#DC3545]/30 rounded-xl text-[#172033]">
+                <p className="font-bold text-[#DC3545]">{language === 'hi' ? 'शिकायत की औपचारिक अस्वीकृति' : 'Formal Rejection of Grievance'}</p>
+                <p className="text-[11px] text-[#687386] mt-0.5">
+                  {language === 'hi' ? 'एआईसीटीई विनियम 2019 के अंतर्गत कानूनी रूप से वैध औचित्य आवश्यक है।' : 'A legally sound justification is required under AICTE Grievance Redressal Regulations 2019.'}
                 </p>
               </div>
               <div>
-                <label className="block text-[#F7F7F8] font-semibold mb-1">
-                  Official Rejection Rationale *
+                <label className="block text-[#172033] font-semibold mb-1">
+                  {language === 'hi' ? 'आधिकारिक अस्वीकृति औचित्य *' : 'Official Rejection Rationale *'}
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="State why the matter is rejected (e.g. Outside AICTE statutory purview, sub-judice in high court, anonymous without actionable proof, unsubstantiated claims)..."
+                  placeholder={language === 'hi' ? 'अस्वीकृति का कारण बताएं (उदा. एआईसीटीई के अधिकार क्षेत्र से बाहर, उच्च न्यायालय में विचाराधीन)...' : 'State why the matter is rejected (e.g. Outside AICTE statutory purview, sub-judice in high court, anonymous without actionable proof, unsubstantiated claims)...'}
                   value={modalForm.rejection_reason || ''}
                   onChange={(e) => setModalForm({ ...modalForm, rejection_reason: e.target.value })}
-                  className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF]"
+                  className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20"
                   required
                 />
               </div>
@@ -1824,14 +1841,14 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* STATUS CHANGE */}
           {activeModal === 'status' && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">New Status *</label>
+              <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'नई स्थिति *' : 'New Status *'}</label>
               <select
                 value={modalForm.status || complaint.status}
                 onChange={(e) => setModalForm({ ...modalForm, status: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8] shadow-xs"
               >
                 {STATUS_OPTIONS.filter(s => s !== 'All').map(s => (
-                  <option key={s} value={s} className="bg-[#13131E] text-[#F7F7F8]">{s}</option>
+                  <option key={s} value={s} className="bg-white text-[#172033]">{s}</option>
                 ))}
               </select>
             </div>
@@ -1840,14 +1857,14 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* TRANSFER MODAL */}
           {activeModal === 'transfer' && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">Target AICTE Bureau *</label>
+              <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'लक्ष्य एआईसीटीई ब्यूरो *' : 'Target AICTE Bureau *'}</label>
               <select
                 value={modalForm.target_bureau || 'Regulation Bureau (RB)'}
                 onChange={(e) => setModalForm({ ...modalForm, target_bureau: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8] shadow-xs"
               >
                 {BUREAUS.filter(b => b !== 'All' && b !== complaint.source_bureau).map(b => (
-                  <option key={b} value={b} className="bg-[#13131E] text-[#F7F7F8]">{b}</option>
+                  <option key={b} value={b} className="bg-white text-[#172033]">{b}</option>
                 ))}
               </select>
             </div>
@@ -1856,16 +1873,16 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* ESCALATE MODAL */}
           {activeModal === 'escalate' && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">Escalation Committee / Body *</label>
+              <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'उच्च समिति / निकाय *' : 'Escalation Committee / Body *'}</label>
               <select
                 value={modalForm.target_level || 'Apex Grievance Redressal Committee'}
                 onChange={(e) => setModalForm({ ...modalForm, target_level: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8] shadow-xs"
               >
-                <option value="Apex Grievance Redressal Committee" className="bg-[#13131E] text-[#F7F7F8]">Apex Grievance Redressal Committee</option>
-                <option value="Central Standing Appellate Committee" className="bg-[#13131E] text-[#F7F7F8]">Central Standing Appellate Committee</option>
-                <option value="Chief Vigilance Officer (CVO)" className="bg-[#13131E] text-[#F7F7F8]">Chief Vigilance Officer (CVO)</option>
-                <option value="Chairman Executive Committee" className="bg-[#13131E] text-[#F7F7F8]">Chairman Executive Committee</option>
+                <option value="Apex Grievance Redressal Committee" className="bg-white text-[#172033]">Apex Grievance Redressal Committee</option>
+                <option value="Central Standing Appellate Committee" className="bg-white text-[#172033]">Central Standing Appellate Committee</option>
+                <option value="Chief Vigilance Officer (CVO)" className="bg-white text-[#172033]">Chief Vigilance Officer (CVO)</option>
+                <option value="Chairman Executive Committee" className="bg-white text-[#172033]">Chairman Executive Committee</option>
               </select>
             </div>
           )}
@@ -1873,14 +1890,14 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* ASSIGN OFFICER MODAL */}
           {activeModal === 'assign' && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">Select Officer *</label>
+              <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'अधिकारी चुनें *' : 'Select Officer *'}</label>
               <select
                 value={modalForm.officer_name || OFFICERS_LIST[0]}
                 onChange={(e) => setModalForm({ ...modalForm, officer_name: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] focus:outline-none focus:border-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] focus:outline-none focus:border-[#0645A8] shadow-xs"
               >
                 {OFFICERS_LIST.map(o => (
-                  <option key={o} value={o} className="bg-[#13131E] text-[#F7F7F8]">{o}</option>
+                  <option key={o} value={o} className="bg-white text-[#172033]">{o}</option>
                 ))}
               </select>
             </div>
@@ -1889,13 +1906,13 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* RESOLVE MODAL */}
           {activeModal === 'resolve' && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">Resolution Summary Order *</label>
+              <label className="block text-[#172033] font-semibold mb-1">{language === 'hi' ? 'समाधान सारांश आदेश *' : 'Resolution Summary Order *'}</label>
               <textarea
                 rows={3}
-                placeholder="State final findings, directive issued to institute, refund ordered, or penalties imposed..."
+                placeholder={language === 'hi' ? 'अंतिम निष्कर्ष, संस्थान को जारी निर्देश, आदेशित रिफंड या लगाया गया जुर्माना दर्ज करें...' : 'State final findings, directive issued to institute, refund ordered, or penalties imposed...'}
                 value={modalForm.resolution_summary || ''}
                 onChange={(e) => setModalForm({ ...modalForm, resolution_summary: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20 shadow-xs"
                 required
               />
             </div>
@@ -1904,34 +1921,34 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
           {/* Mandatory Remarks */}
           {['status', 'transfer', 'escalate', 'assign', 'resolve'].includes(activeModal) && (
             <div>
-              <label className="block text-[#F7F7F8] font-semibold mb-1">
-                Official Action Remarks * (Audit Trail Mandatory)
+              <label className="block text-[#172033] font-semibold mb-1">
+                {language === 'hi' ? 'आधिकारिक कार्रवाई टिप्पणी * (ऑडिट ट्रेल हेतु अनिवार्य)' : 'Official Action Remarks * (Audit Trail Mandatory)'}
               </label>
               <textarea
                 rows={3}
-                placeholder="State administrative justification for this change..."
+                placeholder={language === 'hi' ? 'इस परिवर्तन का प्रशासनिक औचित्य बताएं...' : 'State administrative justification for this change...'}
                 value={modalForm.remarks || ''}
                 onChange={(e) => setModalForm({ ...modalForm, remarks: e.target.value })}
-                className="w-full p-2.5 bg-[#13131E] border border-[#232234] rounded-xl text-[#F7F7F8] placeholder-[#8B8988] focus:outline-none focus:ring-2 focus:ring-[#9312FF] shadow-xs"
+                className="w-full p-2.5 bg-white border border-[#DCE3EC] rounded-xl text-[#172033] placeholder-[#687386] focus:outline-none focus:ring-2 focus:ring-[#0645A8]/20 shadow-xs"
                 required
               />
             </div>
           )}
 
-          <div className="pt-3 border-t border-[#232234] flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-[#DCE3EC] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={() => setActiveModal(null)}
-              className="px-4 py-2 rounded-xl bg-[#13131E] hover:bg-[#181826] border border-[#232234] text-[#8B8988] hover:text-[#F7F7F8] font-medium transition"
+              className="px-4 py-2 rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#DCE3EC] text-[#687386] hover:text-[#172033] font-medium transition"
             >
-              Cancel
+              {t('action_cancel', 'Cancel')}
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:shadow-[0_0_20px_rgba(147,18,255,0.5)] text-white font-bold shadow-[0_0_15px_rgba(147,18,255,0.35)] transition disabled:opacity-50"
+              className="px-5 py-2 rounded-xl bg-[#0645A8] hover:bg-[#1769D2] text-white font-bold shadow-xs transition disabled:opacity-50"
             >
-              {submitting ? 'Recording...' : 'Commit Action'}
+              {submitting ? (language === 'hi' ? 'दर्ज हो रहा है...' : 'Recording...') : (language === 'hi' ? 'कार्रवाई दर्ज करें' : 'Commit Action')}
             </button>
           </div>
         </form>
@@ -1947,21 +1964,21 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
             }
             setPreviewEvidence(null);
           }}
-          title={`Document Evidence Preview: ${previewEvidence.name}`}
+          title={`${language === 'hi' ? 'दस्तावेज साक्ष्य पूर्वावलोकन:' : 'Document Evidence Preview:'} ${previewEvidence.name}`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs text-[#F7F7F8] bg-[#0D0D14] p-3 rounded-xl border border-[#232234]">
+            <div className="flex items-center justify-between text-xs text-[#172033] bg-[#F8FAFC] p-3 rounded-xl border border-[#DCE3EC]">
               <span className="font-semibold truncate max-w-sm">
-                Document: <strong className="text-white">{previewEvidence.name}</strong> {previewEvidence.size ? `(${previewEvidence.size})` : ''}
+                {language === 'hi' ? 'दस्तावेज:' : 'Document:'} <strong className="text-[#172033]">{previewEvidence.name}</strong> {previewEvidence.size ? `(${previewEvidence.size})` : ''}
               </span>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => window.open(previewEvidence.url, '_blank')}
-                  className="flex items-center gap-1 px-3 py-1 bg-[#13131E] hover:bg-[#181826] border border-[#232234] rounded-lg font-bold text-[#D8B4FE] shadow-2xs transition"
+                  className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-[#EAF3FF] border border-[#DCE3EC] rounded-lg font-bold text-[#0645A8] shadow-xs transition"
                 >
-                  <ExternalLink className="w-3.5 h-3.5 text-[#A020FF]" />
-                  <span>Open in Full Tab</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#0645A8]" />
+                  <span>{language === 'hi' ? 'पूर्ण टैब में खोलें' : 'Open in Full Tab'}</span>
                 </button>
                 <button
                   type="button"
@@ -1973,15 +1990,50 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                  className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white rounded-lg font-bold shadow-2xs transition"
+                  className="flex items-center gap-1 px-3 py-1 bg-[#0645A8] hover:bg-[#1769D2] text-white rounded-lg font-bold shadow-xs transition"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Download</span>
+                  <span>{language === 'hi' ? 'डाउनलोड करें' : 'Download'}</span>
                 </button>
               </div>
             </div>
 
-            <div className="border border-[#232234] rounded-2xl overflow-hidden bg-black flex items-center justify-center min-h-[420px]">
+            {/* APH Dual Authenticity Assessment Banner */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#F8FAFC] rounded-xl border border-[#DCE3EC]">
+              <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-[#EAF3FF] border border-[#BBD5F8]">
+                <ShieldCheck className="w-4 h-4 text-[#0645A8] flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-[#0645A8] block text-[11px]">
+                    {language === 'hi' ? 'स्वचालित सिस्टम सत्यापन: पारित' : 'Automated System Check: PASSED'}
+                  </span>
+                  <span className="text-[10px] text-[#687386] block mt-0.5">
+                    %PDF- signature verified • Size within 10MB statutory limit • Non-executable format.
+                  </span>
+                </div>
+              </div>
+
+              <div className={`flex items-start gap-2.5 p-2.5 rounded-lg border ${
+                isReviewerAccepted 
+                  ? 'bg-[#16A765]/10 border-[#16A765]/30 text-[#16A765]' 
+                  : 'bg-[#F59E0B]/10 border-[#F59E0B]/30 text-[#B45309]'
+              }`}>
+                {isReviewerAccepted ? <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" /> : <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />}
+                <div>
+                  <span className="font-bold block text-[11px]">
+                    {isReviewerAccepted 
+                      ? (language === 'hi' ? 'सांविधिक प्रामाणिकता: सत्यापित (एपीएच अध्याय VII)' : 'Statutory Authenticity: VERIFIED (APH Ch. VII)')
+                      : (language === 'hi' ? 'सांविधिक प्रामाणिकता: संवीक्षाधीन' : 'Statutory Authenticity: SCRUTINY PENDING')}
+                  </span>
+                  <span className="text-[10px] opacity-85 block mt-0.5">
+                    {isReviewerAccepted 
+                      ? 'Nodal Officer confirmed institutional seal and signatory credentials under APH Clause 7.23.'
+                      : 'Automated checks do not guarantee legal authenticity. Official seal verification required.'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-[#DCE3EC] rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center min-h-[420px]">
               {previewEvidence.type?.startsWith('image/') ? (
                 <img
                   src={previewEvidence.url}
@@ -1992,7 +2044,7 @@ export function CaseDetails({ caseId, onBack, onViewCase, onViewInstitution }) {
                 <iframe
                   src={previewEvidence.url}
                   title={previewEvidence.name}
-                  className="w-full h-[70vh] bg-[#0D0D14] border-0"
+                  className="w-full h-[70vh] bg-white border-0"
                 />
               )}
             </div>

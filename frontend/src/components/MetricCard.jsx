@@ -1,44 +1,45 @@
 import React from 'react';
 
-export function MetricCard({ title, value, subtitle, icon: Icon, color = 'violet', alert = false, onClick }) {
+export function MetricCard({ title, value, subtitle, icon: Icon, color = 'blue', alert = false, onClick, className = '' }) {
   const colorMap = {
-    violet: 'border-[#9312FF]/40 text-[#A020FF] bg-[#9312FF]/15 shadow-[0_0_12px_rgba(147,18,255,0.25)]',
-    teal: 'border-[#9312FF]/40 text-[#A020FF] bg-[#9312FF]/15 shadow-[0_0_12px_rgba(147,18,255,0.25)]',
-    purple: 'border-[#9312FF]/40 text-[#A020FF] bg-[#9312FF]/15 shadow-[0_0_12px_rgba(147,18,255,0.25)]',
-    navy: 'border-[#232234] text-[#D8B4FE] bg-[#13131E]',
-    rose: 'border-[#F03B2A]/40 text-[#F03B2A] bg-[#F03B2A]/15 shadow-[0_0_12px_rgba(240,59,42,0.2)]',
-    amber: 'border-[#F59E0B]/40 text-[#F59E0B] bg-[#F59E0B]/15 shadow-[0_0_12px_rgba(245,158,11,0.2)]',
-    emerald: 'border-[#45B558]/40 text-[#45B558] bg-[#45B558]/15 shadow-[0_0_12px_rgba(69,181,88,0.2)]',
-    sky: 'border-[#9312FF]/40 text-[#A020FF] bg-[#9312FF]/15 shadow-[0_0_12px_rgba(147,18,255,0.25)]',
+    blue: 'border-[#0645A8]/20 text-[#0645A8] bg-[#EAF3FF]',
+    violet: 'border-[#0645A8]/20 text-[#0645A8] bg-[#EAF3FF]',
+    teal: 'border-[#0645A8]/20 text-[#0645A8] bg-[#EAF3FF]',
+    purple: 'border-[#0645A8]/20 text-[#0645A8] bg-[#EAF3FF]',
+    navy: 'border-[#DCE3EC] text-[#172033] bg-[#F3F5F8]',
+    rose: 'border-red-200 text-[#DC3545] bg-red-50',
+    amber: 'border-amber-200 text-[#F59E0B] bg-amber-50',
+    emerald: 'border-emerald-200 text-[#16A765] bg-emerald-50',
+    sky: 'border-[#0645A8]/20 text-[#1769D2] bg-[#EAF3FF]',
   };
 
-  const badgeColor = colorMap[color] || colorMap.violet;
+  const badgeColor = colorMap[color] || colorMap.blue;
 
   return (
     <div 
       onClick={onClick}
-      className={`bg-[#0D0D14] border rounded-xl p-5 transition-all duration-300 relative overflow-hidden group ${
+      className={`bg-white border rounded-xl p-5 transition-all duration-200 relative overflow-hidden group shadow-xs animate-fade-rise ${
         alert 
-          ? 'border-[#F03B2A]/50 bg-[#F03B2A]/5 shadow-[0_0_20px_rgba(240,59,42,0.15)] ring-1 ring-[#F03B2A]/30' 
-          : 'border-[#232234] hover:border-[#9312FF]/50 hover:shadow-[0_0_25px_rgba(147,18,255,0.18)] hover:-translate-y-0.5'
-      } ${onClick ? 'cursor-pointer' : ''}`}
+          ? 'border-[#DC3545]/40 bg-red-50/20 shadow-xs ring-1 ring-[#DC3545]/20' 
+          : 'border-[#DCE3EC] hover:border-[#0645A8]/40 hover:shadow-md hover:-translate-y-0.5'
+      } ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       {/* Subtle top accent bar */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#9312FF]/30 to-transparent group-hover:via-[#9312FF] transition-all duration-500" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0645A8]/20 to-transparent group-hover:via-[#0645A8] transition-all duration-300" />
 
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-[#8B8988]">{title}</span>
+        <span className="text-xs font-semibold uppercase tracking-wider text-[#687386]">{title}</span>
         {Icon && (
-          <div className={`p-2 rounded-xl border transition-all duration-300 ${badgeColor}`}>
+          <div className={`p-2 rounded-xl border transition-all duration-200 ${badgeColor}`}>
             <Icon className="w-4 h-4" />
           </div>
         )}
       </div>
       <div className="mt-3 flex items-baseline gap-2">
-        <span className="text-2xl sm:text-3xl font-black text-[#F7F7F8] tracking-tight">{value}</span>
+        <span className="text-2xl sm:text-3xl font-extrabold text-[#172033] tracking-tight">{value}</span>
       </div>
       {subtitle && (
-        <p className="mt-1 text-xs text-[#8B8988] flex items-center gap-1.5 font-normal">
+        <p className="mt-1 text-xs text-[#687386] flex items-center gap-1.5 font-normal">
           {subtitle}
         </p>
       )}

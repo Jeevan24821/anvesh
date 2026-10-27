@@ -4,13 +4,13 @@ export function BureauBadge({ bureau }) {
   if (!bureau) return null;
   const shortCode = bureau.split(' ')[0].replace('(', '').replace(')', '');
   
-  let color = 'bg-[#13131E] text-[#8B8988] border-[#232234]';
-  if (shortCode === 'PGRC') color = 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/40 shadow-[0_0_8px_rgba(147,18,255,0.2)]';
-  else if (shortCode === 'Regulation' || shortCode === 'RB') color = 'bg-violet-900/40 text-[#C084FC] border-violet-700/50';
-  else if (shortCode === 'Approval' || shortCode === 'AB') color = 'bg-[#45B558]/20 text-[#45B558] border-[#45B558]/40';
-  else if (shortCode === 'Policy' || shortCode === 'PAPB') color = 'bg-fuchsia-950/40 text-fuchsia-300 border-fuchsia-800/40';
-  else if (shortCode === 'Anti-Ragging' || shortCode === 'ARC') color = 'bg-[#F03B2A]/20 text-[#F03B2A] border-[#F03B2A]/40 shadow-[0_0_8px_rgba(240,59,42,0.2)]';
-  else if (shortCode === 'Skill' || shortCode === 'SDC') color = 'bg-teal-950/40 text-teal-300 border-teal-800/40';
+  let color = 'bg-[#F3F5F8] text-[#172033] border-[#DCE3EC]';
+  if (shortCode === 'PGRC') color = 'bg-[#EAF3FF] text-[#0645A8] border-[#0645A8]/30 font-semibold shadow-2xs';
+  else if (shortCode === 'Regulation' || shortCode === 'RB') color = 'bg-blue-50 text-[#1769D2] border-blue-200 font-semibold';
+  else if (shortCode === 'Approval' || shortCode === 'AB') color = 'bg-emerald-50 text-[#16A765] border-emerald-200 font-semibold';
+  else if (shortCode === 'Policy' || shortCode === 'PAPB') color = 'bg-indigo-50 text-indigo-700 border-indigo-200 font-semibold';
+  else if (shortCode === 'Anti-Ragging' || shortCode === 'ARC') color = 'bg-red-50 text-[#DC3545] border-red-200 font-semibold';
+  else if (shortCode === 'Skill' || shortCode === 'SDC') color = 'bg-teal-50 text-teal-700 border-teal-200 font-semibold';
 
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border ${color}`}>

@@ -76,25 +76,25 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#0D0D14] rounded-2xl shadow-[0_0_30px_rgba(147,18,255,0.25)] border border-[#232234] w-full max-w-2xl overflow-hidden text-[#F7F7F8]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl border border-[#DCE3EC] w-full max-w-2xl overflow-hidden text-[#172033]">
         {/* Modal Header */}
-        <div className="bg-[#13131E] border-b border-[#232234] p-6 relative">
+        <div className="bg-[#F8FAFC] border-b border-[#DCE3EC] p-6 relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-[#9312FF]/20 border border-[#9312FF]/40 flex items-center justify-center text-[#D8B4FE]">
+              <div className="w-10 h-10 rounded-xl bg-[#EAF3FF] border border-[#BBD5F8] flex items-center justify-center text-[#0645A8]">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-bold tracking-tight text-[#F7F7F8]">Identity Verification & Access Portal</h3>
-                <p className="text-xs text-[#D8B4FE]">AICTE Grievance Monitoring Platform • ANVESH</p>
+                <h3 className="text-xl font-bold tracking-tight text-[#172033]">Identity Verification & Access Portal</h3>
+                <p className="text-xs text-[#0645A8]">AICTE Grievance Monitoring Platform • ANVESH</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-[#8B8988] hover:text-[#F7F7F8] hover:bg-[#1A1926] rounded-lg transition"
+              className="p-2 text-[#687386] hover:text-[#172033] hover:bg-[#F3F5F8] rounded-lg transition"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -114,13 +114,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-[#232234] bg-[#0D0D14] px-6 pt-3 space-x-2">
+        <div className="flex border-b border-[#DCE3EC] bg-white px-6 pt-3 space-x-2">
           <button
             onClick={() => { setActiveTab('institutional'); setError(''); setMessage(''); }}
             className={`pb-3 px-4 font-medium text-sm transition-all border-b-2 flex items-center space-x-2 ${
               activeTab === 'institutional'
-                ? 'border-[#9312FF] text-[#D8B4FE] bg-[#13131E] rounded-t-lg'
-                : 'border-transparent text-[#8B8988] hover:text-[#F7F7F8]'
+                ? 'border-[#0645A8] text-[#0645A8] bg-[#F8FAFC] rounded-t-lg'
+                : 'border-transparent text-[#687386] hover:text-[#172033]'
             }`}
           >
             <span>Institutional Complainant</span>
@@ -130,8 +130,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             onClick={() => { setActiveTab('external'); setError(''); setMessage(''); }}
             className={`pb-3 px-4 font-medium text-sm transition-all border-b-2 flex items-center space-x-2 ${
               activeTab === 'external'
-                ? 'border-[#9312FF] text-[#D8B4FE] bg-[#13131E] rounded-t-lg'
-                : 'border-transparent text-[#8B8988] hover:text-[#F7F7F8]'
+                ? 'border-[#0645A8] text-[#0645A8] bg-[#F8FAFC] rounded-t-lg'
+                : 'border-transparent text-[#687386] hover:text-[#172033]'
             }`}
           >
             <span>External (Parent / Citizen)</span>
@@ -141,8 +141,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             onClick={() => { setActiveTab('officials'); setError(''); setMessage(''); }}
             className={`pb-3 px-4 font-medium text-sm transition-all border-b-2 flex items-center space-x-2 ${
               activeTab === 'officials'
-                ? 'border-[#9312FF] text-[#D8B4FE] bg-[#13131E] rounded-t-lg'
-                : 'border-transparent text-[#8B8988] hover:text-[#F7F7F8]'
+                ? 'border-[#0645A8] text-[#0645A8] bg-[#F8FAFC] rounded-t-lg'
+                : 'border-transparent text-[#687386] hover:text-[#172033]'
             }`}
           >
             <span>Official AICTE Roles</span>
@@ -152,8 +152,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         {/* Tab Content */}
         <div className="p-6">
           {message && (
-            <div className="mb-4 p-3 bg-[#45B558]/10 border border-[#45B558]/30 text-[#45B558] rounded-lg text-sm flex items-center space-x-2">
-              <svg className="w-5 h-5 text-[#45B558] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="mb-4 p-3 bg-[#16A765]/10 border border-[#16A765]/30 text-[#16A765] rounded-lg text-sm flex items-center space-x-2">
+              <svg className="w-5 h-5 text-[#16A765] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{message}</span>
@@ -161,8 +161,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           )}
 
           {error && (
-            <div className="mb-4 p-3 bg-[#F03B2A]/10 border border-[#F03B2A]/30 text-[#F03B2A] rounded-lg text-sm flex items-center space-x-2">
-              <svg className="w-5 h-5 text-[#F03B2A] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="mb-4 p-3 bg-[#DC3545]/10 border border-[#DC3545]/30 text-[#DC3545] rounded-lg text-sm flex items-center space-x-2">
+              <svg className="w-5 h-5 text-[#DC3545] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{error}</span>
@@ -172,13 +172,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           {/* TAB 1: Institutional Login */}
           {activeTab === 'institutional' && (
             <div>
-              <p className="text-xs text-[#8B8988] mb-4">
+              <p className="text-xs text-[#687386] mb-4">
                 Students, faculty, and institutional personnel can authenticate using their college USN/Application Number and receive a simulated institutional verification OTP.
               </p>
               <form onSubmit={instOtpSent ? handleVerifyInstOtp : handleSendInstOtp} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[#8B8988] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-[#687386] uppercase tracking-wider mb-1">
                       Institutional USN / Roll No
                     </label>
                     <input
@@ -187,11 +187,11 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       onChange={(e) => setInstId(e.target.value)}
                       placeholder="e.g. 1DS22CS089"
                       required
-                      className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-sm text-[#F7F7F8] focus:border-[#9312FF] focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#DCE3EC] rounded-lg text-sm text-[#172033] focus:border-[#0645A8] focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#8B8988] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-[#687386] uppercase tracking-wider mb-1">
                       Institutional Email Address
                     </label>
                     <input
@@ -200,18 +200,18 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       onChange={(e) => setInstEmail(e.target.value)}
                       placeholder="e.g. priya.nair@dsce.edu.in"
                       required
-                      className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-sm text-[#F7F7F8] focus:border-[#9312FF] focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#DCE3EC] rounded-lg text-sm text-[#172033] focus:border-[#0645A8] focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {instOtpSent ? (
-                  <div className="p-4 bg-[#13131E] border border-[#9312FF]/30 rounded-xl space-y-3">
+                  <div className="p-4 bg-[#F8FAFC] border border-[#BBD5F8] rounded-xl space-y-3">
                     <div className="flex justify-between items-center">
-                      <label className="text-xs font-semibold text-[#D8B4FE] uppercase">
+                      <label className="text-xs font-semibold text-[#0645A8] uppercase">
                         Enter 6-Digit Verification OTP
                       </label>
-                      <span className="text-xs text-[#D8B4FE] bg-[#9312FF]/20 px-2 py-0.5 rounded font-mono font-medium">
+                      <span className="text-xs text-[#0645A8] bg-[#EAF3FF] px-2 py-0.5 rounded font-mono font-medium">
                         Demo OTP: 123456
                       </span>
                     </div>
@@ -221,12 +221,12 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       value={instOtp}
                       onChange={(e) => setInstOtp(e.target.value)}
                       placeholder="Enter 123456"
-                      className="w-full px-4 py-2 text-center tracking-widest text-lg font-mono font-bold border border-[#9312FF]/50 rounded-lg focus:border-[#9312FF] bg-[#0D0D14] text-[#F7F7F8]"
+                      className="w-full px-4 py-2 text-center tracking-widest text-lg font-mono font-bold border border-[#0645A8]/50 rounded-lg focus:border-[#0645A8] bg-white text-[#172033]"
                       autoFocus
                     />
                     <button
                       type="submit"
-                      className="w-full py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-medium rounded-lg text-sm transition shadow-[0_0_15px_rgba(147,18,255,0.3)]"
+                      className="w-full py-2.5 bg-[#0645A8] hover:bg-[#1769D2] transition text-white font-medium rounded-lg text-sm transition shadow-xs"
                     >
                       Verify OTP & Access Complainant Portal
                     </button>
@@ -234,7 +234,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 ) : (
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-medium rounded-lg text-sm transition shadow-[0_0_15px_rgba(147,18,255,0.3)] flex items-center justify-center space-x-2"
+                    className="w-full py-2.5 bg-[#0645A8] hover:bg-[#1769D2] transition text-white font-medium rounded-lg text-sm transition shadow-xs flex items-center justify-center space-x-2"
                   >
                     <span>Send Verification OTP</span>
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -249,13 +249,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           {/* TAB 2: External Complainant Login */}
           {activeTab === 'external' && (
             <div>
-              <p className="text-xs text-[#8B8988] mb-4">
+              <p className="text-xs text-[#687386] mb-4">
                 Parents, legal guardians, and citizens without an institutional login can authenticate via contact verification to file and monitor grievances.
               </p>
               <form onSubmit={extOtpSent ? handleVerifyExtOtp : handleSendExtOtp} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[#8B8988] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-[#687386] uppercase tracking-wider mb-1">
                       Full Name
                     </label>
                     <input
@@ -264,17 +264,17 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       onChange={(e) => setExtName(e.target.value)}
                       placeholder="e.g. Suresh Menon"
                       required
-                      className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-sm text-[#F7F7F8] focus:border-[#9312FF] focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#DCE3EC] rounded-lg text-sm text-[#172033] focus:border-[#0645A8] focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#8B8988] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-semibold text-[#687386] uppercase tracking-wider mb-1">
                       Affiliation / Relationship
                     </label>
                     <select
                       value={extRelation}
                       onChange={(e) => setExtRelation(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-sm text-[#F7F7F8] focus:border-[#9312FF] focus:outline-none"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#DCE3EC] rounded-lg text-sm text-[#172033] focus:border-[#0645A8] focus:outline-none"
                     >
                       <option value="Parent / Guardian">Parent / Legal Guardian</option>
                       <option value="Concerned Citizen">Concerned Citizen / Public</option>
@@ -284,7 +284,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#8B8988] uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-semibold text-[#687386] uppercase tracking-wider mb-1">
                     Mobile Phone Number / Email
                   </label>
                   <input
@@ -293,17 +293,17 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                     onChange={(e) => setExtContact(e.target.value)}
                     placeholder="+91-9845012345"
                     required
-                    className="w-full px-3 py-2 bg-[#13131E] border border-[#232234] rounded-lg text-sm text-[#F7F7F8] focus:border-[#9312FF] focus:outline-none"
+                    className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#DCE3EC] rounded-lg text-sm text-[#172033] focus:border-[#0645A8] focus:outline-none"
                   />
                 </div>
 
                 {extOtpSent ? (
-                  <div className="p-4 bg-[#13131E] border border-[#9312FF]/30 rounded-xl space-y-3">
+                  <div className="p-4 bg-[#F8FAFC] border border-[#BBD5F8] rounded-xl space-y-3">
                     <div className="flex justify-between items-center">
-                      <label className="text-xs font-semibold text-[#D8B4FE] uppercase">
+                      <label className="text-xs font-semibold text-[#0645A8] uppercase">
                         Enter 6-Digit Verification OTP
                       </label>
-                      <span className="text-xs text-[#D8B4FE] bg-[#9312FF]/20 px-2 py-0.5 rounded font-mono font-medium">
+                      <span className="text-xs text-[#0645A8] bg-[#EAF3FF] px-2 py-0.5 rounded font-mono font-medium">
                         Demo OTP: 123456
                       </span>
                     </div>
@@ -313,12 +313,12 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       value={extOtp}
                       onChange={(e) => setExtOtp(e.target.value)}
                       placeholder="Enter 123456"
-                      className="w-full px-4 py-2 text-center tracking-widest text-lg font-mono font-bold border border-[#9312FF]/50 rounded-lg focus:border-[#9312FF] bg-[#0D0D14] text-[#F7F7F8]"
+                      className="w-full px-4 py-2 text-center tracking-widest text-lg font-mono font-bold border border-[#0645A8]/50 rounded-lg focus:border-[#0645A8] bg-white text-[#172033]"
                       autoFocus
                     />
                     <button
                       type="submit"
-                      className="w-full py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-medium rounded-lg text-sm transition shadow-[0_0_15px_rgba(147,18,255,0.3)]"
+                      className="w-full py-2.5 bg-[#0645A8] hover:bg-[#1769D2] transition text-white font-medium rounded-lg text-sm transition shadow-xs"
                     >
                       Verify OTP & Sign In as External Complainant
                     </button>
@@ -326,7 +326,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 ) : (
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] hover:brightness-110 text-white font-medium rounded-lg text-sm transition shadow-[0_0_15px_rgba(147,18,255,0.3)] flex items-center justify-center space-x-2"
+                    className="w-full py-2.5 bg-[#0645A8] hover:bg-[#1769D2] transition text-white font-medium rounded-lg text-sm transition shadow-xs flex items-center justify-center space-x-2"
                   >
                     <span>Generate Verification Code</span>
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -341,7 +341,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           {/* TAB 3: Officials Demo Quick Switch */}
           {activeTab === 'officials' && (
             <div className="space-y-3">
-              <p className="text-xs text-[#8B8988] mb-2">
+              <p className="text-xs text-[#687386] mb-2">
                 Select an authorized AICTE administrative persona to evaluate role-specific dashboards, verification scrutiny panels, and overlap decisions:
               </p>
 
@@ -350,31 +350,31 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   <div
                     key={roleItem.id}
                     onClick={() => handleSelectOfficial(roleItem)}
-                    className="p-3.5 border border-[#232234] rounded-xl hover:border-[#9312FF] hover:shadow-[0_0_15px_rgba(147,18,255,0.2)] cursor-pointer transition bg-[#13131E] group"
+                    className="p-3.5 border border-[#DCE3EC] rounded-xl hover:border-[#0645A8] hover:shadow-[0_0_15px_rgba(147,18,255,0.2)] cursor-pointer transition bg-[#F8FAFC] group"
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <span className={`inline-block px-2 py-0.5 text-xs font-semibold rounded border ${
                           roleItem.role === 'Administrator'
-                            ? 'bg-[#9312FF]/20 text-[#D8B4FE] border-[#9312FF]/30'
+                            ? 'bg-[#EAF3FF] text-[#0645A8] border-[#BBD5F8]'
                             : roleItem.role === 'Reviewer'
                             ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                            : 'bg-[#0D0D14] text-[#8B8988] border-[#232234]'
+                            : 'bg-white text-[#687386] border-[#DCE3EC]'
                         }`}>
                           {roleItem.role}
                         </span>
-                        <h4 className="font-semibold text-[#F7F7F8] mt-1 text-sm group-hover:text-[#D8B4FE] transition">
+                        <h4 className="font-semibold text-[#172033] mt-1 text-sm group-hover:text-[#0645A8] transition">
                           {roleItem.name}
                         </h4>
-                        <p className="text-xs text-[#8B8988]">{roleItem.roleName}</p>
+                        <p className="text-xs text-[#687386]">{roleItem.roleName}</p>
                       </div>
-                      <span className="text-[#8B8988] group-hover:text-[#D8B4FE] transition">
+                      <span className="text-[#687386] group-hover:text-[#0645A8] transition">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </span>
                     </div>
-                    <p className="text-xs text-[#8B8988] mt-2 line-clamp-2">{roleItem.description}</p>
+                    <p className="text-xs text-[#687386] mt-2 line-clamp-2">{roleItem.description}</p>
                   </div>
                 ))}
               </div>
@@ -383,11 +383,11 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-[#13131E] px-6 py-3 border-t border-[#232234] flex items-center justify-between text-xs text-[#8B8988]">
+        <div className="bg-[#F8FAFC] px-6 py-3 border-t border-[#DCE3EC] flex items-center justify-between text-xs text-[#687386]">
           <span>AICTE ANVESH National Platform</span>
           <button
             onClick={onClose}
-            className="px-3 py-1.5 text-[#8B8988] hover:text-[#F7F7F8] hover:bg-[#1A1926] rounded-lg transition"
+            className="px-3 py-1.5 text-[#687386] hover:text-[#172033] hover:bg-[#F3F5F8] rounded-lg transition"
           >
             Cancel
           </button>

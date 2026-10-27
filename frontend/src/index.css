@@ -4,80 +4,186 @@
 
 @layer base {
   body {
-    background-color: #000000;
-    background-image: radial-gradient(ellipse 90% 50% at 50% -15%, rgba(147, 18, 255, 0.22), transparent 75%);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: #F7F7F8;
+    background-color: #F3F5F8;
+    color: #172033;
     font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
   }
 
-  /* Accessible Royal Violet Focus Ring */
+  /* Accessible Primary Blue Focus Ring */
   :focus-visible {
-    outline: 2px solid #9312FF !important;
+    outline: 2px solid #0645A8 !important;
     outline-offset: 2px !important;
   }
 }
 
-/* Custom sleek scrollbar for dark royal surfaces */
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-fade-rise {
+  animation: fadeRise 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.25s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delays for cards and lists */
+.stagger-1 { animation-delay: 40ms; }
+.stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 160ms; }
+.stagger-5 { animation-delay: 200ms; }
+.stagger-6 { animation-delay: 240ms; }
+
+/* Custom clean scrollbar for modern light theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D0D14;
+  background: #F3F5F8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232234;
+  background: #DCE3EC;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9312FF;
+  background: #0645A8;
 }
 
-/* Royal Dark Glass Card Styling */
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Modern Clean Dashboard White Card Styling */
 .anvesh-card {
-  background-color: #0D0D14;
-  border: 1px solid #232234;
+  background-color: #FFFFFF;
+  border: 1px solid #DCE3EC;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .anvesh-card:hover {
-  border-color: rgba(147, 18, 255, 0.45);
-  box-shadow: 0 0 25px rgba(147, 18, 255, 0.15);
+  border-color: #1769D2;
+  box-shadow: 0 4px 12px rgba(6, 69, 168, 0.08);
 }
 
-/* Royal Violet Gradient Text */
-.violet-text-gradient {
-  background: linear-gradient(135deg, #FFFFFF 0%, #D8B4FE 35%, #A020FF 70%, #7A1CF8 100%);
+/* Gradient text utility */
+.gov-text-gradient {
+  background: linear-gradient(135deg, #0645A8 0%, #1769D2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Royal Violet Glow Button */
-.violet-glow-btn {
-  background: linear-gradient(135deg, #9312FF 0%, #7A1CF8 100%);
+/* Primary Action Button */
+.gov-btn-primary {
+  background-color: #0645A8;
   color: #FFFFFF;
-  box-shadow: 0 0 20px rgba(147, 18, 255, 0.35);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
-.violet-glow-btn:hover {
-  background: linear-gradient(135deg, #A020FF 0%, #8522FB 100%);
-  box-shadow: 0 0 28px rgba(147, 18, 255, 0.55);
+.gov-btn-primary:hover {
+  background-color: #1769D2;
+  box-shadow: 0 2px 8px rgba(6, 69, 168, 0.25);
   transform: translateY(-1px);
 }
 
-/* Respect reduced motion */
+/* Print optimization for official acknowledgement receipts & reports */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide interactive header, sidebar, and close/action buttons */
+  header, aside, .print\:hidden {
+    display: none !important;
+  }
+
+  /* Printable receipt container full width */
+  #printable-receipt {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5rem !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+/* Mobile responsive form inputs: prevent auto-zoom on mobile focus in iOS/Android browsers */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { MetricCard } from '../components/MetricCard';
 import { StatusBadge } from '../components/StatusBadge';
 import { PriorityBadge } from '../components/PriorityBadge';
@@ -42,26 +43,27 @@ import {
 } from 'recharts';
 
 const STATUS_COLORS = {
-  'Submitted': '#9312FF',
-  'Pending Verification': '#C084FC',
+  'Submitted': '#0645A8',
+  'Pending Verification': '#1769D2',
   'Needs More Information': '#F59E0B',
-  'Under Review': '#7A1CF8',
-  'New': '#A020FF',
-  'Pending Bureau Review': '#6110C9',
-  'Under Process': '#38BDF8',
-  'Hearing Scheduled': '#FBBF24',
-  'Action Taken Report Awaited': '#FB923C',
-  'Joint Investigation': '#818CF8',
-  'Escalated to Committee': '#F03B2A',
-  'Disposed': '#45B558',
-  'Resolved': '#45B558',
-  'Transferred': '#A855F7',
-  'Duplicate Linked': '#64748B',
-  'Rejected': '#EF4444'
+  'Under Review': '#083B8D',
+  'New': '#0645A8',
+  'Pending Bureau Review': '#2563EB',
+  'Under Process': '#0284C7',
+  'Hearing Scheduled': '#D97706',
+  'Action Taken Report Awaited': '#F59E0B',
+  'Joint Investigation': '#4F46E5',
+  'Escalated to Committee': '#DC3545',
+  'Disposed': '#16A765',
+  'Resolved': '#16A765',
+  'Transferred': '#7C3AED',
+  'Duplicate Linked': '#687386',
+  'Rejected': '#DC3545'
 };
 
 export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
   const { currentRole } = useAuth();
+  const { t } = useLanguage();
   const isComplainant = currentRole?.role === 'Complainant';
   const isAdmin = currentRole?.role === 'Administrator' || currentRole?.canEditAll;
 
@@ -103,15 +105,15 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
 
   if (error) {
     return (
-      <div className="p-8 text-center bg-[#0D0D14] border border-[#F03B2A]/40 rounded-2xl m-6 shadow-[0_0_20px_rgba(240,59,42,0.15)]">
-        <AlertTriangle className="w-10 h-10 text-[#F03B2A] mx-auto mb-2" />
-        <h3 className="text-lg font-bold text-[#F7F7F8]">Dashboard Metrics Unavailable</h3>
-        <p className="text-sm text-[#8B8988] mt-1">{error}</p>
+      <div className="p-8 text-center bg-white border border-red-200 rounded-2xl m-6 shadow-xs animate-fade-in">
+        <AlertTriangle className="w-10 h-10 text-[#DC3545] mx-auto mb-2" />
+        <h3 className="text-lg font-bold text-[#172033]">Dashboard Metrics Unavailable</h3>
+        <p className="text-sm text-[#687386] mt-1">{error}</p>
         <button 
           onClick={fetchStats}
-          className="mt-4 px-4 py-2 bg-[#13131E] hover:bg-[#181826] text-[#D8B4FE] text-sm font-semibold rounded-xl border border-[#3A3854] transition shadow-xs"
+          className="mt-4 px-4 py-2 bg-[#0645A8] hover:bg-[#1769D2] text-white text-sm font-semibold rounded-xl transition shadow-xs"
         >
-          Retry Fetching
+          {t('action_refresh')}
         </button>
       </div>
     );
@@ -120,41 +122,41 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
   // Complainant specific dashboard view
   if (isComplainant) {
     return (
-      <div className="p-6 max-w-7xl mx-auto space-y-6">
-        {/* Cinematic Royal Violet Dashboard Hero (Complainant) */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#2A2844] bg-[#0D0D14]/90 p-6 sm:p-8 shadow-[0_0_40px_rgba(147,18,255,0.18)]">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-28 bg-[radial-gradient(ellipse_at_top,rgba(147,18,255,0.3),transparent_70%)] pointer-events-none" />
+      <div className="p-6 max-w-7xl mx-auto space-y-6 animate-fade-in">
+        {/* Modern Blue & White Dashboard Hero (Complainant) */}
+        <div className="relative overflow-hidden rounded-2xl border border-[#DCE3EC] bg-white p-6 sm:p-8 shadow-xs">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(ellipse_at_top_right,rgba(6,69,168,0.08),transparent_70%)] pointer-events-none" />
           
           <div className="relative z-10 text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#45B558]/15 border border-[#45B558]/35 text-[#45B558] text-xs font-semibold shadow-[0_0_10px_rgba(69,181,88,0.2)]">
-              <span className="w-2 h-2 rounded-full bg-[#45B558] shadow-[0_0_6px_#45B558]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#16A765] text-xs font-semibold shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#16A765]" />
               Institutional Complainant Access • Confidential Protection Active
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#F7F7F8]">
-              <span className="bg-gradient-to-r from-[#FFFFFF] via-[#D8B4FE] to-[#9312FF] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(147,18,255,0.4)]">
-                ANVESH
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#172033]">
+              <span className="text-[#0645A8]">
+                {t('brand_name')}
               </span>
-              <span className="block text-xl sm:text-2xl font-bold text-[#F7F7F8] mt-1">
-                AICTE Grievance Intelligence
+              <span className="block text-xl sm:text-2xl font-bold text-[#172033] mt-1">
+                {t('dashboard_hero_title')}
               </span>
             </h1>
 
-            <p className="text-xs sm:text-sm font-semibold text-[#D8B4FE] tracking-wide">
-              “Smarter grievance oversight. Explainable AI. Accountable resolution.”
+            <p className="text-xs sm:text-sm font-semibold text-[#1769D2] tracking-wide">
+              {t('dashboard_hero_subtitle')}
             </p>
 
-            <p className="text-xs text-[#8B8988] leading-relaxed max-w-xl mx-auto">
-              Track the real-time processing of your submitted grievances under AICTE Regulations 2019. Receive official information queries, track statutory SLAs, and print official receipts.
+            <p className="text-xs text-[#687386] leading-relaxed max-w-xl mx-auto">
+              {t('dashboard_hero_desc')}
             </p>
 
-            <div className="pt-1 flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => onNavigate('complaints')}
-                className="px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_20px_rgba(147,18,255,0.4)] hover:shadow-[0_0_30px_rgba(147,18,255,0.6)] hover:-translate-y-0.5 transition duration-200 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl font-bold text-xs bg-[#0645A8] hover:bg-[#1769D2] text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-150 flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>Submit New Grievance</span>
+                <span>{t('lodge_grievance')}</span>
               </button>
             </div>
           </div>
@@ -163,34 +165,34 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
         {/* Complainant Key Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
-            title="My Registered Grievances"
+            title={t('metric_total_grievances')}
             value={stats?.total_cases || 0}
-            subtitle="Securely filed records"
+            subtitle={t('metric_subtitle_registered')}
             icon={FileText}
-            color="violet"
+            color="blue"
             onClick={() => onNavigate('complaints')}
           />
           <MetricCard
-            title="Active Under Inquiry"
+            title={t('metric_active_cases')}
             value={stats?.under_process_cases || 0}
-            subtitle="Assigned to bureau scrutiny"
+            subtitle={t('metric_subtitle_in_progress')}
             icon={Clock}
-            color="navy"
+            color="sky"
             onClick={() => onNavigate('complaints')}
           />
           <MetricCard
-            title="Needs My Clarification"
+            title={t('metric_overdue_alerts')}
             value={stats?.pending_verification || 0}
-            subtitle="Officer queries awaiting reply"
+            subtitle={t('metric_subtitle_overdue')}
             icon={HelpCircle}
             color="amber"
             alert={stats?.pending_verification > 0}
             onClick={() => onNavigate('complaints')}
           />
           <MetricCard
-            title="Disposed / Resolved"
+            title={t('metric_disposed_cases')}
             value={stats?.disposed_cases || 0}
-            subtitle="Formal orders issued"
+            subtitle={t('metric_subtitle_resolved')}
             icon={CheckCircle2}
             color="emerald"
             onClick={() => onNavigate('complaints')}
@@ -198,43 +200,43 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
         </div>
 
         {/* Recent Grievances List */}
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#232234]">
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#DCE3EC]">
             <div>
-              <h3 className="text-sm font-bold text-[#F7F7F8]">My Registered Grievances & Status</h3>
-              <p className="text-xs text-[#8B8988]">Track resolution progress, assigned bureau, and officer responses</p>
+              <h3 className="text-sm font-bold text-[#172033]">{t('nav_my_grievances')}</h3>
+              <p className="text-xs text-[#687386]">Track resolution progress, assigned bureau, and officer responses</p>
             </div>
             <button
               onClick={() => onNavigate('complaints')}
-              className="text-xs text-[#A020FF] hover:text-[#D8B4FE] font-bold flex items-center gap-1 transition"
+              className="text-xs text-[#0645A8] hover:text-[#1769D2] font-bold flex items-center gap-1 transition"
             >
-              <span>View All</span>
+              <span>{t('action_view_details')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#13131E] text-[#8B8988] uppercase text-[10px] tracking-wider border-b border-[#232234]">
+              <thead className="bg-[#F8FAFC] text-[#687386] uppercase text-[10px] tracking-wider border-b border-[#DCE3EC]">
                 <tr>
-                  <th className="py-2.5 px-3">Case ID</th>
-                  <th className="py-2.5 px-3">Category & Subject</th>
-                  <th className="py-2.5 px-3">Assigned Bureau</th>
-                  <th className="py-2.5 px-3">Current Status</th>
-                  <th className="py-2.5 px-3">Filed Date</th>
-                  <th className="py-2.5 px-3">Statutory SLA Target</th>
-                  <th className="py-2.5 px-3 text-right">Action</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_case_id')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_subject')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_bureau')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_status')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_date')}</th>
+                  <th className="py-2.5 px-3 font-semibold">Statutory SLA Target</th>
+                  <th className="py-2.5 px-3 text-right font-semibold">{t('table_actions')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1F1E2E] text-[#F7F7F8]">
+              <tbody className="divide-y divide-[#EAF0F6] text-[#172033]">
                 {(stats?.recent_cases || []).map((c) => (
-                  <tr key={c.id} className="hover:bg-[#181826] transition cursor-pointer" onClick={() => onViewCase(c.id)}>
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#D8B4FE] whitespace-nowrap">
+                  <tr key={c.id} className="hover:bg-[#F8FAFC] transition cursor-pointer" onClick={() => onViewCase(c.id)}>
+                    <td className="py-2.5 px-3 font-mono font-bold text-[#0645A8] whitespace-nowrap">
                       {c.case_id}
                     </td>
                     <td className="py-2.5 px-3 max-w-[260px]">
-                      <span className="font-semibold text-[#F7F7F8] block truncate">{c.subject}</span>
-                      <span className="text-[10px] text-[#8B8988]">{c.category}</span>
+                      <span className="font-semibold text-[#172033] block truncate">{c.subject}</span>
+                      <span className="text-[10px] text-[#687386]">{c.category}</span>
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       <BureauBadge bureau={c.source_bureau} />
@@ -242,17 +244,17 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       <StatusBadge status={c.status} isComplainant={true} />
                     </td>
-                    <td className="py-2.5 px-3 whitespace-nowrap text-[#8B8988]">
-                      <div className="font-semibold text-[#F7F7F8] text-xs">{formatDate(c.received_date)}</div>
+                    <td className="py-2.5 px-3 whitespace-nowrap text-[#687386]">
+                      <div className="font-semibold text-[#172033] text-xs">{formatDate(c.received_date)}</div>
                       {c.created_at && (
-                        <div className="text-[10px] text-[#8B8988] font-mono flex items-center gap-1 mt-0.5">
-                          <Clock className="w-2.5 h-2.5 text-[#9312FF]" />
+                        <div className="text-[10px] text-[#687386] font-mono flex items-center gap-1 mt-0.5">
+                          <Clock className="w-2.5 h-2.5 text-[#0645A8]" />
                           <span>{formatTimeOnly(c.created_at) || '09:00 UTC'}</span>
                         </div>
                       )}
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
-                      <span className="font-mono text-xs text-[#D8B4FE] font-bold">
+                      <span className="font-mono text-xs text-[#0645A8] font-bold">
                         {formatDate(c.due_date)}
                       </span>
                     </td>
@@ -262,17 +264,17 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                           e.stopPropagation();
                           onViewCase(c.id);
                         }}
-                        className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#13131E] hover:bg-[#1C1A2E] text-[#A020FF] border border-[#3A3854] hover:border-[#9312FF]/60 transition shadow-xs"
+                        className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#EAF3FF] hover:bg-blue-100 text-[#0645A8] border border-[#0645A8]/20 transition shadow-2xs"
                       >
-                        Track Status
+                        {t('action_view_details')}
                       </button>
                     </td>
                   </tr>
                 ))}
                 {(!stats?.recent_cases || stats.recent_cases.length === 0) && (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-[#8B8988]">
-                      No complaints currently filed. Click 'Submit New Grievance' above to register your case.
+                    <td colSpan={7} className="py-8 text-center text-[#687386]">
+                      {t('no_records_found')}
                     </td>
                   </tr>
                 )}
@@ -333,83 +335,80 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
   }));
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      {/* Cinematic Royal Violet Dashboard Hero (Section 3 & 4) */}
-      <div className="relative overflow-hidden rounded-2xl border border-[#2A2844] bg-[#0D0D14]/90 p-8 sm:p-10 shadow-[0_0_50px_rgba(147,18,255,0.18)]">
-        {/* Subtle cosmic radial ambient light behind the hero */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-36 bg-[radial-gradient(ellipse_at_top,rgba(147,18,255,0.35),transparent_70%)] pointer-events-none" />
+    <div className="p-6 max-w-7xl mx-auto space-y-6 animate-fade-in">
+      {/* Modern Blue & White Dashboard Hero */}
+      <div className="relative overflow-hidden rounded-2xl border border-[#DCE3EC] bg-white p-7 sm:p-9 shadow-xs">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(ellipse_at_top_right,rgba(6,69,168,0.09),transparent_70%)] pointer-events-none" />
         
-        <div className="relative z-10 text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#9312FF]/15 border border-[#9312FF]/35 text-[#D8B4FE] text-xs font-semibold shadow-[0_0_12px_rgba(147,18,255,0.25)]">
-            <span className="w-2 h-2 rounded-full bg-[#9312FF] animate-pulse shadow-[0_0_8px_#9312FF]" />
+        <div className="relative z-10 text-center max-w-3xl mx-auto space-y-3.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAF3FF] border border-[#0645A8]/25 text-[#0645A8] text-xs font-semibold shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-[#0645A8] animate-pulse" />
             AICTE Inter-Bureau Redressal Mesh
           </div>
 
           <div>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-[#F7F7F8]">
-              <span className="bg-gradient-to-r from-[#FFFFFF] via-[#D8B4FE] to-[#9312FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(147,18,255,0.4)]">
-                ANVESH
-              </span>
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0645A8]">
+              {t('brand_name')}
             </h1>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F7F7F8] mt-1">
-              AICTE Grievance Intelligence
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#172033] mt-1">
+              {t('dashboard_hero_title')}
             </h2>
           </div>
 
-          <p className="text-sm sm:text-base font-semibold text-[#D8B4FE] tracking-wide">
-            “Smarter grievance oversight. Explainable AI. Accountable resolution.”
+          <p className="text-sm sm:text-base font-semibold text-[#1769D2] tracking-wide">
+            {t('dashboard_hero_subtitle')}
           </p>
 
-          <p className="text-xs sm:text-sm text-[#8B8988] leading-relaxed max-w-2xl mx-auto">
-            Unify grievance monitoring, identify potentially related complaints, support regulatory review, and improve institutional accountability through a single intelligent platform.
+          <p className="text-xs sm:text-sm text-[#687386] leading-relaxed max-w-2xl mx-auto">
+            {t('dashboard_hero_desc')}
           </p>
 
           {/* Hero Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => onNavigate('complaints')}
-              className="px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_20px_rgba(147,18,255,0.4)] hover:shadow-[0_0_30px_rgba(147,18,255,0.6)] hover:-translate-y-0.5 transition duration-200 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl font-bold text-xs bg-[#0645A8] hover:bg-[#1769D2] text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-150 flex items-center gap-2"
             >
               <FileText className="w-4 h-4" />
-              <span>View Grievances</span>
+              <span>{t('nav_all_grievances')}</span>
             </button>
 
             <button
               onClick={() => onNavigate('overlaps')}
-              className="px-5 py-2.5 rounded-xl font-bold text-xs bg-[#13131E] hover:bg-[#181826] text-[#F7F7F8] border border-[#3A3854] hover:border-[#9312FF]/60 shadow-[0_0_15px_rgba(147,18,255,0.15)] hover:-translate-y-0.5 transition duration-200 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl font-bold text-xs bg-white hover:bg-[#F3F5F8] text-[#0645A8] border border-[#0645A8]/30 shadow-xs hover:-translate-y-0.5 transition duration-150 flex items-center gap-2"
             >
-              <GitMerge className="w-4 h-4 text-[#A020FF]" />
-              <span>Explore Overlap Intelligence</span>
+              <GitMerge className="w-4 h-4 text-[#0645A8]" />
+              <span>{t('explore_overlaps')}</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Top Banner & Bureau Filter */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0D0D14] border border-[#232234] p-5 rounded-2xl shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#DCE3EC] p-5 rounded-2xl shadow-xs">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-xl font-extrabold text-[#F7F7F8] tracking-tight">AICTE Executive Grievance Overview</h1>
-            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#9312FF]/15 text-[#D8B4FE] border border-[#9312FF]/30 font-bold uppercase tracking-wider">
+            <h1 className="text-xl font-extrabold text-[#172033] tracking-tight">{t('dashboard_hero_title')}</h1>
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#EAF3FF] text-[#0645A8] border border-[#0645A8]/25 font-bold uppercase tracking-wider">
               Live Monitoring
             </span>
           </div>
-          <p className="text-xs text-[#8B8988] mt-1 font-medium">
+          <p className="text-xs text-[#687386] mt-1 font-medium">
             Real-time monitoring across PGRC, Regulation Bureau (RB), Approval Bureau (AB), Anti-Ragging Cell, and Skill Cell.
           </p>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-2 bg-[#13131E] px-3.5 py-1.5 rounded-xl border border-[#232234] text-xs text-[#F7F7F8]">
-            <Filter className="w-3.5 h-3.5 text-[#9312FF]" />
-            <span className="text-[#8B8988] font-medium">Bureau:</span>
+          <div className="flex items-center gap-2 bg-[#F3F5F8] px-3.5 py-1.5 rounded-xl border border-[#DCE3EC] text-xs text-[#172033]">
+            <Filter className="w-3.5 h-3.5 text-[#0645A8]" />
+            <span className="text-[#687386] font-medium">{t('table_bureau')}:</span>
             <select
               value={selectedBureau}
               onChange={(e) => setSelectedBureau(e.target.value)}
-              className="bg-transparent text-[#F7F7F8] font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-[#172033] font-semibold focus:outline-none cursor-pointer"
             >
               {BUREAUS.map((b) => (
-                <option key={b} value={b} className="bg-[#13131E] text-[#F7F7F8]">
+                <option key={b} value={b} className="bg-white text-[#172033]">
                   {b}
                 </option>
               ))}
@@ -418,8 +417,8 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
 
           <button
             onClick={fetchStats}
-            className="p-2 rounded-xl bg-[#13131E] hover:bg-[#181826] border border-[#232234] text-[#8B8988] hover:text-[#F7F7F8] hover:border-[#3A3854] transition shadow-xs"
-            title="Refresh statistics"
+            className="p-2 rounded-xl bg-white hover:bg-[#F3F5F8] border border-[#DCE3EC] text-[#687386] hover:text-[#0645A8] transition shadow-xs"
+            title={t('action_refresh')}
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -430,59 +429,59 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
       {stats?.overdue_cases > 0 && (
         <div 
           onClick={() => onNavigate('complaints', { is_overdue: true })}
-          className="bg-[#F03B2A]/10 border border-[#F03B2A]/35 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-[#F03B2A]/60 transition group shadow-[0_0_20px_rgba(240,59,42,0.15)] text-[#F7F7F8]"
+          className="bg-red-50/70 border border-red-200 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-red-400 transition group shadow-xs text-[#172033]"
         >
           <div className="flex items-center gap-3.5">
-            <div className="p-2.5 rounded-xl bg-[#F03B2A]/20 text-[#F03B2A] border border-[#F03B2A]/40 shadow-[0_0_12px_rgba(240,59,42,0.3)]">
+            <div className="p-2.5 rounded-xl bg-red-100 text-[#DC3545] border border-red-200 shadow-2xs">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-[#F7F7F8]">
+              <h4 className="text-sm font-bold text-[#DC3545]">
                 {stats.overdue_cases} Institution Grievances Have Breached Statutory SLA Deadlines
               </h4>
-              <p className="text-xs text-[#8B8988] mt-0.5">
+              <p className="text-xs text-[#687386] mt-0.5">
                 Immediate inter-bureau intervention required under AICTE Regulations 2019. Click to filter overdue cases.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#F03B2A] group-hover:translate-x-1 transition">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#DC3545] group-hover:translate-x-1 transition">
             <span>Inspect Overdue</span>
             <ArrowRight className="w-4 h-4" />
           </div>
         </div>
       )}
 
-      {/* Primary KPI Metrics Grid (With Accurate Overlap Math) */}
+      {/* Primary KPI Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          title="Total Grievances"
+          title={t('metric_total_grievances')}
           value={stats?.total_cases || 0}
-          subtitle="Unique cases registered"
+          subtitle={t('metric_subtitle_registered')}
           icon={FileText}
-          color="violet"
+          color="blue"
           onClick={() => onNavigate('complaints')}
         />
         <MetricCard
-          title="Active Under Process"
+          title={t('metric_active_cases')}
           value={stats?.under_process_cases || 0}
-          subtitle="Inquiry, review & hearings"
+          subtitle={t('metric_subtitle_in_progress')}
           icon={Clock}
-          color="navy"
+          color="sky"
           onClick={() => onNavigate('complaints', { status: 'Under Process' })}
         />
         {isAdmin ? (
           <MetricCard
-            title="Cases Flagged for Overlap"
+            title={t('metric_cross_bureau_overlaps')}
             value={stats?.cases_flagged_for_overlap || 0}
             subtitle={`${stats?.potential_match_pairs || 0} pairwise match alerts`}
             icon={GitMerge}
-            color="purple"
+            color="violet"
             alert={(stats?.cases_flagged_for_overlap || 0) > 0}
             onClick={() => onNavigate('overlaps')}
           />
         ) : (
           <MetricCard
-            title="Pending Initial Scrutiny"
+            title={t('status_pending_verification')}
             value={stats?.pending_cases || 0}
             subtitle="Intake verification pending"
             icon={FileText}
@@ -491,7 +490,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
           />
         )}
         <MetricCard
-          title="Disposed / Resolved"
+          title={t('metric_disposed_cases')}
           value={stats?.disposed_cases || 0}
           subtitle={`Disposal rate: ${stats?.total_cases ? ((stats.disposed_cases / stats.total_cases) * 100).toFixed(1) : 0}%`}
           icon={CheckCircle2}
@@ -502,56 +501,56 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
 
       {/* Secondary Metrics Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-4 shadow-sm hover:border-[#3A3854] transition">
-          <span className="text-[11px] font-semibold text-[#8B8988] uppercase tracking-wider">Pending Initial Scrutiny</span>
-          <p className="text-xl font-black text-[#F7F7F8] mt-1">{stats?.pending_cases || 0}</p>
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-4 shadow-xs hover:border-[#0645A8]/40 transition">
+          <span className="text-[11px] font-semibold text-[#687386] uppercase tracking-wider">{t('status_pending_verification')}</span>
+          <p className="text-xl font-black text-[#172033] mt-1">{stats?.pending_cases || 0}</p>
         </div>
         {isAdmin ? (
-          <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-4 shadow-sm hover:border-[#3A3854] transition">
-            <span className="text-[11px] font-semibold text-[#8B8988] uppercase tracking-wider">Pending Overlap Decisions</span>
-            <p className="text-xl font-black text-[#A020FF] mt-1 drop-shadow-[0_0_8px_rgba(160,32,255,0.4)]">{stats?.pending_overlap_decisions || 0}</p>
+          <div className="bg-white border border-[#DCE3EC] rounded-2xl p-4 shadow-xs hover:border-[#0645A8]/40 transition">
+            <span className="text-[11px] font-semibold text-[#687386] uppercase tracking-wider">Pending Overlap Decisions</span>
+            <p className="text-xl font-black text-[#0645A8] mt-1">{stats?.pending_overlap_decisions || 0}</p>
           </div>
         ) : (
-          <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-4 shadow-sm hover:border-[#3A3854] transition">
-            <span className="text-[11px] font-semibold text-[#8B8988] uppercase tracking-wider">Joint Panel Inquiries</span>
-            <p className="text-xl font-black text-[#A020FF] mt-1 drop-shadow-[0_0_8px_rgba(160,32,255,0.4)]">{stats?.joint_investigation_cases || 0}</p>
+          <div className="bg-white border border-[#DCE3EC] rounded-2xl p-4 shadow-xs hover:border-[#0645A8]/40 transition">
+            <span className="text-[11px] font-semibold text-[#687386] uppercase tracking-wider">Joint Panel Inquiries</span>
+            <p className="text-xl font-black text-[#0645A8] mt-1">{stats?.joint_investigation_cases || 0}</p>
           </div>
         )}
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-4 shadow-sm hover:border-[#3A3854] transition">
-          <span className="text-[11px] font-semibold text-[#8B8988] uppercase tracking-wider">Inter-Bureau Transferred</span>
-          <p className="text-xl font-black text-[#818CF8] mt-1">{stats?.transferred_cases || 0}</p>
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-4 shadow-xs hover:border-[#0645A8]/40 transition">
+          <span className="text-[11px] font-semibold text-[#687386] uppercase tracking-wider">{t('status_transferred')}</span>
+          <p className="text-xl font-black text-[#1769D2] mt-1">{stats?.transferred_cases || 0}</p>
         </div>
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-4 shadow-sm hover:border-[#3A3854] transition">
-          <span className="text-[11px] font-semibold text-[#8B8988] uppercase tracking-wider">Approaching SLA (7 Days)</span>
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-4 shadow-xs hover:border-[#0645A8]/40 transition">
+          <span className="text-[11px] font-semibold text-[#687386] uppercase tracking-wider">Approaching SLA (7 Days)</span>
           <p className="text-xl font-black text-[#F59E0B] mt-1">{stats?.approaching_deadlines?.length || 0}</p>
         </div>
       </div>
 
       {/* CHARTS SECTION 1: COMPLAINT TREND LINE CHART WITH TOGGLE */}
-      <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md hover:border-[#3A3854] transition space-y-4">
+      <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs hover:border-[#0645A8]/30 transition space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#A020FF]" />
-              <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">
+              <TrendingUp className="w-4 h-4 text-[#0645A8]" />
+              <h3 className="text-sm font-bold text-[#172033] tracking-wide">
                 Complaint Intake & Resolution Longitudinal Trends
               </h3>
             </div>
-            <p className="text-xs text-[#8B8988] mt-0.5 font-medium">
+            <p className="text-xs text-[#687386] mt-0.5 font-medium">
               6-month historical trajectory of grievance intake, disposal volume, and pending pipelines
             </p>
           </div>
 
           {/* Metric filter buttons */}
-          <div className="flex items-center gap-1 bg-[#13131E] p-1 rounded-xl border border-[#232234] text-xs">
+          <div className="flex items-center gap-1 bg-[#F3F5F8] p-1 rounded-xl border border-[#DCE3EC] text-xs">
             {['All', 'Filed', 'Resolved', 'Pending', 'Overdue'].map((m) => (
               <button
                 key={m}
                 onClick={() => setTrendMetric(m)}
                 className={`px-3 py-1 rounded-lg font-semibold transition ${
                   trendMetric === m
-                    ? 'bg-gradient-to-r from-[#9312FF] to-[#7A1CF8] text-white shadow-[0_0_12px_rgba(147,18,255,0.4)] font-bold'
-                    : 'text-[#8B8988] hover:text-[#F7F7F8]'
+                    ? 'bg-[#0645A8] text-white shadow-xs font-bold'
+                    : 'text-[#687386] hover:text-[#172033]'
                 }`}
               >
                 {m}
@@ -566,29 +565,29 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
               data={normalizedTrendData}
               margin={{ top: 10, right: 20, left: -15, bottom: 10 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#1F1E2E" vertical={false} />
-              <XAxis dataKey="month" stroke="#8B8988" fontSize={11} tickLine={false} />
-              <YAxis stroke="#8B8988" fontSize={11} tickLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#EAF0F6" vertical={false} />
+              <XAxis dataKey="month" stroke="#687386" fontSize={11} tickLine={false} />
+              <YAxis stroke="#687386" fontSize={11} tickLine={false} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0D0D14',
-                  borderColor: '#2A293E',
-                  color: '#F7F7F8',
+                  backgroundColor: '#FFFFFF',
+                  borderColor: '#DCE3EC',
+                  color: '#172033',
                   borderRadius: '12px',
                   fontSize: '12px',
-                  boxShadow: '0 0 25px rgba(0,0,0,0.8)'
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)'
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px', color: '#8B8988' }} />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px', color: '#687386' }} />
 
               {(trendMetric === 'All' || trendMetric === 'Filed') && (
                 <Line
                   type="monotone"
                   dataKey="filed"
                   name="Filed Grievances"
-                  stroke="#A020FF"
+                  stroke="#0645A8"
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: '#A020FF' }}
+                  dot={{ r: 4, fill: '#0645A8' }}
                   activeDot={{ r: 6 }}
                 />
               )}
@@ -597,9 +596,9 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                   type="monotone"
                   dataKey="resolved"
                   name="Resolved Cases"
-                  stroke="#45B558"
+                  stroke="#16A765"
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: '#45B558' }}
+                  dot={{ r: 4, fill: '#16A765' }}
                   activeDot={{ r: 6 }}
                 />
               )}
@@ -619,9 +618,9 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                   type="monotone"
                   dataKey="overdue"
                   name="Overdue Breaches"
-                  stroke="#F03B2A"
+                  stroke="#DC3545"
                   strokeWidth={2}
-                  dot={{ r: 3, fill: '#F03B2A' }}
+                  dot={{ r: 3, fill: '#DC3545' }}
                 />
               )}
             </LineChart>
@@ -632,11 +631,11 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
       {/* CHARTS SECTION 2: Workload & Status Donut */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bureau-Wise Workload Chart (2 Cols) */}
-        <div className="lg:col-span-2 bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md hover:border-[#3A3854] transition">
+        <div className="lg:col-span-2 bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs hover:border-[#0645A8]/30 transition">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">Bureau-Wise Workload Distribution</h3>
-              <p className="text-xs text-[#8B8988]">Active vs. overdue cases per bureau (PGRC, RB, AB, PAPB, ARC, SDC)</p>
+              <h3 className="text-sm font-bold text-[#172033] tracking-wide">Bureau-Wise Workload Distribution</h3>
+              <p className="text-xs text-[#687386]">Active vs. overdue cases per bureau (PGRC, RB, AB, PAPB, ARC, SDC)</p>
             </div>
           </div>
           <div className="h-72 w-full min-h-[280px]">
@@ -645,38 +644,38 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                 data={normalizedBureauWorkload}
                 margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#1F1E2E" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#EAF0F6" vertical={false} />
                 <XAxis 
                   dataKey="bureau_short" 
-                  stroke="#8B8988" 
+                  stroke="#687386" 
                   fontSize={11} 
                   tickLine={false}
                 />
-                <YAxis stroke="#8B8988" fontSize={11} tickLine={false} />
+                <YAxis stroke="#687386" fontSize={11} tickLine={false} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#0D0D14', 
-                    borderColor: '#2A293E', 
-                    color: '#F7F7F8',
+                    backgroundColor: '#FFFFFF', 
+                    borderColor: '#DCE3EC', 
+                    color: '#172033',
                     borderRadius: '12px', 
                     fontSize: '12px',
-                    boxShadow: '0 0 25px rgba(0,0,0,0.8)'
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.08)'
                   }} 
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: '#8B8988' }} />
-                <Bar dataKey="active" name="Active Cases" fill="#9312FF" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="overdue" name="Overdue SLA" fill="#F03B2A" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="disposed" name="Disposed" fill="#45B558" radius={[4, 4, 0, 0]} />
+                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px', color: '#687386' }} />
+                <Bar dataKey="active" name="Active Cases" fill="#0645A8" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="overdue" name="Overdue SLA" fill="#DC3545" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="disposed" name="Disposed" fill="#16A765" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Case Status Distribution Donut Chart with Total in Center (1 Col) */}
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md hover:border-[#3A3854] transition flex flex-col justify-between relative">
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs hover:border-[#0645A8]/30 transition flex flex-col justify-between relative">
           <div>
-            <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">Status Breakdown</h3>
-            <p className="text-xs text-[#8B8988]">Current lifecycle states of complaints</p>
+            <h3 className="text-sm font-bold text-[#172033] tracking-wide">Status Breakdown</h3>
+            <p className="text-xs text-[#687386]">Current lifecycle states of complaints</p>
           </div>
 
           <div className="h-56 w-full my-auto relative min-h-[224px]">
@@ -695,48 +694,48 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                     {normalizedStatusDist.map((entry, index) => (
                       <Cell 
                         key={`cell-${index}`} 
-                        fill={STATUS_COLORS[entry.name] || '#8B8988'} 
+                        fill={STATUS_COLORS[entry.name] || '#687386'} 
                       />
                     ))}
                   </Pie>
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#0D0D14', 
-                      borderColor: '#2A293E', 
-                      color: '#F7F7F8',
+                      backgroundColor: '#FFFFFF', 
+                      borderColor: '#DCE3EC', 
+                      color: '#172033',
                       borderRadius: '12px', 
                       fontSize: '12px',
-                      boxShadow: '0 0 25px rgba(0,0,0,0.8)'
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.08)'
                     }} 
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-[#8B8988]">
+              <div className="h-full flex items-center justify-center text-xs text-[#687386]">
                 No active status distribution records
               </div>
             )}
 
             {/* Total count in center of donut */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-2xl font-black text-[#F7F7F8] font-mono leading-none drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">
+              <span className="text-2xl font-black text-[#172033] font-mono leading-none">
                 {totalCasesForDonut}
               </span>
-              <span className="text-[10px] text-[#8B8988] font-semibold uppercase tracking-wider mt-0.5">
+              <span className="text-[10px] text-[#687386] font-semibold uppercase tracking-wider mt-0.5">
                 Total Cases
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-[11px] text-[#8B8988] pt-2 border-t border-[#1F1E2E]">
+          <div className="grid grid-cols-2 gap-2 text-[11px] text-[#687386] pt-2 border-t border-[#DCE3EC]">
             {normalizedStatusDist.slice(0, 4).map((item) => (
               <div key={item.name} className="flex items-center gap-1.5 truncate">
                 <span 
                   className="w-2.5 h-2.5 rounded-full flex-shrink-0" 
-                  style={{ backgroundColor: STATUS_COLORS[item.name] || '#8B8988' }}
+                  style={{ backgroundColor: STATUS_COLORS[item.name] || '#687386' }}
                 />
                 <span className="truncate">{item.name}:</span>
-                <span className="font-bold text-[#F7F7F8] ml-auto">{item.value}</span>
+                <span className="font-bold text-[#172033] ml-auto">{item.value}</span>
               </div>
             ))}
           </div>
@@ -746,15 +745,15 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
       {/* Bottom Section: Recent Activity & Approaching Deadlines */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Cases Table (2 Cols) */}
-        <div className="lg:col-span-2 bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md hover:border-[#3A3854] transition">
+        <div className="lg:col-span-2 bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs hover:border-[#0645A8]/30 transition">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">Recent Case Intake</h3>
-              <p className="text-xs text-[#8B8988]">Latest technical institution complaints filed</p>
+              <h3 className="text-sm font-bold text-[#172033] tracking-wide">Recent Case Intake</h3>
+              <p className="text-xs text-[#687386]">Latest technical institution complaints filed</p>
             </div>
             <button
               onClick={() => onNavigate('complaints')}
-              className="text-xs text-[#D8B4FE] hover:text-[#FFFFFF] flex items-center gap-1 font-semibold transition"
+              className="text-xs text-[#0645A8] hover:text-[#1769D2] flex items-center gap-1 font-semibold transition"
             >
               View All <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -762,26 +761,26 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#13131E] text-[#8B8988] uppercase text-[10px] tracking-wider border-b border-[#232234]">
+              <thead className="bg-[#F8FAFC] text-[#687386] uppercase text-[10px] tracking-wider border-b border-[#DCE3EC]">
                 <tr>
-                  <th className="py-2.5 px-3">Case ID</th>
-                  <th className="py-2.5 px-3">Institution</th>
-                  <th className="py-2.5 px-3">Bureau</th>
-                  <th className="py-2.5 px-3">Priority</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3 text-right">Action</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_case_id')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_institution')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_bureau')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_priority')}</th>
+                  <th className="py-2.5 px-3 font-semibold">{t('table_status')}</th>
+                  <th className="py-2.5 px-3 text-right font-semibold">{t('table_actions')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#1F1E2E] text-[#F7F7F8]">
+              <tbody className="divide-y divide-[#EAF0F6] text-[#172033]">
                 {recentCases.map((c) => (
-                  <tr key={c.id} className="hover:bg-[#181826] transition">
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#D8B4FE] whitespace-nowrap">
+                  <tr key={c.id} className="hover:bg-[#F8FAFC] transition">
+                    <td className="py-2.5 px-3 font-mono font-bold text-[#0645A8] whitespace-nowrap">
                       {c.case_id}
                     </td>
                     <td className="py-2.5 px-3 max-w-[200px] truncate" title={c.institution_name}>
                       <button
                         onClick={() => onViewInstitution(c.institution_id)}
-                        className="text-[#F7F7F8] hover:text-[#D8B4FE] font-medium truncate text-left block transition"
+                        className="text-[#172033] hover:text-[#0645A8] font-medium truncate text-left block transition"
                       >
                         {c.institution_name}
                       </button>
@@ -798,7 +797,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                     <td className="py-2.5 px-3 text-right whitespace-nowrap">
                       <button
                         onClick={() => onViewCase(c.id)}
-                        className="text-xs px-2.5 py-1 rounded-lg bg-[#13131E] hover:bg-[#9312FF]/20 text-[#D8B4FE] font-semibold border border-[#2A293E] hover:border-[#9312FF]/50 transition"
+                        className="text-xs px-2.5 py-1 rounded-lg bg-[#EAF3FF] hover:bg-blue-100 text-[#0645A8] font-semibold border border-[#0645A8]/20 transition shadow-2xs"
                       >
                         Inspect
                       </button>
@@ -807,8 +806,8 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                 ))}
                 {recentCases.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="py-6 text-center text-[#8B8988]">
-                      No recent cases recorded for this bureau filter.
+                    <td colSpan={6} className="py-6 text-center text-[#687386]">
+                      {t('no_records_found')}
                     </td>
                   </tr>
                 )}
@@ -818,18 +817,18 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
         </div>
 
         {/* Approaching Deadlines Widget (1 Col) */}
-        <div className="bg-[#0D0D14] border border-[#232234] rounded-2xl p-5 shadow-md hover:border-[#3A3854] transition flex flex-col justify-between">
+        <div className="bg-white border border-[#DCE3EC] rounded-2xl p-5 shadow-xs hover:border-[#0645A8]/30 transition flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-[#F59E0B]" />
-                <h3 className="text-sm font-bold text-[#F7F7F8] tracking-wide">Target Deadlines in 7 Days</h3>
+                <h3 className="text-sm font-bold text-[#172033] tracking-wide">Target Deadlines in 7 Days</h3>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-[#F59E0B] border border-amber-200">
                 Action Required
               </span>
             </div>
-            <p className="text-xs text-[#8B8988] mb-4">
+            <p className="text-xs text-[#687386] mb-4">
               Pending cases approaching statutory SLA resolution limits
             </p>
 
@@ -838,20 +837,20 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
                 <div
                   key={c.id}
                   onClick={() => onViewCase(c.id)}
-                  className="p-3 rounded-xl bg-[#13131E] hover:bg-[#181826] border border-[#232234] hover:border-[#F59E0B]/50 cursor-pointer transition"
+                  className="p-3 rounded-xl bg-[#F8FAFC] hover:bg-[#EAF3FF]/40 border border-[#DCE3EC] hover:border-[#0645A8]/40 cursor-pointer transition shadow-2xs"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#D8B4FE]">
+                    <span className="font-mono text-xs font-bold text-[#0645A8]">
                       {c.case_id}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/35">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
                       Due in {c.days_remaining}d
                     </span>
                   </div>
-                  <p className="text-xs text-[#F7F7F8] font-semibold truncate mt-1" title={c.subject}>
+                  <p className="text-xs text-[#172033] font-semibold truncate mt-1" title={c.subject}>
                     {c.subject}
                   </p>
-                  <div className="flex items-center justify-between text-[11px] text-[#8B8988] mt-1">
+                  <div className="flex items-center justify-between text-[11px] text-[#687386] mt-1">
                     <span className="truncate max-w-[150px]">{c.institution_name}</span>
                     <span>{formatDate(c.due_date)}</span>
                   </div>
@@ -859,7 +858,7 @@ export function Dashboard({ onNavigate, onViewCase, onViewInstitution }) {
               ))}
 
               {approachingDeadlines.length === 0 && (
-                <p className="text-xs text-[#8B8988] text-center py-6">
+                <p className="text-xs text-[#687386] text-center py-6">
                   No cases due within the next 7 days.
                 </p>
               )}

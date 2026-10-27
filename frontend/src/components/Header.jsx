@@ -1,22 +1,37 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Bell, LogOut, Shield, User } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { Bell, LogOut, Shield, User, Globe, Menu } from 'lucide-react';
 
-export function Header({ onNavigate, activePage }) {
+export function Header({ onNavigate, activePage, onToggleSidebar, isSidebarCollapsed }) {
   const { currentRole, unreadCount, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
 
   if (!currentRole) return null;
 
   return (
-    <header className="bg-[#0D0D14]/90 backdrop-blur-md border-b border-[#232234] sticky top-0 z-30 px-6 py-3 shadow-md">
+    <header className="bg-white border-b border-[#DCE3EC] sticky top-0 z-30 px-6 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-fade-in">
       <div className="flex items-center justify-between gap-4">
         {/* Left: Branding, Official Government Logos & Portal Badge */}
         <div className="flex items-center gap-3">
+          {/* Sidebar Toggle Button (Quick Toggle from Header) */}
+          {onToggleSidebar && (
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              className="p-1.5 rounded-xl border border-[#DCE3EC] text-[#0645A8] hover:bg-[#EAF3FF] hover:border-[#BBD5F8] transition shadow-2xs flex items-center justify-center mr-0.5"
+              title={isSidebarCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)"}
+              aria-label="Toggle Sidebar"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+          )}
+
           {/* Institutional Logos Group */}
           <div className="flex items-center gap-2">
             {/* AICTE Statutory Council Seal */}
             <div 
-              className="p-1 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs flex items-center justify-center hover:bg-white transition"
+              className="p-1 rounded-xl bg-white border border-[#DCE3EC] shadow-2xs flex items-center justify-center hover:border-[#0645A8]/40 transition"
               title="All India Council for Technical Education (AICTE)"
             >
               <img 
@@ -28,7 +43,7 @@ export function Header({ onNavigate, activePage }) {
 
             {/* ANVESH Platform Brand Emblem */}
             <div 
-              className="p-1 rounded-xl bg-[#13131E] border border-[#3A3854] shadow-[0_0_15px_rgba(147,18,255,0.25)] flex items-center justify-center"
+              className="p-1 rounded-xl bg-white border border-[#DCE3EC] shadow-2xs flex items-center justify-center hover:border-[#0645A8]/40 transition"
               title="ANVESH Grievance Intelligence Platform"
             >
               <img 
@@ -40,7 +55,7 @@ export function Header({ onNavigate, activePage }) {
 
             {/* Digital India Seal (Hidden on narrow mobile, visible sm+) */}
             <div 
-              className="hidden sm:flex p-1 rounded-xl bg-white/95 border border-[#3A3854] shadow-xs items-center justify-center hover:bg-white transition"
+              className="hidden sm:flex p-1 rounded-xl bg-white border border-[#DCE3EC] shadow-2xs items-center justify-center hover:border-[#0645A8]/40 transition"
               title="Digital India - Power to Empower"
             >
               <img 
@@ -51,76 +66,107 @@ export function Header({ onNavigate, activePage }) {
             </div>
           </div>
 
-          <div className="border-l border-[#232234] pl-2.5">
+          <div className="border-l border-[#DCE3EC] pl-3">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base tracking-wider text-[#F7F7F8] flex items-center gap-1.5">
-                ANVESH
-                <span className="w-1.5 h-1.5 rounded-full bg-[#9312FF] shadow-[0_0_8px_#9312FF]"></span>
+              <span className="font-extrabold text-base tracking-wider text-[#0645A8] flex items-center gap-1.5">
+                {t('brand_name')}
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1769D2] shadow-xs"></span>
               </span>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
                 currentRole?.role === 'Complainant'
-                  ? 'bg-[#45B558]/15 text-[#45B558] border border-[#45B558]/30'
+                  ? 'bg-emerald-50 text-[#16A765] border border-emerald-200'
                   : currentRole?.role === 'Reviewer'
-                  ? 'bg-[#9312FF]/15 text-[#A020FF] border border-[#9312FF]/30'
+                  ? 'bg-[#EAF3FF] text-[#0645A8] border border-[#0645A8]/30 font-bold'
                   : currentRole?.role === 'Administrator'
-                  ? 'bg-gradient-to-r from-[#9312FF]/20 to-[#7A1CF8]/20 text-[#D8B4FE] border border-[#9312FF]/40 font-extrabold shadow-[0_0_10px_rgba(147,18,255,0.2)]'
-                  : 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30'
+                  ? 'bg-blue-50 text-[#0645A8] border border-[#0645A8]/40 font-extrabold shadow-2xs'
+                  : 'bg-amber-50 text-amber-700 border border-amber-200'
               }`}>
-                {currentRole?.role} Portal
+                {currentRole?.role === 'Administrator' ? t('portal_administrator') :
+                 currentRole?.role === 'Reviewer' ? t('portal_reviewer') :
+                 currentRole?.role === 'Complainant' ? t('portal_student') :
+                 `${currentRole?.role} Portal`}
               </span>
             </div>
-            <p className="text-[11px] text-[#8B8988] hidden sm:block font-medium">
-              AICTE Inter-Bureau Grievance Intelligence & Resolution Platform
+            <p className="text-[11px] text-[#687386] hidden sm:block font-medium">
+              {t('brand_subtitle')}
             </p>
           </div>
         </div>
 
         {/* Center: System Status Pill */}
-        <div className="hidden lg:flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#13131E] border border-[#232234] text-xs text-[#8B8988] font-medium">
-          <Shield className="w-3.5 h-3.5 text-[#9312FF] flex-shrink-0" />
-          <span className="text-[11px] text-[#F7F7F8]">Authenticated Session</span>
-          <span className="w-1 h-1 rounded-full bg-[#45B558] shadow-[0_0_6px_#45B558]"></span>
-          <span className="text-[11px] text-[#8B8988]">Statutory Redressal Active</span>
+        <div className="hidden lg:flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F3F5F8] border border-[#DCE3EC] text-xs text-[#687386] font-medium">
+          <Shield className="w-3.5 h-3.5 text-[#0645A8] flex-shrink-0" />
+          <span className="text-[11px] text-[#172033] font-semibold">{t('authenticated_session')}</span>
+          <span className="w-1 h-1 rounded-full bg-[#16A765]"></span>
+          <span className="text-[11px] text-[#687386]">{t('statutory_active')}</span>
         </div>
 
-        {/* Right: Notifications & User Profile with Logout */}
+        {/* Right: Language Switcher, Notifications & User Profile */}
         <div className="flex items-center gap-2.5">
+          {/* Language Switcher Selector (English / हिन्दी) */}
+          <div className="flex items-center bg-[#F3F5F8] border border-[#DCE3EC] rounded-xl p-0.5 shadow-2xs">
+            <button
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                language === 'en'
+                  ? 'bg-[#0645A8] text-white shadow-xs'
+                  : 'text-[#687386] hover:text-[#172033] hover:bg-white/60'
+              }`}
+              title="Switch to English"
+            >
+              <span>EN</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('hi')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                language === 'hi'
+                  ? 'bg-[#0645A8] text-white shadow-xs'
+                  : 'text-[#687386] hover:text-[#172033] hover:bg-white/60'
+              }`}
+              title="हिन्दी में देखें (Switch to Hindi)"
+            >
+              <span>हिन्दी</span>
+            </button>
+          </div>
+
           {/* Notifications Bell */}
           <button
             onClick={() => onNavigate('notifications')}
             className={`relative p-2 rounded-xl border transition ${
               activePage === 'notifications'
-                ? 'bg-[#9312FF]/20 border-[#9312FF] text-[#A020FF] shadow-[0_0_15px_rgba(147,18,255,0.3)]'
-                : 'bg-[#13131E] border-[#232234] text-[#8B8988] hover:text-[#F7F7F8] hover:border-[#3A3854]'
+                ? 'bg-[#EAF3FF] border-[#0645A8] text-[#0645A8] shadow-xs'
+                : 'bg-[#F3F5F8] border-[#DCE3EC] text-[#687386] hover:text-[#0645A8] hover:bg-[#EAF3FF] hover:border-[#0645A8]/40'
             }`}
-            title="Notifications & SLA Alerts"
+            title={t('notifications')}
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 px-1.5 py-0.2 text-[9px] font-bold bg-[#F03B2A] text-white rounded-full min-w-[16px] text-center shadow-[0_0_8px_rgba(240,59,42,0.6)]">
+              <span className="absolute -top-1 -right-1 px-1.5 py-0.2 text-[9px] font-bold bg-[#DC3545] text-white rounded-full min-w-[16px] text-center shadow-xs">
                 {unreadCount > 99 ? '99+' : unreadCount}
               </span>
             )}
           </button>
 
           {/* Authenticated User Badge */}
-          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#13131E] border border-[#232234]">
+          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#F3F5F8] border border-[#DCE3EC]">
             <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs border ${
               currentRole?.role === 'Complainant'
-                ? 'bg-[#45B558]/20 text-[#45B558] border-[#45B558]/40'
+                ? 'bg-emerald-100 text-[#16A765] border-emerald-300'
                 : currentRole?.role === 'Reviewer'
-                ? 'bg-[#9312FF]/20 text-[#A020FF] border-[#9312FF]/40'
+                ? 'bg-[#EAF3FF] text-[#0645A8] border-blue-200'
                 : currentRole?.role === 'Administrator'
-                ? 'bg-gradient-to-br from-[#9312FF] to-[#7A1CF8] text-white border-violet-400 shadow-[0_0_10px_rgba(147,18,255,0.4)]'
-                : 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40'
+                ? 'bg-[#0645A8] text-white border-[#0645A8] shadow-xs'
+                : 'bg-amber-100 text-amber-700 border-amber-300'
             }`}>
               {currentRole?.name ? currentRole?.name[0] : <User className="w-3.5 h-3.5" />}
             </div>
             <div className="hidden md:block text-left">
-              <div className="text-xs font-bold text-[#F7F7F8] leading-tight">
+              <div className="text-xs font-bold text-[#172033] leading-tight">
                 {currentRole?.name}
               </div>
-              <div className="text-[10px] text-[#8B8988] font-medium truncate max-w-[170px]">
+              <div className="text-[10px] text-[#687386] font-medium truncate max-w-[170px]">
                 {currentRole?.roleName}
               </div>
             </div>
@@ -129,11 +175,11 @@ export function Header({ onNavigate, activePage }) {
           {/* Logout Button */}
           <button
             onClick={logout}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#F03B2A] bg-[#F03B2A]/10 hover:bg-[#F03B2A]/20 border border-[#F03B2A]/30 rounded-xl transition shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#DC3545] bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition shadow-xs"
             title="End session and securely log out"
           >
-            <LogOut className="w-3.5 h-3.5 text-[#F03B2A]" />
-            <span className="hidden sm:inline">Logout</span>
+            <LogOut className="w-3.5 h-3.5 text-[#DC3545]" />
+            <span className="hidden sm:inline">{t('logout')}</span>
           </button>
         </div>
       </div>
