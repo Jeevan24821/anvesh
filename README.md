@@ -41,24 +41,7 @@ Operating in isolated administrative silos causes duplicate investigative effort
 
 ---
 
-## 👥 3. Demo Accounts for Local Judging
-
-Access the portal at **[http://localhost:5173](http://localhost:5173)**. Unauthenticated sessions are automatically greeted by the login screen. Use the quick-fill buttons on the login page or enter these test credentials:
-
-| Role | Username / Identifier | Password / OTP | Profile Name & Designation | Permissions & Access Scope |
-|---|---|---|---|---|
-| **Main Administrator** | `admin` | `Admin@123` | Dr. K. N. Satyanarayana (Member Secretary) | Cross-bureau overview, overlap decisions (Keep Separate / Link / Transfer), bureau reassignment, audit logs, CSV exports. |
-| **PGRC Reviewer** | `reviewer_pgrc` | `Reviewer@123` | Dr. Sunita Sharma (Chief Redressal Officer) | Scoped exclusively to PGRC complaints; evidence scrutiny, verification, priority overrides, and clarification requests. |
-| **Regulation Reviewer** | `reviewer_rb` | `Reviewer@123` | Er. Rajesh Verma (Joint Director, Regulation) | Scoped exclusively to Regulation Bureau cases; fee ceiling compliance and affiliation scrutiny. |
-| **Student Complainant** | `student` or `1DS22CS089` | `Student@123` or OTP `123456` | Priya Nair (DSCE Student) | "My Grievances" portal, case timeline, file new grievance, attach evidence, download acknowledgement receipt. |
-| **Parent Complainant** | `parent` or `PAR-984501` | `Parent@123` or OTP `123456` | Suresh Menon (Parent / Guardian) | External complainant portal, track ward's grievance, respond to officer clarification requests. |
-| **Ministry Auditor** | `viewer` | `Viewer@123` | Shri Rameshwar Gupta (Scrutiny Auditor) | **Read-Only Audit Mode:** Can inspect all dashboards, charts, audit histories, and export reports; write actions disabled. |
-
-> **DEMO OTP Mode:** For local testing without SMS/Email providers, entering OTP code `123456` or `DEMO-OTP` with any demo complainant ID authenticates the session deterministically.
-
----
-
-## 🚀 4. Windows Installation & Startup Guide
+## 🚀 3. Windows Installation & Startup Guide
 
 ### Prerequisites
 - Windows 10 or 11
@@ -70,7 +53,6 @@ Double-click or run from PowerShell:
 ```cmd
 run_sentrix.bat
 ```
-This script automatically starts the FastAPI backend on port `8000`, the Vite frontend on port `5173`, and opens your default browser directly to the Login Portal.
 
 ### Option B: Individual Terminal Startup
 
@@ -85,12 +67,6 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```powershell
 Set-Location "frontend"
 npm run dev -- --host 127.0.0.1 --port 5173
-```
-
-### Access URLs
-- **Web Application:** [http://localhost:5173](http://localhost:5173)
-- **Interactive Swagger API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Alternative Redoc API Documentation:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
 
@@ -147,7 +123,7 @@ npm run build
 
 ---
 
-## 🔍 6. Mathematical Definitions of Dashboard Metrics
+## 🔍 4. Mathematical Definitions of Dashboard Metrics
 
 All metrics are dynamically calculated directly from the database through SQL queries:
 
@@ -162,7 +138,7 @@ All metrics are dynamically calculated directly from the database through SQL qu
 
 ---
 
-## 📂 7. Project File Structure
+## 📂 5. Project File Structure
 
 ```
 e:\sih\
